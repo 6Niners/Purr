@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Registration/sign_in.dart';
 
 void main() {
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
 
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      //home: MainPage(),
       home: LoginPage(title: 'Sign In'),
     );
   }
