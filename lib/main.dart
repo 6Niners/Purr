@@ -54,9 +54,7 @@ class ListOfPages extends StatelessWidget {
     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
   onPressed: (){Get.to(page); },
   color:Colors.grey[800],
-    child: Container()
-    );
-  //child: Text(text,style: TextStyle(color: Colors.white),),);
+  child: Text(text,style: TextStyle(color: Colors.white),),);
   }
 }
 
