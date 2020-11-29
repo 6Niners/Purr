@@ -50,11 +50,11 @@ class ListOfPages extends StatelessWidget {
 
   FlatButton PageButton(var page,String text) {
     return FlatButton(
-
     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
   onPressed: (){Get.to(page); },
   color:Colors.grey[800],
-  child: Text(text,style: TextStyle(color: Colors.white),),);
+  child: Text(text,style: TextStyle(color: Colors.black),),
+    );
   }
 }
 
