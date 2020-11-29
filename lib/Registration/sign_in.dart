@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class _LoginPage extends StatefulWidget {
-  _LoginPage({Key key, this.title}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  LoginPage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<_LoginPage> {
+class LoginPageState extends State<LoginPage> {
   String _email, _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -43,7 +43,7 @@ class _LoginPageState extends State<_LoginPage> {
                       }
                       return 'Ok';
                     },
-                    onSaved: (input) => _password = input,
+                    onSaved: (input) => {_password = input},
                     decoration: InputDecoration(
                         labelText: 'Password'
                     ),

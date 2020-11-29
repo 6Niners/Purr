@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
 
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: _LoginPage(title: 'Sign In'),
+      home: LoginPage(title: 'Sign In'),
     );
   }
 }
