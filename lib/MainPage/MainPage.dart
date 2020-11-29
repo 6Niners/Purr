@@ -16,11 +16,11 @@ class _MainPageState extends State<MainPage>
     "assets/icon.png",
     "assets/Not_Found.png",
   ];
-  MainController cont=Get.put(MainController());
+  CardController controller; //Use this to trigger swap.
   @override
   Widget build(BuildContext context) {
-    CardController controller; //Use this to trigger swap.
     TabController TabCont=TabController(vsync:this,length: 3);
+
     return SafeArea(
       child: new Scaffold(
 
@@ -121,6 +121,7 @@ class _MainPageState extends State<MainPage>
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           FloatingActionButton(
+            heroTag: null,
             mini: true,
             onPressed: () {},
             backgroundColor: Colors.white,
@@ -128,18 +129,21 @@ class _MainPageState extends State<MainPage>
           ),
           Padding(padding: EdgeInsets.only(right: 8.0)),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {},
             backgroundColor: Colors.white,
             child: Icon(Icons.close, color: Colors.red),
           ),
           Padding(padding: EdgeInsets.only(right: 8.0)),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {},
             backgroundColor: Colors.white,
             child: Icon(Icons.favorite, color: Colors.green),
           ),
           Padding(padding: EdgeInsets.only(right: 8.0)),
           FloatingActionButton(
+            heroTag: null,
             mini: true,
             onPressed: () {},
             backgroundColor: Colors.white,
