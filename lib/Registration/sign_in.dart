@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:purr/MainPage/MainPage.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -9,6 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+
   String _email, _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -48,11 +51,53 @@ class LoginPageState extends State<LoginPage> {
                         labelText: 'Password'
                     ),
                     obscureText: true,
+                  ),
+                  RaisedButton(
+                    onPressed: () async {
+                      print("in");
+                      await signIn();
+                    },
+                    child: Text('Sign In'),
                   )
                 ]
-              //TODO: implement widget
             )
         )
     );
   }
+
+  Future<void> signIn() async {
+    final formState = _formKey.currentState;
+    print(formState.validate());
+    if (!formState.validate()) {
+      print("gfiooufihg");
+      formState.save();
+      try {
+        UserCredential user = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: _email, password: _password);
+        //FirebaseUser user = FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MainPage()));
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+        }
+      }
+    }
+  }
+
+/*Future<void> signIn() async {
+
+    final formState = _formKey.currentState;
+    if(formState.validate()){
+      formState.save();
+      UserCredential user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
+      //FirebaseUser user = FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+
+        }
+      }
+    }*/
+
 }

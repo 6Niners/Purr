@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class MainController extends GetxController {
 
 
   @override
   Future<void> onInit() async {
+    Firebase.initializeApp();
     super.onInit();
   }
   // Start of swiping functions
