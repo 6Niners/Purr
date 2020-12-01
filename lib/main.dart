@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Registration/sign_in.dart';
 
-import 'MainPage/Controller/Controller.dart';
+import 'MainController.dart';
+import 'MainPage/MainPageController.dart';
 
 void main() {
   runApp(MyApp());

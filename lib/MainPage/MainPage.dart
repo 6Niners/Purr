@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:get/get.dart';
-import 'package:purr/MainPage/Controller/Controller.dart';
+import 'file:///F:/AndroidStudioProjects/Purr/lib/MainPage/MainPageController.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -107,7 +107,7 @@ class _MainPageState extends State<MainPage>
 
               //print(welcomeImages[index]);
               //print(orientation);
-              Get.find<MainController>().CheckSwipe(orientation);
+              Get.find<MainPageController>().CheckSwipe(orientation);
               /// Get orientation & index of swiped card!
             },
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
+import 'package:purr/Registration/RegistrationController.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -14,7 +16,7 @@ class LoginPageState extends State<LoginPage> {
 
   String _email, _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  RegistrationController CONT=Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +36,8 @@ class LoginPageState extends State<LoginPage> {
                         }
                         return null;
                       },
-                      onSaved: (input) => _email = input,
+                      onChanged: (input) => {_email = input},
+                      onSaved: (input) => {_email = input},
                       decoration: InputDecoration(
                           labelText: 'Email'
                       )
@@ -42,10 +45,11 @@ class LoginPageState extends State<LoginPage> {
                   TextFormField(
                     validator: (input) {
                       if (input.length < 6) {
-                        return 'Your password should be atleast 6 characters';
+                        return 'Your password should be at least 6 characters';
                       }
                       return null;
                     },
+                    onChanged: (input) => {_password = input},
                     onSaved: (input) => {_password = input},
                     decoration: InputDecoration(
                         labelText: 'Password'
@@ -55,7 +59,7 @@ class LoginPageState extends State<LoginPage> {
                   RaisedButton(
                     onPressed: () async {
                       print("in");
-                      await signIn();
+                      await CONT.signIn(_formKey,_email,_password);
                     },
                     child: Text('Sign In'),
                   )
@@ -65,25 +69,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> signIn() async {
-    final formState = _formKey.currentState;
 
-    if (formState.validate()) {
-      formState.save();
-      try {
-        UserCredential user = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: _email, password: _password);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MainPage()));
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
-        }
-      }
-    }
-  }
 
 
 
