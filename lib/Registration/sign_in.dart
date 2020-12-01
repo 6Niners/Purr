@@ -32,7 +32,7 @@ class LoginPageState extends State<LoginPage> {
                         if (input.isEmpty) {
                           return 'Please type an Email';
                         }
-                        return 'Ok';
+                        return null;
                       },
                       onSaved: (input) => _email = input,
                       decoration: InputDecoration(
@@ -44,7 +44,7 @@ class LoginPageState extends State<LoginPage> {
                       if (input.length < 6) {
                         return 'Your password should be atleast 6 characters';
                       }
-                      return 'Ok';
+                      return null;
                     },
                     onSaved: (input) => {_password = input},
                     decoration: InputDecoration(
@@ -67,9 +67,8 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> signIn() async {
     final formState = _formKey.currentState;
-    print(formState.validate());
-    if (!formState.validate()) {
-      print("gfiooufihg");
+
+    if (formState.validate()) {
       formState.save();
       try {
         UserCredential user = await FirebaseAuth.instance
