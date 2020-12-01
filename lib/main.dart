@@ -4,11 +4,11 @@ import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Registration/sign_in.dart';
 
 import 'MainController.dart';
-import 'MainPage/MainPageController.dart';
+
 
 void main() {
   runApp(MyApp());
-  MainController cont=Get.put(MainController());
+  Get.put(MainController());
 }
 
 class MyApp extends StatelessWidget {
