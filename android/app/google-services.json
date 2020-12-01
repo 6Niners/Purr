@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "943001514294",
+    "firebase_url": "https://purr-meow.firebaseio.com",
+    "project_id": "purr-meow",
+    "storage_bucket": "purr-meow.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943001514294:android:a4cd7643c4655c1571c397",
+        "android_client_info": {
+          "package_name": "com.meow.purr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943001514294-efq32jj6q3fgkt7p4v52g1beatadumsi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALVXZy8OzS8N9Z3LSN2QadXziUWkAW_yk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943001514294-efq32jj6q3fgkt7p4v52g1beatadumsi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
