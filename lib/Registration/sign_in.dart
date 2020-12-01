@@ -73,7 +73,6 @@ class LoginPageState extends State<LoginPage> {
       try {
         UserCredential user = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: _email, password: _password);
-        //FirebaseUser user = FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => MainPage()));
       } on FirebaseAuthException catch (e) {
@@ -86,17 +85,6 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-/*Future<void> signIn() async {
 
-    final formState = _formKey.currentState;
-    if(formState.validate()){
-      formState.save();
-      UserCredential user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
-      //FirebaseUser user = FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
-
-        }
-      }
-    }*/
 
 }
