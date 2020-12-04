@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Registration/sign_in.dart';
+import 'package:purr/Registration/sign_up.dart';
 
 import 'MainController.dart';
 
@@ -43,6 +44,7 @@ class ListOfPages extends StatelessWidget {
           children: <Widget>[
         PageButton(MainPage(),"Main Page"),
         PageButton(LoginPage(title: 'Sign In'),"Login Page"),
+        PageButton(SignUpPage(title: 'Sign Up'),"Sign Up Page"),
           ],
         ),
       ),

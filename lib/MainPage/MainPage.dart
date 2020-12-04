@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:get/get.dart';
-import 'file:///F:/AndroidStudioProjects/Purr/lib/MainPage/MainPageController.dart';
-
+import 'package:purr/MainPage/MainPageController.dart';
 
 class MainPage extends StatefulWidget {
   @override

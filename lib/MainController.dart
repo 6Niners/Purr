@@ -1,6 +1,5 @@
-
 import 'package:get/get.dart';
-import 'file:///F:/AndroidStudioProjects/Purr/lib/MainPage/MainPageController.dart';
+import 'package:purr/MainPage/MainPageController.dart';
 import 'package:purr/Registration/RegistrationController.dart';
 
 class MainController extends GetxController {
