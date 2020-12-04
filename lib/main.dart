@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
 
         primarySwatch: Colors.blue,
@@ -35,7 +36,7 @@ class ListOfPages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar:AppBar(title: Text("pages list"),centerTitle: true,),
       body:Center(
         child: Column(

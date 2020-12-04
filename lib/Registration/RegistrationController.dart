@@ -11,11 +11,7 @@ class RegistrationController extends GetxController{
     Firebase.initializeApp();
     super.onInit();
   }
-Future<void> signIn(GlobalKey<FormState> _formKey,String email,String password) async {
-  final formState = _formKey.currentState;
-
-  if (formState.validate()) {
-    formState.save();
+Future<void> signIn(String email,String password) async {
     try {
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -27,13 +23,11 @@ Future<void> signIn(GlobalKey<FormState> _formKey,String email,String password) 
         print('Wrong password provided for that user.');
       }
     }
-  }
+
 }
 
 
-Future<void> signUp(GlobalKey<FormState> _formKey,String email,String password) async {
-  final formState = _formKey.currentState;
-
+Future<void> signUp(String email,String password) async {
   try {
     FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email, password: password);

@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/Registration/RegistrationController.dart';
@@ -12,58 +13,115 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
 
-  String _email, _password;
+  TextEditingController _email=TextEditingController();
+  TextEditingController _password=TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   RegistrationController CONT=Get.find();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the _LoginPage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-        ),
+    return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/wallpaper-cat.jpg"), fit: BoxFit.cover)),
+        child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: Form(
             key: _formKey,
-            child: Column(
-                children: <Widget>[
-                  TextFormField(
-                      validator: (input) {
-                        if (input.isEmpty) {
-                          return 'Please type an Email';
-                        }
-                        return null;
-                      },
-                      onChanged: (input) => {_email = input},
-                      onSaved: (input) => {_email = input},
-                      decoration: InputDecoration(
-                          labelText: 'Email'
-                      )
-                  ),
-                  TextFormField(
-                    validator: (input) {
-                      if (input.length < 6) {
-                        return 'Your password should be at least 6 characters';
-                      }
-                      return null;
-                    },
-                    onChanged: (input) => {_password = input},
-                    onSaved: (input) => {_password = input},
-                    decoration: InputDecoration(
-                        labelText: 'Password'
-                    ),
-                    obscureText: true,
-                  ),
-                  RaisedButton(
-                    onPressed: () async {
-                      print("in");
-                      await CONT.signIn(_formKey,_email,_password);
-                    },
-                    child: Text('Sign In'),
-                  )
-                ]
+            child: Center(
+              child: Card(
+                  color: Colors.grey[400],
+                  elevation: 30,
+
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    children: <Widget>[
+                      Center(
+                        child: Container(
+                            padding: EdgeInsets.all(10),
+                            margin: EdgeInsets.all(5),
+                            child: Text(widget.title,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        margin: EdgeInsets.all(5),
+                        child: TextFormField(
+                            validator: (input) {
+                              if (!EmailValidator.validate(input)) {
+                                return 'Please type a valid Email';
+                              }
+                              return null;
+                            },
+                            controller: _email,
+                            style: TextStyle(fontSize: 20),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            decoration: InputDecoration(
+                                labelText: 'Email'
+                            )
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        margin: EdgeInsets.all(5),
+                        child: TextFormField(
+                          validator: (input) {
+                            if (input.length < 6) {
+                              return 'Your password should be at least 6 characters';
+                            }
+                            return null;
+                          },
+                          controller: _password,
+                          style: TextStyle(fontSize: 20),
+
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                              labelText: 'Password'
+                          ),
+                          obscureText: true,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            margin: EdgeInsets.all(5),
+                            width: 150,
+                            height: 70,
+                            child: RaisedButton(
+                              color: Colors.grey,
+                              onPressed: () async {
+                                Get.back();
+                              },
+                              child: Text('Back'),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            margin: EdgeInsets.all(5),
+                            width: 150,
+                            height: 70,
+
+                            child: RaisedButton(
+                              color: Colors.blue,
+                              onPressed: () async {
+                                //print("in");
+                                if (_formKey.currentState.validate()) {
+                                  await CONT.signIn(_email.text,_password.text);}
+                              },
+                              child: Text('Sign In',style: TextStyle(fontSize: 20,)),
+                            ),
+                          )
+                        ],
+                      ),
+
+                    ]
+                ),
+              ),
             )
-        )
+        ))
     );
   }
 
