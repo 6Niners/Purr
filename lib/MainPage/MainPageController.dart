@@ -3,6 +3,8 @@ import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../UI_Widgets.dart';
+
 class MainPageController extends GetxController {
 
 
@@ -45,16 +47,6 @@ class MainPageController extends GetxController {
   }
 
   //end of swiping functions
-  Future<void> ShowToast(String text) async {
-      Fluttertoast.showToast(
-          msg: text,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.grey[850],
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-    }
+
 
 }
