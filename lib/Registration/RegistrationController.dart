@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
 
-import '../UI_Widgets.dart';
+import 'package:purr/UI_Widgets.dart';
 class RegistrationController extends GetxController{
 
 

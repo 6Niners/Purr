@@ -3,7 +3,7 @@ import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import '../UI_Widgets.dart';
+import 'package:purr/UI_Widgets.dart';
 
 class MainPageController extends GetxController {
 
