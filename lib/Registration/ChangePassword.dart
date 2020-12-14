@@ -15,6 +15,10 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
   TextEditingController _Currentpassword = TextEditingController();
   TextEditingController _Newpassword = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _obscureText0=true;
+  bool _obscureText1=true;
+  bool _obscureText2=true;
+
   RegistrationController CONT = Get.find();
   @override
   Widget build(BuildContext context) {
@@ -60,8 +64,23 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                   style: TextStyle(fontSize: 20),
                                   decoration: InputDecoration(
                                       labelText: 'Current Password',
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        // Based on passwordVisible state choose the icon
+                                        _obscureText0
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Theme.of(context).primaryColorDark,
+                                      ),
+                                      onPressed: () {
+                                        // Update the state i.e. toogle the state of passwordVisible variable
+                                        setState(() {
+                                          _obscureText0 = !_obscureText0;
+                                        });
+                                      },
+                                    ),
                                   ),
-                                  obscureText: true,
+                                  obscureText: _obscureText0,
                                 ),
                               ),
 
@@ -80,8 +99,23 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                   AutovalidateMode.onUserInteraction,
                               controller: _Newpassword,
                               style: TextStyle(fontSize: 20),
-                              decoration: InputDecoration(labelText: 'Password'),
-                              obscureText: true,
+                              decoration: InputDecoration(labelText: 'Password',
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    // Based on passwordVisible state choose the icon
+                                    _obscureText1
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                  onPressed: () {
+                                    // Update the state i.e. toogle the state of passwordVisible variable
+                                    setState(() {
+                                      _obscureText1 = !_obscureText1;
+                                    });
+                                  },
+                                ),),
+                              obscureText: _obscureText1,
                             ),
                           ),
                           Container(
@@ -99,8 +133,23 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                   AutovalidateMode.onUserInteraction,
                               style: TextStyle(fontSize: 20),
                               decoration:
-                                  InputDecoration(labelText: 'Confirm Password'),
-                              obscureText: true,
+                                  InputDecoration(labelText: 'Confirm Password',
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        // Based on passwordVisible state choose the icon
+                                        _obscureText2
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Theme.of(context).primaryColorDark,
+                                      ),
+                                      onPressed: () {
+                                        // Update the state i.e. toogle the state of passwordVisible variable
+                                        setState(() {
+                                          _obscureText2 = !_obscureText2;
+                                        });
+                                      },
+                                    ),),
+                              obscureText: _obscureText2,
                             ),
                           ),
                           Row(
