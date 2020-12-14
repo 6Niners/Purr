@@ -36,6 +36,7 @@ Future<void> signUp(String email,String password) async {
   try {
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email, password: password);
+    FirebaseAuth.instance.currentUser.sendEmailVerification();
     Get.to(MainPage());
   } on FirebaseAuthException catch(e){
     print(e.code);
