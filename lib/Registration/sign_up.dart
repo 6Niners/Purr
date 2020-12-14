@@ -52,7 +52,9 @@ class SignUpPageState extends State<SignUpPage> {
                                 if (!EmailValidator.validate(input)) {
                                   return 'Please type a valid Email';
                                 }
-                                return null;
+                                else{
+                                  return null;
+                                }
                               },
                               autovalidateMode: AutovalidateMode.onUserInteraction,
                               controller: _email,
@@ -70,13 +72,34 @@ class SignUpPageState extends State<SignUpPage> {
                               if (input.length < 6) {
                                 return 'Your password should be at least 6 characters';
                               }
-                              return null;
+                              else{
+                                return null;
+                              }
                             },
                             autovalidateMode: AutovalidateMode.onUserInteraction,
                             controller: _password,
                             style: TextStyle(fontSize: 20),
                             decoration: InputDecoration(
                                 labelText: 'Password'
+                            ),
+                            obscureText: true,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.all(5),
+                          child: TextFormField(
+                            validator: (input) {
+                              if (input != _password.text) {
+                                return "Those passwords didn't match";
+                              }else{
+                              return null;
+                              }
+                            },
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            style: TextStyle(fontSize: 20),
+                            decoration: InputDecoration(
+                                labelText: 'Confirm Password'
                             ),
                             obscureText: true,
                           ),
