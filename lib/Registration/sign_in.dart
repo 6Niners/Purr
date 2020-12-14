@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/Registration/RegistrationController.dart';
+import 'package:purr/Registration/forgot_password.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -82,6 +83,17 @@ class LoginPageState extends State<LoginPage> {
                           obscureText: true,
                         ),
                       ),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(ForgotpasswordPage(title: 'Forgot password'));
+                          },
+                          child: new Text(
+                            'Forgot Password',
+                            style: TextStyle(color: Colors.blue),
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -113,7 +125,8 @@ class LoginPageState extends State<LoginPage> {
                               },
                               child: Text('Sign In',style: TextStyle(fontSize: 20,)),
                             ),
-                          )
+                          ),
+
                         ],
                       ),
 

@@ -45,12 +45,28 @@ Future<void> signUp(String email,String password) async {
     } else if (e.code == 'email-already-in-use'){
       print('This email is already in use, try to sign in instead');
       ShowToast('This email is already in use, try to sign in instead',Background_color: Colors.red);
-    }
+    }else{
+      ShowToast(e.message,Background_color: Colors.red);}
+
   } catch(e){
     print(e.toString());
   }
 }
 
+  Future<void> forgotpassword(String email) async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: email);
+      ShowToast("Reset password link has sent your mail please use it to change the password.",Background_color: Colors.blue);
+    } on FirebaseAuthException catch(e){
+      print(e.code);
+      if (e.code == 'user-not-found'){
 
+        ShowToast('There is no user with that email',Background_color: Colors.red);
+      }
+      else{
+      ShowToast(e.message,Background_color: Colors.red);}
+  }
+  }
 
 }

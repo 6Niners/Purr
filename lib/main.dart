@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
+import 'package:purr/Registration/forgot_password.dart';
 import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
 
@@ -44,6 +45,7 @@ class ListOfPages extends StatelessWidget {
         PageButton(MainPage(),"Main Page"),
         PageButton(LoginPage(title: 'Sign In'),"Login Page"),
         PageButton(SignUpPage(title: 'Sign Up'),"Sign Up Page"),
+        PageButton(ForgotpasswordPage(title: 'Forgot password'),"Forgot password"),
           ],
         ),
       ),
