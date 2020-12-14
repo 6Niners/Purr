@@ -30,7 +30,7 @@ class SignUpPageState extends State<SignUpPage> {
               key: _formKey,
               child: Center(
                 child: Card(
-                  color: Colors.grey[400],
+                  color: Colors.grey[100],
                   elevation: 30,
 
                   child: Column(

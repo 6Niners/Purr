@@ -6,6 +6,7 @@ import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
 
 import 'MainController.dart';
+import 'package:purr/Registration/ChangePassword.dart';
 
 
 void main() {
@@ -46,6 +47,8 @@ class ListOfPages extends StatelessWidget {
         PageButton(LoginPage(title: 'Sign In'),"Login Page"),
         PageButton(SignUpPage(title: 'Sign Up'),"Sign Up Page"),
         PageButton(ForgotpasswordPage(title: 'Forgot password'),"Forgot password"),
+        PageButton(ChangePasswordPage(title: 'Change Password'),"Change Password"),
+
           ],
         ),
       ),

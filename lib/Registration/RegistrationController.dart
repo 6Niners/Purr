@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
 
 import 'package:purr/UI_Widgets.dart';
 class RegistrationController extends GetxController{
+  UserCredential user;
 
 
   @override
@@ -16,7 +16,7 @@ class RegistrationController extends GetxController{
   }
 Future<void> signIn(String email,String password) async {
     try {
-      UserCredential user = await FirebaseAuth.instance
+      user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       Get.to(MainPage());
     } on FirebaseAuthException catch (e) {
@@ -70,4 +70,25 @@ Future<void> signUp(String email,String password) async {
   }
   }
 
+  //if the user is logged in
+  Future<bool> validatePassword(String password) async {
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    var authCredentials = EmailAuthProvider.credential(
+        email: firebaseUser.email, password: password);
+    try {
+      var authResult = await firebaseUser
+          .reauthenticateWithCredential(authCredentials);
+      return authResult.user != null;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<void> updatePassword(String password) async {
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser.updatePassword(password);
+    print("changed to "+password);
+    ShowToast("your password got changed",Background_color: Colors.blue);
+  }
 }

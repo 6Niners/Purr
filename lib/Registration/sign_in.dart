@@ -30,8 +30,8 @@ class LoginPageState extends State<LoginPage> {
             key: _formKey,
             child: Center(
               child: Card(
-                  color: Colors.grey[400],
-                  elevation: 30,
+                color: Colors.grey[100],
+                elevation: 30,
 
                 child: Column(
                     mainAxisSize: MainAxisSize.min,

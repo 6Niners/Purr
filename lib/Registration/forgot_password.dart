@@ -14,7 +14,6 @@ class ForgotpasswordPage extends StatefulWidget {
 class ForgotpasswordPageState extends State<ForgotpasswordPage> {
 
   TextEditingController _email=TextEditingController();
-  TextEditingController _password=TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   RegistrationController CONT=Get.find();
   @override
@@ -29,7 +28,7 @@ class ForgotpasswordPageState extends State<ForgotpasswordPage> {
                 key: _formKey,
                 child: Center(
                   child: Card(
-                    color: Colors.grey[400],
+                    color: Colors.grey[100],
                     elevation: 30,
 
                     child: Column(
