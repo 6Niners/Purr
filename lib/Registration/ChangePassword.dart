@@ -15,9 +15,9 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
   TextEditingController _Currentpassword = TextEditingController();
   TextEditingController _Newpassword = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _obscureText0=true;
-  bool _obscureText1=true;
-  bool _obscureText2=true;
+  bool _obscureTextCurrentPassword=true;
+  bool _obscureTextNewPassword=true;
+  bool _obscureTextConfirmPassword=true;
 
   RegistrationController CONT = Get.find();
   @override
@@ -67,7 +67,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         // Based on passwordVisible state choose the icon
-                                        _obscureText0
+                                        _obscureTextCurrentPassword
                                             ? Icons.visibility
                                             : Icons.visibility_off,
                                         color: Theme.of(context).primaryColorDark,
@@ -75,12 +75,12 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                       onPressed: () {
                                         // Update the state i.e. toogle the state of passwordVisible variable
                                         setState(() {
-                                          _obscureText0 = !_obscureText0;
+                                          _obscureTextCurrentPassword = !_obscureTextCurrentPassword;
                                         });
                                       },
                                     ),
                                   ),
-                                  obscureText: _obscureText0,
+                                  obscureText: _obscureTextCurrentPassword,
                                 ),
                               ),
 
@@ -103,7 +103,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     // Based on passwordVisible state choose the icon
-                                    _obscureText1
+                                    _obscureTextNewPassword
                                         ? Icons.visibility
                                         : Icons.visibility_off,
                                     color: Theme.of(context).primaryColorDark,
@@ -111,11 +111,11 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                   onPressed: () {
                                     // Update the state i.e. toogle the state of passwordVisible variable
                                     setState(() {
-                                      _obscureText1 = !_obscureText1;
+                                      _obscureTextNewPassword = !_obscureTextNewPassword;
                                     });
                                   },
                                 ),),
-                              obscureText: _obscureText1,
+                              obscureText: _obscureTextNewPassword,
                             ),
                           ),
                           Container(
@@ -137,7 +137,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         // Based on passwordVisible state choose the icon
-                                        _obscureText2
+                                        _obscureTextConfirmPassword
                                             ? Icons.visibility
                                             : Icons.visibility_off,
                                         color: Theme.of(context).primaryColorDark,
@@ -145,11 +145,11 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                       onPressed: () {
                                         // Update the state i.e. toogle the state of passwordVisible variable
                                         setState(() {
-                                          _obscureText2 = !_obscureText2;
+                                          _obscureTextConfirmPassword = !_obscureTextConfirmPassword;
                                         });
                                       },
                                     ),),
-                              obscureText: _obscureText2,
+                              obscureText: _obscureTextConfirmPassword,
                             ),
                           ),
                           Row(

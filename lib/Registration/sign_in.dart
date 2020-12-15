@@ -17,7 +17,7 @@ class LoginPageState extends State<LoginPage> {
   TextEditingController _email=TextEditingController();
   TextEditingController _password=TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _obscureText0=true;
+  bool _obscureTextPassword=true;
   RegistrationController CONT=Get.find();
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class LoginPageState extends State<LoginPage> {
                             suffixIcon: IconButton(
                               icon: Icon(
                                 // Based on passwordVisible state choose the icon
-                                _obscureText0
+                                _obscureTextPassword
                                     ? Icons.visibility
                                     : Icons.visibility_off,
                                 color: Theme.of(context).primaryColorDark,
@@ -92,13 +92,13 @@ class LoginPageState extends State<LoginPage> {
                               onPressed: () {
                                 // Update the state i.e. toogle the state of passwordVisible variable
                                 setState(() {
-                                  _obscureText0 = !_obscureText0;
+                                  _obscureTextPassword = !_obscureTextPassword;
                                 });
                               },
                             ),
                             ),
 
-                          obscureText: _obscureText0,
+                          obscureText: _obscureTextPassword,
                         ),
 
                       ),
