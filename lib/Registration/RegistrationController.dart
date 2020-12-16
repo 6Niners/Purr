@@ -23,9 +23,9 @@ class RegistrationController extends GetxController {
           .signInWithEmailAndPassword(email: email, password: password);
       firebaseUser = FirebaseAuth.instance.currentUser;
       if(firebaseUser.emailVerified){
-        Get.to(MainPage());
+        Get.offAll(MainPage());
       }else{
-        Get.to(VerfiyEmailPage());
+        Get.offAll(VerfiyEmailPage());
       }
 
     } on FirebaseAuthException catch (e) {
@@ -46,7 +46,7 @@ class RegistrationController extends GetxController {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email, password: password);
-      Get.to(VerfiyEmailPage());
+      Get.offAll(VerfiyEmailPage());
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'weak-password') {
