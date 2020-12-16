@@ -124,7 +124,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                             child: TextFormField(
                               validator: (input) {
                                 if (input != _Newpassword.text) {
-                                  return "Those passwords didn't match";
+                                  return "These passwords don't match";
                                 } else {
                                   return null;
                                 }

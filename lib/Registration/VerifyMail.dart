@@ -121,6 +121,7 @@ resendbutton() {
     {
     CONT.SendEmailVerification();
     count++;
+    timerforbutton.cancel();
     setbuttontimer();
     };
 

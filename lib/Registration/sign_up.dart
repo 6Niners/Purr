@@ -110,7 +110,7 @@ class SignUpPageState extends State<SignUpPage> {
                           child: TextFormField(
                             validator: (input) {
                               if (input != _password.text) {
-                                return "Those passwords didn't match";
+                                return "These passwords don't match";
                               }else{
                               return null;
                               }
