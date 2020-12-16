@@ -37,7 +37,7 @@ class ListOfPages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:AppBar(title: Text("pages list"),centerTitle: true,),
+      appBar:AppBar(title: Text("Main Menu"),centerTitle: true,),
       body:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -48,6 +48,7 @@ class ListOfPages extends StatelessWidget {
         PageButton(SignUpPage(title: 'Sign Up'),"Sign Up Page"),
         PageButton(ForgotpasswordPage(title: 'Forgot password'),"Forgot password"),
         PageButton(ChangePasswordPage(title: 'Change Password'),"Change Password"),
+        PageButton(MainPage(), "Profile"),
 
           ],
         ),
