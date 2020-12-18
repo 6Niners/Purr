@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 
-class FetchProfilePage extends StatelessWidget {
+class FetchProfilePage extends StatefulWidget {
+  @override
+  _FetchProfilePageState createState() => _FetchProfilePageState();
+}
+
+
+class _FetchProfilePageState extends State<FetchProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
