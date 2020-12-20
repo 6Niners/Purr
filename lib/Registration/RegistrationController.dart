@@ -3,10 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
-
+import 'package:purr/Registration/VerifyMail.dart';
+import 'package:purr/Services/Database.dart';
 import 'package:purr/UI_Widgets.dart';
 
-import 'package:purr/Registration/VerifyMail.dart';
+
 class RegistrationController extends GetxController {
   User firebaseUser;
 
@@ -46,6 +47,7 @@ class RegistrationController extends GetxController {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email, password: password);
+      await DatabaseService(uid: FirebaseAuth.instance.currentUser.uid).updateUserData('null', 'null', 'null');
       Get.offAll(VerfiyEmailPage());
     } on FirebaseAuthException catch (e) {
       print(e.code);
@@ -60,6 +62,7 @@ class RegistrationController extends GetxController {
       } else {
         ShowToast(e.message, Background_color: Colors.red);
       }
+
     } catch (e) {
       print(e.toString());
     }

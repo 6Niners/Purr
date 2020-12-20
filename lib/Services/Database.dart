@@ -7,7 +7,7 @@ class DatabaseService {
 
   final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
 
-  Future<void> updateUserData(String petName, String pet, int breed) async {
+  Future<void> updateUserData(String petName, String pet, String breed) async {
     return await user.doc(uid).set({
       'Pet Name': petName,
       'Pet': pet,
