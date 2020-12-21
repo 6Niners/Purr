@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
+import 'package:purr/Registration/SetupProfile.dart';
 import 'package:purr/Registration/VerifyMail.dart';
 import 'package:purr/Services/Database.dart';
 import 'package:purr/UI_Widgets.dart';
@@ -121,7 +122,7 @@ class RegistrationController extends GetxController {
     firebaseUser = FirebaseAuth.instance.currentUser;
     firebaseUser.reload();
     if (firebaseUser.emailVerified) {
-      Get.offAll(MainPage());
+      Get.offAll(SetupProfilePage(title: 'Setup Page'));
     }
   }
 }

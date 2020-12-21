@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
+import 'package:purr/Profile/FetchProfilePage.dart';
+import 'package:purr/Registration/ChangePassword.dart';
+import 'package:purr/Registration/SetupProfile.dart';
 import 'package:purr/Registration/forgot_password.dart';
 import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
-import 'package:purr/Profile/FetchProfilePage.dart';
 
 import 'MainController.dart';
-import 'package:purr/Registration/ChangePassword.dart';
 
 
 void main() {
   runApp(MyApp());
   Get.put(MainController());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -50,6 +52,8 @@ class ListOfPages extends StatelessWidget {
         PageButton(ForgotpasswordPage(title: 'Forgot password'),"Forgot password"),
         PageButton(ChangePasswordPage(title: 'Change Password'),"Change Password"),
         PageButton(FetchProfilePage(), "Profile"),
+        PageButton(SetupProfilePage(), "Setup Profile"),
+
 
           ],
         ),

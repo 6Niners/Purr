@@ -82,6 +82,8 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+/.dart_tool/
+/.dart_tool
 .dart_tool/
 .dart_tool/flutter_build/
 .dart_tool/package_config.json
