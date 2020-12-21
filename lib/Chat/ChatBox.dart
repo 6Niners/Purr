@@ -1,8 +1,7 @@
 import 'dart:async';
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  import 'dart:io';
-  import 'package:cloud_firestore/cloud_firestore.dart';
-  import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ChatConroller extends GetxController {
@@ -23,17 +22,17 @@ class ChatConroller extends GetxController {
           }
           return ListView.builder(
               itemCount: snapshot.data.documents.length,
-              //the length of documents that we have created in our database and to retrieve data stored in Cloud Firestore
+              //the length of documents that we have created in our database and to retrieve data stored in Cloud Fire store
               itemBuilder: (context,
                   index) { // the function is to get only last item in the chat with any data type
-                return Container(// the return the last message as in tile funnction
+                return Container(// the return the last message as in tile function
                   child: Text(snapshot.data.documents[index].data["message"]),
                 );
               }
           );
         }
         else {
-          return Text("write somthing to" + receivername); // if it is the first time to talke     //lw fe w2t h3'yrha le sora
+          return Text("write something to" + receivername); // if it is the first time to talk     //lw fe w2t h3'yrha le sora
         }
       },
     );
@@ -44,7 +43,7 @@ class ChatConroller extends GetxController {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   addMessage(String Message) {
     //function to writ the message
-    if (Message.isNotEmpty) { // if there is somthing in the writing bare
+    if (Message.isNotEmpty) { // if there is something in the writing bare
       Map<String, dynamic> chatroomMap = {
         //save the data in the database using mapping
         "sendBy": sendername,
@@ -65,7 +64,7 @@ class ChatConroller extends GetxController {
     //function to creat a chat room in the data base
     Firestore.instance.collection("ChatRoom")
         .document(chatroomID) //the document is an id store place
-        .setData(chatroomMap) // the setdata is a place to store the data
+        .setData(chatroomMap) // the set data is a place to store the data
         .catchError((e) {
       print(e.toString());
     }); //if there is any error

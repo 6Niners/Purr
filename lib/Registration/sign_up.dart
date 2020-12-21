@@ -119,6 +119,7 @@ class SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(fontSize: 20),
                             decoration: InputDecoration(
                                 labelText: 'Confirm Password',
+
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   // Based on passwordVisible state choose the icon
