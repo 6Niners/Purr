@@ -60,6 +60,4 @@ class ChatBox1 extends StatelessWidget {
       ),
     );
   } //widget
-
-
-} //class ChatBox1
+}//class ChatBox1
