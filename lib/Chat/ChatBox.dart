@@ -44,7 +44,7 @@ class ChatConroller extends GetxController {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   addMessage(String Message) {
     //function to writ the message
-    if (Message.isNotEmpty) { // if there is somthing in the writing bare
+    if (Message.isNotEmpty) { // if there is something in the writing bare
       Map<String, dynamic> chatroomMap = {
         //save the data in the database using mapping
         "sendBy": sendername,
@@ -63,7 +63,7 @@ class ChatConroller extends GetxController {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   creatChatRoom(String chatroomID, chatroomMap) {
     //function to creat a chat room in the data base
-    Firestore.instance.collection("ChatRoom")
+    FirebaseFirestore.instance.collection("ChatRoom")
         .document(chatroomID) //the document is an id store place
         .setData(chatroomMap) // the setdata is a place to store the data
         .catchError((e) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:purr/Chat/Chat_screen_UI.dart';
 import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
@@ -53,6 +54,8 @@ class ListOfPages extends StatelessWidget {
         PageButton(ChangePasswordPage(title: 'Change Password'),"Change Password"),
         PageButton(FetchProfilePage(), "Profile"),
         PageButton(SetupProfilePage(), "Setup Profile"),
+            PageButton(ChatBox1(),"chat"),
+
 
 
           ],
