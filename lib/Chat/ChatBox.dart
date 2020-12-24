@@ -62,7 +62,7 @@ class ChatConroller extends GetxController {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   creatChatRoom(String chatroomID, chatroomMap) {
     //function to creat a chat room in the data base
-    Firestore.instance.collection("ChatRoom")
+    FirebaseFirestore.instance.collection("ChatRoom")
         .document(chatroomID) //the document is an id store place
         .setData(chatroomMap) // the set data is a place to store the data
         .catchError((e) {
