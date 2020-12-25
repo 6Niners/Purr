@@ -6,13 +6,14 @@ import 'dart:async';
 import 'package:get/get.dart';
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ChatConroller extends GetxController {
-  String receivername="";
-  String sendername="";
-  String senderid="";
+  String receivername = "";
+  String sendername = "";
+  String senderid = "";
   Stream chats;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Widget chatMessages() {
-    //buid a widget to view the messages
+    //build a widget to view the messages
     return StreamBuilder( //return and stream the chat section from the data base with last update
       stream: chats,
       builder: (context,
@@ -26,14 +27,14 @@ class ChatConroller extends GetxController {
               //the length of documents that we have created in our database and to retrieve data stored in Cloud Firestore
               itemBuilder: (context,
                   index) { // the function is to get only last item in the chat with any data type
-                return Container(// the return the last message as in tile funnction
+                return Container( // the return the last message as in tile function
                   child: Text(snapshot.data.documents[index].data["message"]),
                 );
               }
           );
         }
         else {
-          return Text("write somthing to" + receivername); // if it is the first time to talke     //lw fe w2t h3'yrha le sora
+          return Text('Meow your message'); // if it is the first time to talker
         }
       },
     );
@@ -64,8 +65,8 @@ class ChatConroller extends GetxController {
   creatChatRoom(String chatroomID, chatroomMap) {
     //function to creat a chat room in the data base
     FirebaseFirestore.instance.collection("ChatRoom")
-        .document(chatroomID) //the document is an id store place
-        .setData(chatroomMap) // the setdata is a place to store the data
+        .doc(chatroomID) //the document is an id store place
+        .set(chatroomMap) // the setdata is a place to store the data
         .catchError((e) {
       print(e.toString());
     }); //if there is any error
