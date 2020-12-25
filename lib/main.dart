@@ -8,7 +8,7 @@ import 'package:purr/Registration/SetupProfile.dart';
 import 'package:purr/Registration/forgot_password.dart';
 import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'MainController.dart';
 
 

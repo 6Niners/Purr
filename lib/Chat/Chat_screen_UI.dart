@@ -29,6 +29,15 @@ class ChatBox1 extends StatelessWidget {
        preferredCameraDevice: CameraDevice.front,
     );
   }
+  ///////////////////////////////////////////
+  Future<void> pickpicture()async{
+    final imageFile= await ImagePicker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 600,
+        maxHeight: 700,
+      imageQuality: 50
+    );
+  }
 
   ///////////////////////////////////////////
   addMessage(String Message) {
@@ -83,7 +92,7 @@ class ChatBox1 extends StatelessWidget {
             icon: Icon(Icons.photo),
             iconSize: 25.0,
             color: Colors.redAccent,
-            onPressed: () {},
+            onPressed: () => {pickpicture()},
           ),
           Expanded(
             child: TextField(
