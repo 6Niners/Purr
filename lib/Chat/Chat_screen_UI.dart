@@ -19,6 +19,7 @@ class ChatBox1 extends StatelessWidget {
 
   ///////////////////////////////////////////
   Future<void> takePicture() async {
+     print('function works');
     ImagePicker _picker = ImagePicker();
     _picker.getImage(
       source: ImageSource.camera,
