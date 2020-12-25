@@ -54,7 +54,7 @@ class ListOfPages extends StatelessWidget {
             PageButton(ForgotpasswordPage(title: 'Forgot password'), "Forgot password"),
             PageButton(ChangePasswordPage(title: 'Change Password'), "Change Password"),
             PageButton(FetchProfilePage(), "Profile"),
-            PageButton(SetupProfilePage(), "Setup Profile"),
+            PageButton(SetupProfilePage(title: "Setup Profile"), "Setup Profile"),
             PageButton(ChatBox1(), "chat"),
 
 
