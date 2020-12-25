@@ -12,6 +12,7 @@ import 'package:purr/Registration/sign_up.dart';
 import 'MainController.dart';
 
 
+
 void main() {
   runApp(MyApp());
   Get.put(MainController());
@@ -41,21 +42,20 @@ class ListOfPages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:AppBar(title: Text("Main Menu"),centerTitle: true,),
-      body:Center(
+      appBar: AppBar(title: Text("Main Menu"), centerTitle: true,),
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-        PageButton(MainPage(),"Main Page!"),
-        PageButton(LoginPage(title: 'Sign In'),"Login Page!"),
-        PageButton(SignUpPage(title: 'Sign Up'),"Sign Up Page"),
-        PageButton(ForgotpasswordPage(title: 'Forgot password'),"Forgot password"),
-        PageButton(ChangePasswordPage(title: 'Change Password'),"Change Password"),
-        PageButton(FetchProfilePage(), "Profile"),
-        PageButton(SetupProfilePage(), "Setup Profile"),
-            PageButton(ChatBox1(),"chat"),
-
+            PageButton(MainPage(), "Main Page!"),
+            PageButton(LoginPage(title: 'Sign In'), "Login Page!"),
+            PageButton(SignUpPage(title: 'Sign Up'), "Sign Up Page"),
+            PageButton(ForgotpasswordPage(title: 'Forgot password'), "Forgot password"),
+            PageButton(ChangePasswordPage(title: 'Change Password'), "Change Password"),
+            PageButton(FetchProfilePage(), "Profile"),
+            PageButton(SetupProfilePage(), "Setup Profile"),
+            PageButton(ChatBox1(), "chat"),
 
 
           ],
