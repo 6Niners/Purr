@@ -19,23 +19,26 @@ class ChatBox1 extends StatelessWidget {
 
   ///////////////////////////////////////////
   Future<void> takePicture() async {
-     print('function works');
+    // print('function works');
     ImagePicker _picker = ImagePicker();
     _picker.getImage(
       source: ImageSource.camera,
-       maxWidth: 600.0,
+      maxWidth: 600.0,
       maxHeight: 700.0,
       imageQuality: 25,
-       preferredCameraDevice: CameraDevice.front,
+      preferredCameraDevice: CameraDevice.front,
     );
   }
+
   ///////////////////////////////////////////
-  Future<void> pickpicture()async{
-    final imageFile= await ImagePicker.pickImage(
+  Future<void> pickpicture() async {
+    print('function works');
+    final picker = ImagePicker();
+    picker.getImage(
         source: ImageSource.gallery,
         maxWidth: 600,
         maxHeight: 700,
-      imageQuality: 50
+        imageQuality: 50
     );
   }
 
@@ -86,7 +89,7 @@ class ChatBox1 extends StatelessWidget {
             icon: Icon(Icons.camera),
             iconSize: 25.0,
             color: Colors.redAccent,
-            onPressed: () => {takePicture},
+            onPressed: () => {takePicture()},
           ),
           IconButton(
             icon: Icon(Icons.photo),
