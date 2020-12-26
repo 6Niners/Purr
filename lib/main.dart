@@ -12,7 +12,8 @@ import 'MainController.dart';
 
 
 
-void main() {
+Future<void> main() async {
+
   runApp(MyApp());
   Get.put(MainController());
 

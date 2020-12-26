@@ -9,7 +9,7 @@ class MainController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    Firebase.initializeApp();
+    await Firebase.initializeApp();
     Get.put(MainPageController());
     Get.put(RegistrationController());
     Get.put(DatabaseService());
