@@ -1,16 +1,14 @@
 
 import 'dart:async';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:get/get.dart';
 
 
 ///////////////////////////////////////////
 
 
-class ChatBox1 extends StatelessWidget {
+class ChatBox extends StatelessWidget {
 
   String receivername = " pet name";
   String sendername = "Sender";
@@ -20,29 +18,72 @@ class ChatBox1 extends StatelessWidget {
 
   ///////////////////////////////////////////
   Widget chatMessages() {
-    Stream chats = FirebaseFirestore.instance.collection('ChatRoom')
-        .snapshots();
-    CollectionReference users = FirebaseFirestore.instance.collection(
-        'ChatRoom').doc(senderid).collection('messages');
+    var chat = FirebaseFirestore.instance.collection(
+        'ChatRoom').doc(senderid).collection('messages').orderBy("time",descending: false);
     // print('work work work work work');
     //buid a widget to view the messages
     return Container(
       height: 1000,
       child: StreamBuilder<QuerySnapshot>(
-        stream: users.snapshots(),
+        stream: chat.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Something went wrong');
           }
-
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Text("Loading");
           }
-
           return new ListView(
             children: snapshot.data.docs.map((DocumentSnapshot document) {
-              return new ListTile(
-                title: new Text(document.data()['message']),
+              bool sendByMe=false;
+              if(document.data()['sendBy']==sendername){
+                sendByMe=true;
+              }else{
+                sendByMe=false;
+              }
+              return Container(
+                padding: EdgeInsets.only(
+                    top: 8,
+                    bottom: 8,
+                    left: sendByMe ? 0 : 24,
+                    right: sendByMe ? 24 : 0),
+                alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
+                child: Container(
+                  margin: sendByMe
+                      ? EdgeInsets.only(left: 30)
+                      : EdgeInsets.only(right: 30),
+                  padding: EdgeInsets.only(
+                      top: 17, bottom: 17, left: 20, right: 20),
+                  decoration: BoxDecoration(
+                      borderRadius: sendByMe ? BorderRadius.only(
+                          topLeft: Radius.circular(23),
+                          topRight: Radius.circular(23),
+                          bottomLeft: Radius.circular(23)
+                      ) :
+                      BorderRadius.only(
+                          topLeft: Radius.circular(23),
+                          topRight: Radius.circular(23),
+                          bottomRight: Radius.circular(23)),
+                      gradient: LinearGradient(
+
+                        colors: sendByMe ? [
+                          const Color(0xff007EF4),
+                          const Color(0xff2A75BC)
+                        ]
+                            : [
+                          const Color(0xFFFF1744),
+                          const Color(0xFFD50000)
+                        ],
+                      )
+                  ),
+                  child: Text(document.data()['message'],
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'OverpassRegular',
+                          fontWeight: FontWeight.w300)),
+                ),
               );
             }).toList(),
           );
@@ -135,7 +176,6 @@ class ChatBox1 extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Expanded(child: chatMessages()),
-          Flexible(fit: FlexFit.tight, child: SizedBox()),
           buildMessageComposer(),
         ],
       ),
@@ -144,9 +184,9 @@ class ChatBox1 extends StatelessWidget {
   buildMessageComposer() {
     TextEditingController Message = TextEditingController();
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
-      height: 40.0,
-      color: Colors.white,
+      padding: EdgeInsets.all(10),
+      height: 60.0,
+      color: Colors.pink[50],
       child: Row(
         children: <Widget>[
           IconButton(

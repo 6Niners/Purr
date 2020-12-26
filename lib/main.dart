@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Purr',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -57,7 +57,7 @@ class ListOfPages extends StatelessWidget {
               PageButton(ChangePasswordPage(), "Change Password"),
               PageButton(FetchProfilePage(), "Profile"),
               PageButton(SetupProfilePage(), "Setup Profile"),
-              PageButton(ChatBox1(), "chat"),
+              PageButton(ChatBox(), "chat"),
 
 
             ],
