@@ -7,17 +7,56 @@ import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////
 
 
 class ChatBox1 extends StatelessWidget {
-  ///////////////////////////////////////////
-  String receivername = "";
-  String sendername = "";
-  String senderid = "";
-  Stream chats;
+
+  String receivername = " pet name";
+  String sendername = "Sender";
+  String senderid = "6969";
 
   ///////////////////////////////////////////
+
+  ///////////////////////////////////////////
+  Widget chatMessages() {
+    Stream chats = FirebaseFirestore.instance.collection('ChatRoom')
+        .snapshots();
+    CollectionReference users = FirebaseFirestore.instance.collection(
+        'ChatRoom').doc(senderid).collection('messages');
+    // print('work work work work work');
+    //buid a widget to view the messages
+    return Container(
+      height: 1000,
+      child: StreamBuilder<QuerySnapshot>(
+        stream: users.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading");
+          }
+
+          return new ListView(
+            children: snapshot.data.docs.map((DocumentSnapshot document) {
+              return new ListTile(
+                title: new Text(document.data()['message']),
+              );
+            }).toList(),
+          );
+        },
+      ),
+    );
+  }
+
+  ///////////////////////////////////////////
+
+
+    //////////////////////////////////////////
+   //            Chat Functions            //
+  //////////////////////////////////////////
   Future<void> takePicture() async {
     // print('function works');
     ImagePicker _picker = ImagePicker();
@@ -32,7 +71,7 @@ class ChatBox1 extends StatelessWidget {
 
   ///////////////////////////////////////////
   Future<void> pickpicture() async {
-    print('function works');
+   // print('function works');
     final picker = ImagePicker();
     picker.getImage(
         source: ImageSource.gallery,
@@ -56,7 +95,7 @@ class ChatBox1 extends StatelessWidget {
         "time": DateTime.now(),
         'sender_id': senderid,
       };
-      creatChatRoom('1', chatroomMap);
+      creatChatRoom( senderid, chatroomMap);
     }
     else {
       return ("please write a message");
@@ -67,22 +106,47 @@ class ChatBox1 extends StatelessWidget {
   creatChatRoom(String chatroomID, chatroomMap) {
     //function to create a chat room in the data base
     FirebaseFirestore.instance.collection("ChatRoom")
-        .doc(chatroomID) //the document is an id store place
-        .set(chatroomMap) // the setdata is a place to store the data
+        .doc(chatroomID).collection("messages") //the document is an id store place
+         // the set data is a place to store the data
+    .add(chatroomMap)
         .catchError((e) {
       print(e.toString());
     }); //if there is any error
   }
 
+    /////////////////////////////////////////
+   //             Chat UI                 //
   /////////////////////////////////////////
 
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent, //appBar color
+        title: Text( receivername,
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(child: chatMessages()),
+          Flexible(fit: FlexFit.tight, child: SizedBox()),
+          buildMessageComposer(),
+        ],
+      ),
+    );
+  } //widget
   buildMessageComposer() {
     TextEditingController Message = TextEditingController();
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      height: 70.0,
-      color: Colors.white60,
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      height: 40.0,
+      color: Colors.white,
       child: Row(
         children: <Widget>[
           IconButton(
@@ -119,37 +183,4 @@ class ChatBox1 extends StatelessWidget {
     );
   } //buildMessageComposer
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.redAccent,
-      appBar: AppBar(
-        backgroundColor: Colors.redAccent, //appBar color
-        title: Text(
-          'petName or userName',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              child: buildMessageComposer(),
-
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  } //widget
 }//class ChatBox1
