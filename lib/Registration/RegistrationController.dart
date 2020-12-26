@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
@@ -15,7 +15,6 @@ class RegistrationController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    Firebase.initializeApp();
     super.onInit();
   }
 
