@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>943001514294-cqcbo8mr50ni8dnm6prai2egdqft3hkq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.943001514294-cqcbo8mr50ni8dnm6prai2egdqft3hkq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAN80ZHn5fsuO0jsLrOnF467TGi5nX4oz4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>943001514294</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.meow.purr</string>
+	<key>PROJECT_ID</key>
+	<string>purr-meow</string>
+	<key>STORAGE_BUCKET</key>
+	<string>purr-meow.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:943001514294:ios:30357d42165002cc71c397</string>
+	<key>DATABASE_URL</key>
+	<string>https://purr-meow.firebaseio.com</string>
+</dict>
+</plist>
