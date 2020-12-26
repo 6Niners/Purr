@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+
 import 'package:purr/Models/ProfileData.dart';
 
 class UserDataList extends StatefulWidget {
@@ -14,7 +14,6 @@ class _UserDataListState extends State<UserDataList> {
   Widget build(BuildContext context) {
 
     final profileData = Provider.of<List<ProfileData>>(context);
-
 
     return Padding(
       padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
