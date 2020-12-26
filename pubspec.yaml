@@ -37,6 +37,8 @@ dependencies:
   #To pick image from gallery
   image_picker: ^0.6.7+17
 
+  provider: ^4.3.2+3
+
 
 dev_dependencies:
   flutter_test:
