@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:purr/Services/Database.dart';
 
 class SetupProfilePage extends StatefulWidget {
-  SetupProfilePage({Key key, this.title}) : super(key: key);
-  final String title;
 
   @override
   SetupProfilePageState createState() => SetupProfilePageState();
@@ -44,7 +42,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                           child: Container(
                               padding: EdgeInsets.all(10),
                               margin: EdgeInsets.all(5),
-                              child: Text(widget.title,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                              child: Text("Setup Profile",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
                         ),
                         Container(
                           padding: EdgeInsets.all(10),

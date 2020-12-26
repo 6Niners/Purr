@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:purr/Registration/RegistrationController.dart';
 
 class SignUpPage extends StatefulWidget {
-  SignUpPage({Key key, this.title}) : super(key: key);
-  final String title;
+
 
   @override
   SignUpPageState createState() => SignUpPageState();
@@ -44,7 +43,7 @@ class SignUpPageState extends State<SignUpPage> {
                           child: Container(
                               padding: EdgeInsets.all(10),
                               margin: EdgeInsets.all(5),
-                              child: Text(widget.title,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                              child: Text("Sign Up",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
                         ),
                         Container(
                           padding: EdgeInsets.all(10),

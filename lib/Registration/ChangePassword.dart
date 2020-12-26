@@ -3,8 +3,7 @@ import 'package:get/get.dart';
 import 'package:purr/Registration/RegistrationController.dart';
 
 class ChangePasswordPage extends StatefulWidget {
-  ChangePasswordPage({Key key, this.title}) : super(key: key);
-  final String title;
+
 
   @override
   ChangePasswordPageState createState() => ChangePasswordPageState();
@@ -46,7 +45,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                 padding: EdgeInsets.all(10),
                                 margin: EdgeInsets.all(5),
                                 child: Text(
-                                  widget.title,
+                                  'Change Password',
                                   style: TextStyle(
                                       fontSize: 20, fontWeight: FontWeight.bold),
                                 )),

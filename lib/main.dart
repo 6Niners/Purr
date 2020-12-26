@@ -8,7 +8,6 @@ import 'package:purr/Registration/SetupProfile.dart';
 import 'package:purr/Registration/forgot_password.dart';
 import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
-import 'package:image_picker/image_picker.dart';
 import 'MainController.dart';
 
 
@@ -44,21 +43,24 @@ class ListOfPages extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(title: Text("Main Menu"), centerTitle: true,),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            PageButton(MainPage(), "Main Page!"),
-            PageButton(LoginPage(title: 'Sign In'), "Login Page!"),
-            PageButton(SignUpPage(title: 'Sign Up'), "Sign Up Page"),
-            PageButton(ForgotpasswordPage(title: 'Forgot password'), "Forgot password"),
-            PageButton(ChangePasswordPage(title: 'Change Password'), "Change Password"),
-            PageButton(FetchProfilePage(), "Profile"),
-            PageButton(SetupProfilePage(title: "Setup Profile"), "Setup Profile"),
-            PageButton(ChatBox1(), "chat"),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              PageButton(LoginPage(), "Main App Route"),
+              PageButton(MainPage(), "Main Page!"),
+              PageButton(LoginPage(), "Login Page!"),
+              PageButton(SignUpPage(), "Sign Up Page"),
+              PageButton(ForgotpasswordPage(), "Forgot password"),
+              PageButton(ChangePasswordPage(), "Change Password"),
+              PageButton(FetchProfilePage(), "Profile"),
+              PageButton(SetupProfilePage(), "Setup Profile"),
+              PageButton(ChatBox1(), "chat"),
 
 
-          ],
+            ],
+          ),
         ),
       ),
     );

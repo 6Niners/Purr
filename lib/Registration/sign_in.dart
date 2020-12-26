@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/Registration/RegistrationController.dart';
 import 'package:purr/Registration/forgot_password.dart';
+import 'package:purr/Registration/sign_up.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
-  final String title;
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -44,7 +43,7 @@ class LoginPageState extends State<LoginPage> {
                         child: Container(
                             padding: EdgeInsets.all(10),
                             margin: EdgeInsets.all(5),
-                            child: Text(widget.title,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                            child: Text('Sign In',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
                       ),
                       Container(
                         padding: EdgeInsets.all(10),
@@ -105,7 +104,7 @@ class LoginPageState extends State<LoginPage> {
                       Center(
                         child: GestureDetector(
                           onTap: () {
-                            Get.to(ForgotpasswordPage(title: 'Forgot password'));
+                            Get.to(ForgotpasswordPage());
                           },
                           child: new Text(
                             'Forgot Password',
@@ -124,9 +123,9 @@ class LoginPageState extends State<LoginPage> {
                             child: RaisedButton(
                               color: Colors.grey,
                               onPressed: () async {
-                                Get.back();
+                                Get.to(SignUpPage());
                               },
-                              child: Text('Back'),
+                              child: Text('Sign up',style: TextStyle(fontSize: 18,)),
                             ),
                           ),
                           Container(
@@ -142,7 +141,7 @@ class LoginPageState extends State<LoginPage> {
                                 if (_formKey.currentState.validate()) {
                                   await CONT.signIn(_email.text,_password.text);}
                               },
-                              child: Text('Sign In',style: TextStyle(fontSize: 20,)),
+                              child: Text('Sign In',style: TextStyle(fontSize: 18,)),
                             ),
                           ),
 

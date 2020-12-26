@@ -122,7 +122,7 @@ class RegistrationController extends GetxController {
     firebaseUser = FirebaseAuth.instance.currentUser;
     firebaseUser.reload();
     if (firebaseUser.emailVerified) {
-      Get.offAll(SetupProfilePage(title: 'Setup Page'));
+      Get.offAll(SetupProfilePage());
     }
   }
 }
