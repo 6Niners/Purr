@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Services/Database.dart';
 
 class SetupProfilePage extends StatefulWidget {
@@ -136,7 +137,9 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                 onPressed: () async {
                                   //print("in");
                                   if (_formKey.currentState.validate()) {
-                                    await CONT.updateUserData(_petName.text, _pet.text, _breed.text);}
+                                    await CONT.updateUserData(_petName.text, _pet.text, _breed.text);
+                                    Get.offAll(MainPage());
+                                  }
                                 },
                                 child: Text('Next'),
                               ),
