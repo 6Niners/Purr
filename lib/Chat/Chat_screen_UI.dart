@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
 
 ///////////////////////////////////////////
 
@@ -121,8 +121,17 @@ class ChatBox extends StatelessWidget {
         imageQuality: 50
     );
   }
-
-  ///////////////////////////////////////////
+  void _sendImage({String messageText, String imageUrl}) {
+    chatReference.add({
+      'text': messageText,
+      'sender_id': Widget.prefs.getString('uid'),
+      'sender_name': Widget.prefs.getString('name'),
+      'profile_photo': Widget.prefs.getString('profile_photo'),
+      'image_url': imageUrl,
+      'time': FieldValue.serverTimestamp(),
+    });
+  }
+    ///////////////////////////////////////////
   addMessage(String Message) {
     // print('function works'+ Message);
 
@@ -199,8 +208,19 @@ class ChatBox extends StatelessWidget {
             icon: Icon(Icons.photo),
             iconSize: 25.0,
             color: Colors.redAccent,
-            onPressed: () => {pickpicture()},
-          ),
+            onPressed: ()  async { var image = await ImagePicker.pickImage(
+                source: ImageSource.gallery);
+            int timestamp = new DateTime.now().millisecondsSinceEpoch;
+            FirebaseStorage storage = FirebaseStorage.instance;
+            Reference ref = storage.ref().child("image" + DateTime.now().toString());
+            UploadTask uploadTask = ref.putFile(image);
+            String fileUrl;
+            uploadTask.then((res) async {
+              fileUrl = await res.ref.getDownloadURL();
+            });
+            _sendImage(messageText: null, imageUrl: fileUrl);
+    }),
+
           Expanded(
             child: TextField(
               textCapitalization: TextCapitalization.sentences,

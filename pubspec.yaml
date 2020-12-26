@@ -35,9 +35,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   #To pick image from gallery
-  image_picker:
-
-  provider:
+  image_picker: ^0.6.7+17
+  firebase_storage: ^5.2.0
+  
 
 
 dev_dependencies:
