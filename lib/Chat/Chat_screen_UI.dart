@@ -19,7 +19,8 @@ class ChatBox extends StatelessWidget {
   ///////////////////////////////////////////
   Widget chatMessages() {
     var chat = FirebaseFirestore.instance.collection(
-        'ChatRoom').doc(senderid).collection('messages').orderBy("time",descending: false);
+        'ChatRoom').doc(senderid).collection('messages').orderBy(
+        "time", descending: false);
     // print('work work work work work');
     //buid a widget to view the messages
     return Container(
@@ -35,11 +36,11 @@ class ChatBox extends StatelessWidget {
           }
           return new ListView(
             children: snapshot.data.docs.map((DocumentSnapshot document) {
-              bool sendByMe=false;
-              if(document.data()['sendBy']==sendername){
-                sendByMe=true;
-              }else{
-                sendByMe=false;
+              bool sendByMe = false;
+              if (document.data()['sendBy'] == sendername) {
+                sendByMe = true;
+              } else {
+                sendByMe = false;
               }
               return Container(
                 padding: EdgeInsets.only(
@@ -47,7 +48,8 @@ class ChatBox extends StatelessWidget {
                     bottom: 8,
                     left: sendByMe ? 0 : 24,
                     right: sendByMe ? 24 : 0),
-                alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
+                alignment: sendByMe ? Alignment.centerRight : Alignment
+                    .centerLeft,
                 child: Container(
                   margin: sendByMe
                       ? EdgeInsets.only(left: 30)
@@ -92,12 +94,12 @@ class ChatBox extends StatelessWidget {
     );
   }
 
-  ///////////////////////////////////////////
 
 
     //////////////////////////////////////////
    //            Chat Functions            //
   //////////////////////////////////////////
+
   Future<void> takePicture() async {
     // print('function works');
     ImagePicker _picker = ImagePicker();
@@ -111,8 +113,9 @@ class ChatBox extends StatelessWidget {
   }
 
   ///////////////////////////////////////////
+
   Future<void> pickpicture() async {
-   // print('function works');
+    // print('function works');
     final picker = ImagePicker();
     picker.getImage(
         source: ImageSource.gallery,
@@ -121,7 +124,10 @@ class ChatBox extends StatelessWidget {
         imageQuality: 50
     );
   }
-  void _sendImage({String messageText, String imageUrl}) {
+
+  //////////////////////////////////////////
+
+/*  void _sendImage({String messageText, String imageUrl}) {
     chatReference.add({
       'text': messageText,
       'sender_id': Widget.prefs.getString('uid'),
@@ -130,8 +136,10 @@ class ChatBox extends StatelessWidget {
       'image_url': imageUrl,
       'time': FieldValue.serverTimestamp(),
     });
-  }
-    ///////////////////////////////////////////
+  } */
+
+  ///////////////////////////////////////////
+
   addMessage(String Message) {
     // print('function works'+ Message);
 
@@ -145,7 +153,7 @@ class ChatBox extends StatelessWidget {
         "time": DateTime.now(),
         'sender_id': senderid,
       };
-      creatChatRoom( senderid, chatroomMap);
+      creatChatRoom(senderid, chatroomMap);
     }
     else {
       return ("please write a message");
@@ -153,43 +161,21 @@ class ChatBox extends StatelessWidget {
   }
 
   //////////////////////////////////////////
+
   creatChatRoom(String chatroomID, chatroomMap) {
     //function to create a chat room in the data base
     FirebaseFirestore.instance.collection("ChatRoom")
-        .doc(chatroomID).collection("messages") //the document is an id store place
-         // the set data is a place to store the data
-    .add(chatroomMap)
+        .doc(chatroomID).collection(
+        "messages") //the document is an id store place
+    // the set data is a place to store the data
+        .add(chatroomMap)
         .catchError((e) {
       print(e.toString());
     }); //if there is any error
   }
 
-    /////////////////////////////////////////
-   //             Chat UI                 //
-  /////////////////////////////////////////
+//////////////////////////////////////////
 
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.redAccent, //appBar color
-        title: Text( receivername,
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(child: chatMessages()),
-          buildMessageComposer(),
-        ],
-      ),
-    );
-  } //widget
   buildMessageComposer() {
     TextEditingController Message = TextEditingController();
     return Container(
@@ -205,21 +191,23 @@ class ChatBox extends StatelessWidget {
             onPressed: () => {takePicture()},
           ),
           IconButton(
-            icon: Icon(Icons.photo),
-            iconSize: 25.0,
-            color: Colors.redAccent,
-            onPressed: ()  async { var image = await ImagePicker.pickImage(
-                source: ImageSource.gallery);
-            int timestamp = new DateTime.now().millisecondsSinceEpoch;
-            FirebaseStorage storage = FirebaseStorage.instance;
-            Reference ref = storage.ref().child("image" + DateTime.now().toString());
-            UploadTask uploadTask = ref.putFile(image);
-            String fileUrl;
-            uploadTask.then((res) async {
-              fileUrl = await res.ref.getDownloadURL();
-            });
-            _sendImage(messageText: null, imageUrl: fileUrl);
-    }),
+              icon: Icon(Icons.photo),
+              iconSize: 25.0,
+              color: Colors.redAccent,
+              onPressed: () async {
+                var image = await ImagePicker.pickImage(
+                    source: ImageSource.gallery);
+                int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                FirebaseStorage storage = FirebaseStorage.instance;
+                Reference ref = storage.ref().child(
+                    "image" + DateTime.now().toString());
+                UploadTask uploadTask = ref.putFile(image);
+                String fileUrl;
+                uploadTask.then((res) async {
+                  fileUrl = await res.ref.getDownloadURL();
+                });
+                //    _sendImage(messageText: null, imageUrl: fileUrl);
+              }),
 
           Expanded(
             child: TextField(
@@ -228,10 +216,9 @@ class ChatBox extends StatelessWidget {
               decoration: InputDecoration.collapsed(
                 hintText: 'meow your message',
               ),
-
             ),
-
           ),
+
           IconButton(
             icon: Icon(Icons.send),
             iconSize: 25.0,
@@ -243,4 +230,30 @@ class ChatBox extends StatelessWidget {
     );
   } //buildMessageComposer
 
+    /////////////////////////////////////////
+   //             Chat UI                 //
+  /////////////////////////////////////////
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent, //appBar color
+        title: Text(receivername,
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(child: chatMessages()),
+          buildMessageComposer(),
+        ],
+      ),
+    );
+  } //widget
 }//class ChatBox1

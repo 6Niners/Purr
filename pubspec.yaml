@@ -36,7 +36,9 @@ dependencies:
   cupertino_icons: ^0.1.3
   #To pick image from gallery
   image_picker: ^0.6.7+17
+  provider:
   firebase_storage: ^5.2.0
+
   
 
 
