@@ -1,6 +1,5 @@
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:get/get.dart';
-
 import 'package:purr/UI_Widgets.dart';
 
 class MainPageController extends GetxController {

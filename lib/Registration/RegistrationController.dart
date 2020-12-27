@@ -8,6 +8,8 @@ import 'package:purr/Registration/VerifyMail.dart';
 import 'package:purr/Services/Database.dart';
 import 'package:purr/UI_Widgets.dart';
 
+import 'package:purr/Registration/CommonClasses-functions.dart';
+
 
 class RegistrationController extends GetxController {
   User firebaseUser;
@@ -114,7 +116,7 @@ class RegistrationController extends GetxController {
 
     firebaseUser.updatePassword(password);
     print("changed to " + password);
-    ShowToast("your password got changed", Background_color: Colors.blue);
+    ShowToast("Your password got changed", Background_color: Colors.blue);
   }
 
   void ismailverified() {
@@ -123,5 +125,71 @@ class RegistrationController extends GetxController {
     if (firebaseUser.emailVerified) {
       Get.offAll(SetupProfilePage());
     }
+  }
+
+
+
+
+//ui widgets to avoid repeating the same functions
+  Container buildTextFormField(TextEditingController Controller,String labeltext,Function(String) Validator) {
+    return Container(
+        padding: EdgeInsets.all(10),
+    margin: EdgeInsets.all(5),
+    child: TextFormField(
+        validator:Validator,
+
+        controller: Controller,
+        style: Get.theme.textTheme.bodyText1,
+        autovalidateMode: AutovalidateMode.disabled,
+        decoration: InputDecoration(
+            labelText: labeltext,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+        )
+    )
+    );
+  }
+
+
+  Container buildTextFormFieldPassword(TextEditingController Controller,String labeltext,BoolToPassByReference ObscureText,{TextEditingController Controller2,String Function(String) Validator}) {
+    if(Validator==null){
+    if(Controller2==null){
+      Validator=passwordValidator;
+    }else{
+      passwordMatchValidatorClass OtherPasswordField=passwordMatchValidatorClass(Controller2);
+      Validator=OtherPasswordField.passwordMatchValidator;
+    }
+    }
+    return Container(
+        padding: EdgeInsets.all(10),
+    margin: EdgeInsets.all(5),
+    child: TextFormField(
+      controller: Controller,
+      style: Get.theme.textTheme.bodyText1,
+      validator: Validator,
+      autovalidateMode: AutovalidateMode.disabled,
+      decoration: InputDecoration(
+        labelText: labeltext,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+        suffixIcon: IconButton(
+          icon: Icon(
+            // Based on passwordVisible state choose the icon
+            ObscureText.obscure
+                ? Icons.visibility
+                : Icons.visibility_off,
+            color: Get.theme.primaryColorDark,
+          ),
+          onPressed: () {
+            // Update the state i.e. toogle the state of passwordVisible variable
+              ObscureText.obscure = !ObscureText.obscure;
+              update();
+            }
+
+
+        ),
+      ),
+
+      obscureText: ObscureText.obscure,
+    )
+    );
   }
 }

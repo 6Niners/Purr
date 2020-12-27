@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:purr/Registration/CommonClasses-functions.dart';
 import 'package:purr/Registration/RegistrationController.dart';
 
 class ChangePasswordPage extends StatefulWidget {
@@ -10,13 +11,15 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class ChangePasswordPageState extends State<ChangePasswordPage> {
-  bool password_validated=false;
   TextEditingController _Currentpassword = TextEditingController();
   TextEditingController _Newpassword = TextEditingController();
+  TextEditingController _NewpasswordConfirm = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _obscureTextCurrentPassword=true;
-  bool _obscureTextNewPassword=true;
-  bool _obscureTextConfirmPassword=true;
+  BoolToPassByReference password_validated=BoolToPassByReference();
+
+  BoolToPassByReference _obscureTextCurrentPassword=BoolToPassByReference();
+  BoolToPassByReference _obscureTextNewPassword=BoolToPassByReference();
+  BoolToPassByReference _obscureTextConfirmPassword=BoolToPassByReference();
 
   RegistrationController CONT = Get.find();
   @override
@@ -32,7 +35,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
               key: _formKey,
               child: Center(
                 child: Card(
-                  color: Colors.grey[100],
+                  color: Get.theme.backgroundColor,
                   elevation: 30,
                   child: SingleChildScrollView(
                     child: Column(
@@ -46,110 +49,35 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                 margin: EdgeInsets.all(5),
                                 child: Text(
                                   'Change Password',
-                                  style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                  style: Get.theme.textTheme.headline6,
                                 )),
                           ),
-
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.all(5),
-                                child: TextFormField(
-                                  validator: (value) {
-                                    if(password_validated){return null;}else{return "wrong password";}
-                                  },
-                                  //autovalidateMode: AutovalidateMode.onUserInteraction,
-                                  controller: _Currentpassword,
-                                  style: TextStyle(fontSize: 20),
-                                  decoration: InputDecoration(
-                                      labelText: 'Current Password',
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        // Based on passwordVisible state choose the icon
-                                        _obscureTextCurrentPassword
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Theme.of(context).primaryColorDark,
-                                      ),
-                                      onPressed: () {
-                                        // Update the state i.e. toogle the state of passwordVisible variable
-                                        setState(() {
-                                          _obscureTextCurrentPassword = !_obscureTextCurrentPassword;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  obscureText: _obscureTextCurrentPassword,
-                                ),
-                              ),
-
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.all(5),
-                            child: TextFormField(
-                              validator: (input) {
-                                if (input.length < 6) {
-                                  return 'Your password should be at least 6 characters';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              controller: _Newpassword,
-                              style: TextStyle(fontSize: 20),
-                              decoration: InputDecoration(labelText: 'Password',
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    // Based on passwordVisible state choose the icon
-                                    _obscureTextNewPassword
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: Theme.of(context).primaryColorDark,
-                                  ),
-                                  onPressed: () {
-                                    // Update the state i.e. toogle the state of passwordVisible variable
-                                    setState(() {
-                                      _obscureTextNewPassword = !_obscureTextNewPassword;
-                                    });
-                                  },
-                                ),),
-                              obscureText: _obscureTextNewPassword,
-                            ),
+                          GetBuilder<RegistrationController>(
+                              builder: (_) {
+                                return _.buildTextFormFieldPassword(
+                                    _Currentpassword, 'Current Password',
+                                    _obscureTextCurrentPassword,Validator: (value) {
+                                  if(password_validated.obscure){return null;}else{return "wrong password";}
+                                },);
+                              }
                           ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.all(5),
-                            child: TextFormField(
-                              validator: (input) {
-                                if (input != _Newpassword.text) {
-                                  return "These passwords don't match";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              style: TextStyle(fontSize: 20),
-                              decoration:
-                                  InputDecoration(labelText: 'Confirm Password',
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        // Based on passwordVisible state choose the icon
-                                        _obscureTextConfirmPassword
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Theme.of(context).primaryColorDark,
-                                      ),
-                                      onPressed: () {
-                                        // Update the state i.e. toogle the state of passwordVisible variable
-                                        setState(() {
-                                          _obscureTextConfirmPassword = !_obscureTextConfirmPassword;
-                                        });
-                                      },
-                                    ),),
-                              obscureText: _obscureTextConfirmPassword,
-                            ),
+
+                          GetBuilder<RegistrationController>(
+                              builder: (_) {
+                                return _.buildTextFormFieldPassword(
+                                    _Newpassword, 'Password',
+                                    _obscureTextNewPassword);
+                              }
+                          ),
+
+                          GetBuilder<RegistrationController>(
+                            builder: (_) {
+                              return  _.buildTextFormFieldPassword(
+                                  _NewpasswordConfirm, 'Confirm Password',
+                                  _obscureTextConfirmPassword, Controller2:_Newpassword);
+
+                            },
+
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,7 +92,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                   onPressed: () async {
                                     Get.back();
                                   },
-                                  child: Text('Back'),
+                                  child: Text('Back',style: Get.theme.textTheme.bodyText1,),
                                 ),
                               ),
                               Container(
@@ -176,13 +104,13 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                   color: Colors.blue,
                                   onPressed: () async {
                                     //print("in");
-                                    password_validated=await CONT.validatePassword(_Currentpassword.text);
+                                    password_validated.obscure=await CONT.validatePassword(_Currentpassword.text);
                                     setState(() {});
-                                    if (_formKey.currentState.validate()&&password_validated) {
+                                    if (_formKey.currentState.validate()&&password_validated.obscure) {
                                       await CONT.updatePassword(_Newpassword.text);
                                     }
                                   },
-                                  child: Text('Sign Up'),
+                                  child: Text('Sign Up',style: Get.theme.textTheme.bodyText1,),
                                 ),
                               )
                             ],

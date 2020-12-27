@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPageController.dart';
+import 'package:purr/Registration/ChangePassword.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -44,7 +45,12 @@ class _MainPageState extends State<MainPage>
           children: [
             Like_Dislike_Screen(context, controller),
             Icon(Icons.directions_car),
-            Icon(Icons.directions_transit),
+          FlatButton(
+
+      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
+    onPressed: (){Get.to(ChangePasswordPage()); },
+    color:Colors.grey[800],
+    child: Text("Change Password",style: TextStyle(color: Colors.white),),)
           ],
 
         ),

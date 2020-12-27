@@ -1,7 +1,7 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/Registration/RegistrationController.dart';
+import 'package:purr/Registration/CommonClasses-functions.dart';
 
 class ForgotpasswordPage extends StatefulWidget {
 
@@ -26,77 +26,62 @@ class ForgotpasswordPageState extends State<ForgotpasswordPage> {
                 key: _formKey,
                 child: Center(
                   child: Card(
-                    color: Colors.grey[100],
+                    color: Get.theme.backgroundColor,
                     elevation: 30,
 
-                    child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    child: SingleChildScrollView(
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
 
-                        children: <Widget>[
-                          Center(
-                            child: Container(
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.all(5),
-                                child: Text('Forgot password',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.all(5),
-                            child: TextFormField(
-                                validator: (input) {
-                                  if (!EmailValidator.validate(input)) {
-                                    return 'Please type a valid Email';
-                                  }
-                                  return null;
-                                },
-                                controller: _email,
-                                style: TextStyle(fontSize: 20),
-                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                decoration: InputDecoration(
-                                    labelText: 'Email'
-                                )
+                          children: <Widget>[
+                            Center(
+                              child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.all(5),
+                                  child: Text('Forgot password',style: Get.theme.textTheme.headline6,)),
                             ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.all(5),
-                                width: 150,
-                                height: 70,
-                                child: RaisedButton(
-                                  color: Colors.grey,
-                                  onPressed: () async {
-                                    Get.back();
-                                  },
-                                  child: Text('Back'),
+                            CONT.buildTextFormField(_email, "Email", emailValidator),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.all(5),
+                                  width: 150,
+                                  height: 70,
+                                  child: RaisedButton(
+                                    color: Colors.grey,
+                                    onPressed: () async {
+                                      Get.back();
+                                    },
+                                    child: Text('Back'),
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.all(5),
-                                width: 150,
-                                height: 70,
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.all(5),
+                                  width: 150,
+                                  height: 70,
 
-                                child: RaisedButton(
-                                  color: Colors.blue,
-                                  onPressed: () async {
-                                    //print("in");
-                                    if (_formKey.currentState.validate()) {
-                                      await CONT.forgotpassword(_email.text);
-                                  }
-                                  },
-                                  child: Text('Send Mail',style: TextStyle(fontSize: 20,))
+                                  child: RaisedButton(
+                                    color: Colors.blue,
+                                    onPressed: () async {
+                                      //print("in");
+                                      if (_formKey.currentState.validate()) {
+                                        await CONT.forgotpassword(_email.text);
+                                    }
+                                    },
+                                    child: Text('Send Mail',style: Get.theme.textTheme.bodyText1)
+                                  ),
                                 ),
-                              ),
 
-                            ],
-                          ),
+                              ],
+                            ),
 
-                        ]
+                          ]
+                      ),
                     ),
                   ),
                 )
