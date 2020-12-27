@@ -4,11 +4,13 @@ import 'package:purr/Chat/Chat_screen_UI.dart';
 import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
+import 'package:purr/Registration/MainRegistrationPage.dart';
 import 'package:purr/Registration/SetupProfile.dart';
 import 'package:purr/Registration/forgot_password.dart';
 import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
-import 'MainController.dart';
+import 'package:purr/MainController.dart';
+import 'package:purr/Registration/CommonClasses-functions.dart';
 
 
 
@@ -26,10 +28,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Purr',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: Themes.light,
+      darkTheme: Themes.dark,
       //home: MainPage(),
       //home: LoginPage(title: 'Sign In'),
       home:ListOfPages(),
@@ -49,7 +49,7 @@ class ListOfPages extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              PageButton(LoginPage(), "Main App Route"),
+              PageButton(MainRegistrationPage(), "Main App Route"),
               PageButton(MainPage(), "Main Page!"),
               PageButton(LoginPage(), "Login Page!"),
               PageButton(SignUpPage(), "Sign Up Page"),
