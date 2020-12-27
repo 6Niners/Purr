@@ -40,6 +40,8 @@ class MainRegistrationPageState extends State<MainRegistrationPage> {
                         height: 70,
                         child: RaisedButton(
                           color: Colors.grey,
+                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+
                           onPressed: () {
                             Get.to(SignUpPage());
                           },
@@ -54,6 +56,8 @@ class MainRegistrationPageState extends State<MainRegistrationPage> {
 
                         child: RaisedButton(
                           color: Colors.blue,
+                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+
                           onPressed: () {
                             //print("in");
                             Get.to(LoginPage());
