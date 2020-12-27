@@ -89,6 +89,8 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                 height: 70,
                                 child: RaisedButton(
                                   color: Colors.grey,
+                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+
                                   onPressed: () async {
                                     Get.back();
                                   },
@@ -102,6 +104,8 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                 height: 70,
                                 child: RaisedButton(
                                   color: Colors.blue,
+                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+
                                   onPressed: () async {
                                     //print("in");
                                     password_validated.obscure=await CONT.validatePassword(_Currentpassword.text);

@@ -82,6 +82,8 @@ class SignUpPageState extends State<SignUpPage> {
 
                                 child: RaisedButton(
                                   color: Colors.grey,
+                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+
                                   onPressed: () async {
                                     Get.back();
                                   },
@@ -96,6 +98,7 @@ class SignUpPageState extends State<SignUpPage> {
 
                                 child: RaisedButton(
                                   color: Colors.blue,
+                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
 
                                   onPressed: () async {
                                     //print("in");

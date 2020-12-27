@@ -75,6 +75,8 @@ class LoginPageState extends State<LoginPage> {
                                   height: 70,
                                   child: RaisedButton(
                                     color: Colors.grey,
+                                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+
                                     onPressed: () async {
                                       Get.back();
                                     },
@@ -85,9 +87,11 @@ class LoginPageState extends State<LoginPage> {
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   margin: EdgeInsets.all(5),
+
                                   width: 150,
                                   height: 70,
                                   child: RaisedButton(
+                                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
                                     color: Colors.blue,
                                     onPressed: () async {
                                       //print("in");

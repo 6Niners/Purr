@@ -53,10 +53,12 @@ class ForgotpasswordPageState extends State<ForgotpasswordPage> {
                                   height: 70,
                                   child: RaisedButton(
                                     color: Colors.grey,
+                                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+
                                     onPressed: () async {
                                       Get.back();
                                     },
-                                    child: Text('Back'),
+                                    child: Text('Back',style: Get.theme.textTheme.bodyText1),
                                   ),
                                 ),
                                 Container(
@@ -67,7 +69,9 @@ class ForgotpasswordPageState extends State<ForgotpasswordPage> {
 
                                   child: RaisedButton(
                                     color: Colors.blue,
-                                    onPressed: () async {
+                                      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+
+                                      onPressed: () async {
                                       //print("in");
                                       if (_formKey.currentState.validate()) {
                                         await CONT.forgotpassword(_email.text);
