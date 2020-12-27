@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Services/Database.dart';
 
+import 'RegistrationController.dart';
+
 class SetupProfilePage extends StatefulWidget {
 
   @override
@@ -19,6 +21,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   DatabaseService CONT=Get.find();
+  RegistrationController REGCONT = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +34,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
               key: _formKey,
               child: Center(
                 child: Card(
-                  color: Colors.grey[100],
+                  color: Get.theme.backgroundColor,
                   elevation: 30,
 
                   child: Column(
@@ -43,71 +46,32 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                           child: Container(
                               padding: EdgeInsets.all(10),
                               margin: EdgeInsets.all(5),
-                              child: Text("Setup Profile",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.all(5),
-                          child: TextFormField(
-                              validator: (input) {
-                                if (input == '') {
-                                  return 'Please type a your pet name';
-                                }
-                                else{
-                                  return null;
-                                }
-                              },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              controller: _petName,
-                              style: TextStyle(fontSize: 20),
-                              decoration: InputDecoration(
-                                  labelText: 'Pet Name'
-                              )
-                          ),
-                        ),
+                              child: Text("Setup Profile",style: Get.theme.textTheme.headline6,),)),
+                        REGCONT.buildTextFormField(_petName, 'Pet Name', (input) {
+                          if (input == '') {
+                            return 'Please type a your pet name';
+                          }
+                          else{
+                            return null;
+                          }
+                        },),
 
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.all(5),
-                          child: TextFormField(
-                              validator: (input) {
-                                if (input == '') {
-                                  return 'Please your pet type';
-                                }
-                                else{
-                                  return null;
-                                }
-                              },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              controller: _pet,
-                              style: TextStyle(fontSize: 20),
-                              decoration: InputDecoration(
-                                  labelText: 'Pet'
-                              )
-                          ),
-                        ),
-
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.all(5),
-                          child: TextFormField(
-                              validator: (input) {
-                                if (input == '') {
-                                  return 'Please your pet breed';
-                                }
-                                else{
-                                  return null;
-                                }
-                              },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              controller: _breed,
-                              style: TextStyle(fontSize: 20),
-                              decoration: InputDecoration(
-                                  labelText: 'Breed'
-                              )
-                          ),
-                        ),
-
+                        REGCONT.buildTextFormField(_pet, 'Pet', (input) {
+                          if (input == '') {
+                            return 'Please your pet type';
+                          }
+                          else{
+                            return null;
+                          }
+                        },),
+                        REGCONT.buildTextFormField(_breed, 'Breed', (input) {
+                          if (input == '') {
+                            return 'Please your pet breed';
+                          }
+                          else{
+                            return null;
+                          }
+                        },),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -118,11 +82,12 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                               height: 70,
 
                               child: RaisedButton(
-                                color: Colors.grey,
+                                color: Get.theme.canvasColor,
+                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
                                 onPressed: () async {
                                   Get.back();
                                 },
-                                child: Text('Back'),
+                                child: Text('Back',style:Get.theme.textTheme.bodyText1),
                               ),
                             ),
                             Container(
@@ -132,8 +97,8 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                               height: 70,
 
                               child: RaisedButton(
-                                color: Colors.blue,
-
+                                color: Get.theme.buttonColor,
+                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
                                 onPressed: () async {
                                   //print("in");
                                   if (_formKey.currentState.validate()) {
@@ -141,7 +106,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                     Get.offAll(MainPage());
                                   }
                                 },
-                                child: Text('Next'),
+                                child: Text('Next',style:Get.theme.textTheme.bodyText1),
                               ),
                             )
                           ],

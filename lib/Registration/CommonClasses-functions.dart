@@ -4,7 +4,17 @@ import 'package:get/get.dart';
 class Themes {
   static final light = ThemeData.light().copyWith(
     backgroundColor: Colors.white,
-    buttonColor: Colors.blue,
+    //go to more actions button
+    buttonColor: Colors.blue[400],
+    //label in text field
+    // set the primaryColor light theme or accentColor for dark theme.
+    primaryColor: Colors.blue[800],
+    //border color
+    highlightColor: Colors.blue[800],
+    //back button
+    canvasColor: Colors.blue[100],
+
+    // set the primaryColor light theme or accentColor for dark theme.
     textTheme: TextTheme(
         headline6: TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold),
         bodyText1: TextStyle(color: Colors.black,fontSize: 18),
@@ -12,8 +22,18 @@ class Themes {
     ),
   );
   static final dark = ThemeData.dark().copyWith(
-    backgroundColor: Colors.black,
-    buttonColor: Colors.red,
+    backgroundColor: Colors.blueGrey[900],
+    //go to more actions button
+    buttonColor: Colors.green[800],
+    //back button
+    primaryColor: Colors.black45,
+    //back button
+    canvasColor: Colors.black45,
+    //border color
+    highlightColor: Colors.green[800],
+    //label in text field and border
+    // set the primaryColor light theme or accentColor for dark theme.
+    accentColor: Colors.green[800],
     textTheme: TextTheme(
         headline6:  TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold),
         bodyText1: TextStyle(color: Colors.white,fontSize: 18),

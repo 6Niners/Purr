@@ -42,7 +42,7 @@ class ListOfPages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text("Main Menu"), centerTitle: true,),
+      appBar: AppBar(title: Text("Main Menu"), centerTitle: true,backgroundColor: Colors.blue,),
       body: Center(
         child: SingleChildScrollView(
           child: Column(

@@ -129,7 +129,6 @@ class RegistrationController extends GetxController {
 
 
 
-
 //ui widgets to avoid repeating the same functions
   Container buildTextFormField(TextEditingController Controller,String labeltext,Function(String) Validator) {
     return Container(
@@ -137,13 +136,14 @@ class RegistrationController extends GetxController {
     margin: EdgeInsets.all(5),
     child: TextFormField(
         validator:Validator,
-
         controller: Controller,
         style: Get.theme.textTheme.bodyText1,
         autovalidateMode: AutovalidateMode.disabled,
         decoration: InputDecoration(
             labelText: labeltext,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
+          focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,),),
         )
     )
     );
@@ -169,14 +169,16 @@ class RegistrationController extends GetxController {
       autovalidateMode: AutovalidateMode.disabled,
       decoration: InputDecoration(
         labelText: labeltext,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
+        focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
         suffixIcon: IconButton(
           icon: Icon(
             // Based on passwordVisible state choose the icon
             ObscureText.obscure
                 ? Icons.visibility
                 : Icons.visibility_off,
-            color: Get.theme.primaryColorDark,
+
           ),
           onPressed: () {
             // Update the state i.e. toogle the state of passwordVisible variable

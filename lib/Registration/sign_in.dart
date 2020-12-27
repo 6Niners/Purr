@@ -74,7 +74,7 @@ class LoginPageState extends State<LoginPage> {
                                   width: 150,
                                   height: 70,
                                   child: RaisedButton(
-                                    color: Colors.grey,
+                                    color: Get.theme.canvasColor,
                                     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
 
                                     onPressed: () async {
@@ -92,7 +92,7 @@ class LoginPageState extends State<LoginPage> {
                                   height: 70,
                                   child: RaisedButton(
                                     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-                                    color: Colors.blue,
+                                    color:Get.theme.buttonColor,
                                     onPressed: () async {
                                       //print("in");
                                       if (_formKey.currentState.validate()) {

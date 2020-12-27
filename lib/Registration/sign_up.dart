@@ -81,7 +81,7 @@ class SignUpPageState extends State<SignUpPage> {
                                 height: 70,
 
                                 child: RaisedButton(
-                                  color: Colors.grey,
+                                  color: Get.theme.canvasColor,
                                   shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
 
                                   onPressed: () async {
@@ -97,7 +97,7 @@ class SignUpPageState extends State<SignUpPage> {
                                 height: 70,
 
                                 child: RaisedButton(
-                                  color: Colors.blue,
+                                  color: Get.theme.buttonColor,
                                   shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
 
                                   onPressed: () async {

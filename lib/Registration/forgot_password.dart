@@ -52,7 +52,7 @@ class ForgotpasswordPageState extends State<ForgotpasswordPage> {
                                   width: 150,
                                   height: 70,
                                   child: RaisedButton(
-                                    color: Colors.grey,
+                                    color: Get.theme.canvasColor,
                                     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
 
                                     onPressed: () async {
@@ -68,7 +68,7 @@ class ForgotpasswordPageState extends State<ForgotpasswordPage> {
                                   height: 70,
 
                                   child: RaisedButton(
-                                    color: Colors.blue,
+                                    color: Get.theme.buttonColor,
                                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
 
                                       onPressed: () async {
