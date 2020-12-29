@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPageController.dart';
+import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
 
 class MainPage extends StatefulWidget {
@@ -45,13 +46,29 @@ class _MainPageState extends State<MainPage>
           children: [
             Like_Dislike_Screen(context, controller),
             Icon(Icons.directions_car),
-          FlatButton(
+          Column(
+            children: [
 
-      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
-    onPressed: (){Get.to(ChangePasswordPage()); },
-    color:Colors.grey[800],
-    child: Text("Change Password",style: TextStyle(color: Colors.white),),)
-          ],
+              FlatButton(
+
+                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
+                onPressed: (){Get.to(ChangePasswordPage()); },
+                color:Colors.grey[800],
+                child: Text("Change Password",style: TextStyle(color: Colors.white),),),
+
+              FlatButton(
+
+                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
+                onPressed: (){Get.to(FetchProfilePage()); },
+                color:Colors.grey[800],
+                child: Text("Profile",style: TextStyle(color: Colors.white),),)
+            ],
+
+          ),
+
+
+
+           ],
 
         ),
       ),

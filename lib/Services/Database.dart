@@ -1,12 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:purr/Models/ProfileData.dart';
 
 class DatabaseService extends GetxController {
   final String uid;
 
+  List<String> profileData = List();
+
+
   DatabaseService({this.uid});
 
+  var firebaseUser = FirebaseAuth.instance.currentUser;
   CollectionReference user = FirebaseFirestore.instance.collection('UserData');
 
 
@@ -19,6 +24,26 @@ class DatabaseService extends GetxController {
     });
   }
 
+
+
+  Future<void> getUserProfileData() async {
+
+    await user.doc(firebaseUser.uid).get().then((document){
+
+      if (document.exists){
+        profileData.clear();
+
+        document.data().forEach((key, value) {
+          profileData.add(value);
+        });
+      }
+    });
+
+    update();
+  }
+
+
+  /*
   List<ProfileData> _returnProfileDataListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((streamDoc) {
       return ProfileData(
@@ -32,5 +57,5 @@ class DatabaseService extends GetxController {
   Stream<List<ProfileData>> get userData {
     return user.snapshots().map(_returnProfileDataListFromSnapshot);
   }
-
+  */
 }
