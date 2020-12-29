@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,7 +13,7 @@ class ChatBox extends StatelessWidget {
 
   String receivername = " pet name";
   String sendername = "Sender";
-  String senderid = "6969";
+  String senderid = "69";
 
   ///////////////////////////////////////////
 
@@ -69,22 +70,31 @@ class ChatBox extends StatelessWidget {
                       gradient: LinearGradient(
 
                         colors: sendByMe ? [
-                          const Color(0xff007EF4),
-                          const Color(0xff2A75BC)
+
+                         /* const Color(0xFFC6FF00),
+                          const Color(0xFF76FF03),
+                          const Color(0xFF00E676),
+                          const Color(0xFF1DE9B6)
+*/
+                         const Color(0xFF64B5F6),
+                          const Color(0xFF1E88E5)
+
+
+
                         ]
                             : [
-                          const Color(0xFFFF1744),
-                          const Color(0xFFD50000)
+                          const Color(0xFFCE93D8),
+                          const Color(0xFFAB47BC)
                         ],
                       )
                   ),
                   child: Text(document.data()['message'],
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Color(0xFFFFFFFF),
                           fontSize: 16,
                           fontFamily: 'OverpassRegular',
-                          fontWeight: FontWeight.w300)),
+                          fontWeight: FontWeight.w800)),
                 ),
               );
             }).toList(),
@@ -181,21 +191,25 @@ class ChatBox extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10),
       height: 60.0,
-      color: Colors.pink[50],
+      color: Color(0xFFBBDEFB),
+      //color: Color(0xFFB2EBF2),
+      //color: Color(0xFFFFCDD2),
       child: Row(
         children: <Widget>[
           IconButton(
             icon: Icon(Icons.camera),
             iconSize: 25.0,
-            color: Colors.redAccent,
+            color: Color(0xFF00695C),
+            //color: Colors.redAccent,
             onPressed: () => {takePicture()},
           ),
           IconButton(
               icon: Icon(Icons.photo),
               iconSize: 25.0,
-              color: Colors.redAccent,
+              color: Color(0xFF00695C),
+              //color: Colors.redAccent,
               onPressed: () async {
-                var image = await ImagePicker.pickImage(
+              /*  var image = await ImagePicker.pickImage(
                     source: ImageSource.gallery);
                 int timestamp = new DateTime.now().millisecondsSinceEpoch;
                 FirebaseStorage storage = FirebaseStorage.instance;
@@ -205,7 +219,7 @@ class ChatBox extends StatelessWidget {
                 String fileUrl;
                 uploadTask.then((res) async {
                   fileUrl = await res.ref.getDownloadURL();
-                });
+                });  */
                 //    _sendImage(messageText: null, imageUrl: fileUrl);
               }),
 
@@ -213,6 +227,7 @@ class ChatBox extends StatelessWidget {
             child: TextField(
               textCapitalization: TextCapitalization.sentences,
               controller: Message,
+              style: Get.theme.textTheme.bodyText1,
               decoration: InputDecoration.collapsed(
                 hintText: 'meow your message',
               ),
@@ -222,9 +237,13 @@ class ChatBox extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.send),
             iconSize: 25.0,
-            color: Colors.redAccent,
-            onPressed: () => { addMessage(Message.text)},
+            color: Color(0xFF00695C),
+            //color: Colors.redAccent,
+            onPressed: () => { addMessage(Message.text),
+
+            }, //onPressed
           ),
+
         ],
       ),
     );
@@ -237,22 +256,28 @@ class ChatBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.redAccent, //appBar color
-        title: Text(receivername,
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/wallpaper-cat.jpg"),
+              fit: BoxFit.cover)),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Color(0xFF0D47A1), //appBar color
+          title: Text(receivername,
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(child: chatMessages()),
-          buildMessageComposer(),
-        ],
+        body: Column(
+          children: <Widget>[
+            Expanded(child: chatMessages()),
+            buildMessageComposer(),
+          ],
+        ),
       ),
     );
   } //widget
