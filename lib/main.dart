@@ -11,7 +11,7 @@ import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
 import 'package:purr/MainController.dart';
 import 'package:purr/Registration/CommonClasses-functions.dart';
-
+import 'package:purr/chat_list view.dart';
 
 
 Future<void> main() async {
@@ -58,7 +58,7 @@ class ListOfPages extends StatelessWidget {
               PageButton(FetchProfilePage(), "Profile"),
               PageButton(SetupProfilePage(), "Setup Profile"),
               PageButton(ChatBox(), "chat"),
-
+              PageButton(ChatPage(), "chat list"),
 
             ],
           ),
