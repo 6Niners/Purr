@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:purr/Chat/Chat_screen_UI.dart';
 
@@ -62,6 +62,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    var chat = FirebaseFirestore.instance.collection('ChatRoom').orderBy("time", descending: false);
+
     return Scaffold(
       backgroundColor: AppColors.mainColor,
       appBar: AppBar(
@@ -73,15 +75,6 @@ class _ChatPageState extends State<ChatPage> {
             fontSize: 32,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              FlutterIcons.filter,
-              color: AppColors.blueColor,
-            ),
-            onPressed: null,
-          )
-        ],
       ),
       body: Column(
         children: <Widget>[
@@ -107,128 +100,85 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
           Expanded(
-              child: ListView.builder(
-               itemCount: items.length,
-                itemBuilder: (context, index){
-                var chat = FirebaseFirestore.instance.collection('ChatRoom').orderBy("time", descending: false);
-                return Container(
+                child: Container(
                 height: 1000,
                 child: StreamBuilder<QuerySnapshot>(
                 stream: chat.snapshots(),
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                return Text('Something went wrong');
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text("Loading");
-                }
+                  if (snapshot.hasError) {
+                    return Text('Something went wrong');
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text("Loading");
+                  }
 
-                return new ListView(
-                children: snapshot.data.docs.map((DocumentSnapshot document)
-                return Container(child: document.data()['sendBy'] ,Text(document.data()['message'],);
-                  data ['message'].lastMessage
-                )
-              )
-              );
-          }
-          )
+                  return new ListView(
+                  children: snapshot.data.docs.map((DocumentSnapshot document) {
+                        return ListTile(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ChatBox(),
+                              ),
+                            );
+                          },
 
-      );
-   }
- )
-
-
-
-
-
-
-               itemCount: list.length,
-               itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => ChatBox(),
-                      ),
-                    );
-                  },
-
-                  leading: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(100),
-                      ),
-                      image: DecorationImage(
-                        image: ExactAssetImage("assets/default.jpg"),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    list[index].sendername,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  subtitle: list[index].isTyping
-                      ? Row(
-                    children: <Widget>[
-                      /*
+                          leading: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(100),
+                              ),
+                              image: DecorationImage(
+                                image: ExactAssetImage("assets/default.jpg"),
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            document.data()["sender name"],
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          subtitle: document.data()["isTyping"]
+                              ? Row(
+                            children: <Widget>[
+                              /*
                       SpinKitThreeBounce(
                         color: AppColors.blueColor,
                         size: 20.0,
                       ),*/
-                    ],
-                  )
-                      : Row(
-                    children: <Widget>[
-                      Text(
-                        list[index].lastMessage,
-                        style: TextStyle(
-                          color: Colors.white54,
-                        ),
-                      ),
-                      SizedBox(width: 25),
-                      Text(
-                       list[index].lastMessageTime + " days ago",
-                        style: TextStyle(
-                          color: Colors.white54,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
+                            ],
+                          )
+                              : Row(
+                            children: <Widget>[
+                              Text(
+                                document.data()[lastMessage],
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                ),
+                              ),
+                              SizedBox(width: 25),
+                              Text(
+                                document.data()[lastMessageTime] +
+                                    " days ago",
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList());
+                }),
+                )
+                )
+
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.darkColor,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white24,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(FlutterIcons.home),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FlutterIcons.chat),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FlutterIcons.menu),
-            title: Text(""),
-          ),
-        ],
+
       ),
     );
   }
 }
 
-*/
