@@ -80,7 +80,6 @@ class ChatBox extends StatelessWidget {
                           const Color(0xFF1E88E5)
 
 
-
                         ]
                             : [
                           const Color(0xFFCE93D8),
@@ -272,11 +271,14 @@ class ChatBox extends StatelessWidget {
             ),
           ),
         ),
-        body: Column(
-          children: <Widget>[
-            Expanded(child: chatMessages()),
-            buildMessageComposer(),
-          ],
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Column(
+            children: <Widget>[
+              Expanded(child: chatMessages()),
+              buildMessageComposer(),
+            ],
+          ),
         ),
       ),
     );
