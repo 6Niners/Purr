@@ -48,7 +48,7 @@ class VerfiyEmailPageState extends State<VerfiyEmailPage> {
             backgroundColor: Colors.transparent,
             body: Center(
               child: Card(
-                color: Colors.grey[100],
+                color: Get.theme.backgroundColor,
                 elevation: 30,
 
                 child: Column(
@@ -61,12 +61,12 @@ class VerfiyEmailPageState extends State<VerfiyEmailPage> {
                         child: Container(
                             padding: EdgeInsets.all(10),
                             margin: EdgeInsets.all(5),
-                            child: Text("Verify Email",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                            child: Text("Verify Email",style: Get.theme.textTheme.headline6,)),
                       ),
                       Container(
                         padding: EdgeInsets.all(10),
                         margin: EdgeInsets.all(5),
-                        child: Text("Please click the link sent to "+CONT.firebaseUser.email+" to proceed",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                        child: Text("Please click the link sent to "+CONT.firebaseUser.email+" to proceed",style:Get.theme.textTheme.headline6,)),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -78,9 +78,9 @@ class VerfiyEmailPageState extends State<VerfiyEmailPage> {
                             height: 70,
 
                             child: RaisedButton(
-                                color: Colors.blue,
+                                color: Get.theme.buttonColor,
                                 onPressed: resendbutton(),
-                                child: Text(buttontext(),style: TextStyle(fontSize: 15,))
+                                child: Text(buttontext(),style: Get.theme.textTheme.bodyText1)
                             ),
                           ),
 

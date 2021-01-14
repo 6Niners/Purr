@@ -217,7 +217,7 @@ class ChatRoom extends StatefulWidget {
 
 class ChatRoomState extends State<ChatRoom> {
 
-  var chat = FirebaseFirestore.instance.collection('chatRooms').orderBy("time", descending: false);
+  var chat = FirebaseFirestore.instance.collection('ChatRoom').orderBy("time", descending: false);
   Stream chatRooms;
 
   Widget chatRoomsList() {
@@ -264,7 +264,7 @@ class ChatRoomState extends State<ChatRoom> {
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
-          "assets/images/logo.png",
+          "assets/wallpaper-cat.jpg",
           height: 40,
         ),
         elevation: 0.0,

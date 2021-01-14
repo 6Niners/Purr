@@ -6,6 +6,7 @@ import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
 import 'package:purr/Registration/MainRegistrationPage.dart';
 import 'package:purr/Registration/SetupProfile.dart';
+import 'package:purr/Registration/VerifyMail.dart';
 import 'package:purr/Registration/forgot_password.dart';
 import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
@@ -52,13 +53,14 @@ class ListOfPages extends StatelessWidget {
               PageButton(MainRegistrationPage(), "Main App Route"),
               PageButton(MainPage(), "Main Page!"),
               PageButton(LoginPage(), "Login Page!"),
+              PageButton(VerfiyEmailPage(), "Verfiy Email Page"),
               PageButton(SignUpPage(), "Sign Up Page"),
               PageButton(ForgotpasswordPage(), "Forgot password"),
               PageButton(ChangePasswordPage(), "Change Password"),
               PageButton(FetchProfilePage(), "Profile"),
               PageButton(SetupProfilePage(), "Setup Profile"),
               PageButton(ChatBox(), "chat"),
-              PageButton(ChatPage(), "chat list"),
+              PageButton(ChatRoom(), "chat list"),
 
             ],
           ),
