@@ -6,15 +6,15 @@ import 'package:purr/Registration/RegistrationController.dart';
 
 import 'package:purr/UI_Widgets.dart';
 
-class VerfiyEmailPage extends StatefulWidget {
-  VerfiyEmailPage({Key key, this.title}) : super(key: key);
+class VerifyEmailPage extends StatefulWidget {
+  VerifyEmailPage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  VerfiyEmailPageState createState() => VerfiyEmailPageState();
+  VerifyEmailPageState createState() => VerifyEmailPageState();
 }
 
-class VerfiyEmailPageState extends State<VerfiyEmailPage> {
+class VerifyEmailPageState extends State<VerifyEmailPage> {
   int time;
   int count=1;
   Timer timer,timerforbutton;

@@ -28,7 +28,7 @@ class RegistrationController extends GetxController {
       if(firebaseUser.emailVerified){
         Get.offAll(MainPage());
       }else{
-        Get.offAll(VerfiyEmailPage());
+        Get.offAll(VerifyEmailPage());
       }
 
     } on FirebaseAuthException catch (e) {
@@ -50,7 +50,7 @@ class RegistrationController extends GetxController {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email, password: password);
       await DatabaseService(uid: FirebaseAuth.instance.currentUser.uid).updateUserData('null', 'null', 'null');
-      Get.offAll(VerfiyEmailPage());
+      Get.offAll(VerifyEmailPage());
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'weak-password') {
