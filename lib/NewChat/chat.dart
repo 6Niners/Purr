@@ -5,23 +5,31 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:purr/Registration/RegistrationController.dart';
 
 ///////////////////////////////////////////
 
 
-class ChatBoxNew extends StatelessWidget {
+class ChatBoxNew extends StatefulWidget {
   ChatBoxNew(this.Chatroom); //widget
+
+  String Chatroom = "69";
+
+  @override
+  _ChatBoxNewState createState() => _ChatBoxNewState();
+}
+
+class _ChatBoxNewState extends State<ChatBoxNew> {
 
   String receivername = "pet name";
   String sendername = "Sender";
-  String Chatroom = "69";
 
   ///////////////////////////////////////////
 
   ///////////////////////////////////////////
   Widget chatMessages() {
     var chat = FirebaseFirestore.instance.collection(
-        'ChatRoom').doc(Chatroom).collection('messages').orderBy("time", descending: false);
+        'ChatRoom').doc(widget.Chatroom).collection('messages').orderBy("time", descending: false);
     // print('work work work work work');
     //buid a widget to view the messages
     return Container(
@@ -82,8 +90,6 @@ class ChatBoxNew extends StatelessWidget {
     );
   }
 
-
-
   //////////////////////////////////////////
   //            Chat Functions            //
   //////////////////////////////////////////
@@ -139,9 +145,9 @@ class ChatBoxNew extends StatelessWidget {
         "sendBy": sendername,
         "message": Message,
         "time": DateTime.now(),
-        'sender_id': Chatroom,
+        'sender_id': widget.Chatroom,
       };
-      addmessage(Chatroom, chatroomMap);
+      addmessage(widget.Chatroom, chatroomMap);
     }
     else {
       return ("please write a message");
@@ -160,20 +166,33 @@ class ChatBoxNew extends StatelessWidget {
       print(e.toString());
     }); //if there is any error
   }
+
   createChatRoom() async {
+    if(receivername=="pet name"){
     //function to create a chat room in the data base
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    await user.doc(widget.Chatroom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, "")).get().then((document){
+      if (document.exists){
+        //print(receivername);
+        receivername= document.data()['Pet Name'];
+        print(receivername);
+        setState(() {
+        });
+      }
+    });
+    RegistrationController CONT = Get.find();
     FirebaseFirestore.instance.collection("ChatRoom")
-        .doc(this.Chatroom).set({"users list":[receivername,FirebaseAuth.instance.currentUser.uid],"users":Chatroom})
+        .doc(this.widget.Chatroom).set({
+      "users Names":receivername+"_"+CONT.UserInfo.petName,
+      "users list":[widget.Chatroom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, ""),FirebaseAuth.instance.currentUser.uid],
+      "users":widget.Chatroom})
         .catchError((e) {
       print(e.toString());
     });
-    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-    await user.doc(Chatroom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, "")).get().then((document){
-      if (document.exists){
-        receivername= document.data()['Pet Name'];
-      }
-    });
+
+    }
   }
+
 //////////////////////////////////////////
 
   buildMessageComposer() {
@@ -238,8 +257,7 @@ class ChatBoxNew extends StatelessWidget {
         ],
       ),
     );
-  } //buildMessageComposer
-
+  }
   /////////////////////////////////////////
   //             Chat UI                 //
   /////////////////////////////////////////
@@ -277,5 +295,4 @@ class ChatBoxNew extends StatelessWidget {
       ),
     );
   }
-
 }//class ChatBox1

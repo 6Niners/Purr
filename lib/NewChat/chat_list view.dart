@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:purr/NewChat/chat.dart';
+import 'package:purr/Registration/RegistrationController.dart';
 /*
 class FlutterIcons {
 FlutterIcons._();
@@ -217,6 +218,8 @@ class ChatRoom extends StatefulWidget {
 
 class ChatRoomState extends State<ChatRoom> {
   //this one is for the general use
+  RegistrationController CONT = Get.find();
+
   var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
 //testing one
   //var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: "Q3GtQdi0mKOtui9GzrNPUP5DgE63").snapshots();
@@ -229,21 +232,23 @@ class ChatRoomState extends State<ChatRoom> {
           return Text('Something went wrong',style: TextStyle(color: Colors.red,fontSize: 25),);
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),);
+          return Center(child: Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),));
         }
-        /*
         if(snapshot.data.docs.length==0){
-          return ChatRoomsTile(userName: "New Chat", chatroomID: FirebaseAuth.instance.currentUser.uid+"_"+"Meow", );
-        }*/
+          return Center(
+            child: Container(
+              child: Text("There no chats",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+          );
+        }
         return ListView.builder(
           itemCount: snapshot.data.docs.length,
           itemBuilder: (BuildContext context, int index) {
             return ChatRoomsTile(
-              userName: snapshot.data.docs[index].data()['users']
+              userName: snapshot.data.docs[index].data()['users Names']
                   .toString()
                   .replaceAll("_", "")
-                  .replaceAll(FirebaseAuth.instance.currentUser.uid, "")??"name",
-              chatroomID: snapshot.data.docs[index].data()['users']??"name",
+                  .replaceAll(CONT.UserInfo.petName, ""),
+              chatroomID: snapshot.data.docs[index].data()['users'],
             );}
         );
 
@@ -296,6 +301,7 @@ class ChatRoomsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(

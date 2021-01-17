@@ -16,6 +16,7 @@ class RegistrationController extends GetxController {
   User firebaseUser;
   FirebaseAuth Auth;
   ProfileData UserInfo=ProfileData();
+  ProfileData AnotherUserInfo=ProfileData();
   List<String> users=List<String>();
   @override
   Future<void> onInit() async {
@@ -172,14 +173,22 @@ class RegistrationController extends GetxController {
     firebaseUser = Auth.currentUser;
     if(UID==null) {
       UID=firebaseUser.uid;
-    }
+      final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+      await user.doc(UID).get().then((document){
+        if (document.exists){
+          UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],Email: firebaseUser.email);
+        }
+      });
+      update();
+    }else{
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     await user.doc(UID).get().then((document){
       if (document.exists){
-        UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],Email: firebaseUser.email);
+        AnotherUserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],Email: firebaseUser.email);
       }
     });
     update();
+    }
   }
   Future<void> GetUsers() async {
     var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').get();
