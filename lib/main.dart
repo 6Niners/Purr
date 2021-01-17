@@ -58,6 +58,7 @@ class ListOfPages extends StatelessWidget {
               PageButton(FetchProfilePage(), "Profile"),
               PageButton(SetupProfilePage(), "Setup Profile"),
               PageButton(ChatRoom(), "chat list"),
+
               //PageButton(ChatBoxNew(FirebaseAuth.instance.currentUser.uid+"_"+"Meow"), "chatNew"),
 
             ],

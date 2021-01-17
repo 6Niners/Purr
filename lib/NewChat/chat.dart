@@ -93,7 +93,33 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
   //////////////////////////////////////////
   //            Chat Functions            //
   //////////////////////////////////////////
+  BackgroundForChat() async {
+    RegistrationController REGCONT = Get.find();
+    await REGCONT.getUserProfileData();
 
+
+    if ( REGCONT.UserInfo.petType =='cat') {
+
+      return "assets/wallpaper-cat.jpg";
+    }
+
+    else if (REGCONT.UserInfo.petType == 'dog') {
+      return "assets/dog.jpg";  }
+
+    else if (REGCONT.UserInfo.petType == 'hamster') {
+      return "assets/hamster.jpg";  }
+
+    else if (REGCONT.UserInfo.petType == 'rabbit') {
+      return "assets/rabbit.jpg";  }
+
+    else if (REGCONT.UserInfo.petType == 'bird'){
+      return "assets/wallpaper-bird.jpg";  }
+
+    else{
+      return "assets/other.jpg";
+    }
+  }
+///////////////////////////////////////////
   Future<void> takePicture() async {
     // print('function works');
     ImagePicker _picker = ImagePicker();
@@ -119,7 +145,8 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
     );
   }
 
-  //////////////////////////////////////////
+  ///////////////////////////////////////////
+
 
 /*  void _sendImage({String messageText, String imageUrl}) {
     chatReference.add({
@@ -134,7 +161,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
 
   ///////////////////////////////////////////
 
-  addMessage(String Message) {
+   addMessage(String Message) {
     // print('function works'+ Message);
 
     //function to writ the message
@@ -270,7 +297,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/wallpaper-cat.jpg"),
+              image: AssetImage("assets/rabbit.jpg"),//BackgroundForChat()),
               fit: BoxFit.cover)),
       child: Scaffold(
         backgroundColor: Colors.transparent,
