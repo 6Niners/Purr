@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:purr/Chat/Chat_screen_UI.dart';
 import 'package:purr/MainPage/MainPage.dart';
+import 'package:purr/NewChat/chat.dart';
 import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
 import 'package:purr/Registration/MainRegistrationPage.dart';
@@ -12,7 +13,7 @@ import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
 import 'package:purr/MainController.dart';
 import 'package:purr/Registration/CommonClasses-functions.dart';
-import 'package:purr/chat_list view.dart';
+import 'file:///F:/AndroidStudioProjects/Purr/lib/NewChat/chat_list%20view.dart';
 
 
 Future<void> main() async {
@@ -59,8 +60,8 @@ class ListOfPages extends StatelessWidget {
               PageButton(ChangePasswordPage(), "Change Password"),
               PageButton(FetchProfilePage(), "Profile"),
               PageButton(SetupProfilePage(), "Setup Profile"),
-              PageButton(ChatBox(), "chat"),
               PageButton(ChatRoom(), "chat list"),
+              PageButton(ChatBoxNew(FirebaseAuth.instance.currentUser.uid+"_"+"Meow"), "chatNew"),
 
             ],
           ),

@@ -13,12 +13,18 @@ class Themes {
     highlightColor: Colors.blue[800],
     //back button
     canvasColor: Colors.blue[100],
-
+    //message sent by
+    focusColor: Colors.blue[800],
+    //message sent to me
+    cardColor: Colors.grey[800],
+    //meeasge comboser
+    cursorColor: Colors.blue[900],
     // set the primaryColor light theme or accentColor for dark theme.
     textTheme: TextTheme(
         headline6: TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold),
         bodyText1: TextStyle(color: Colors.black,fontSize: 18),
-        subtitle1: TextStyle(color: Colors.blue,fontSize: 14)
+        subtitle1: TextStyle(color: Colors.blue,fontSize: 14),
+        bodyText2: TextStyle(color: Colors.white,fontSize: 14),
     ),
   );
   static final dark = ThemeData.dark().copyWith(
@@ -34,10 +40,19 @@ class Themes {
     //label in text field and border
     // set the primaryColor light theme or accentColor for dark theme.
     accentColor: Colors.green[800],
+
+    //message sent by
+    focusColor: Colors.purple,
+    //message sent to me
+    cardColor: Colors.grey[800],
+    //meeasge comboser
+    cursorColor: Colors.blue[900],
+
     textTheme: TextTheme(
         headline6:  TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold),
         bodyText1: TextStyle(color: Colors.white,fontSize: 18),
-        subtitle1: TextStyle(color: Colors.blue,fontSize: 14)
+        subtitle1: TextStyle(color: Colors.blue,fontSize: 14),
+      bodyText2: TextStyle(color: Colors.white,fontSize: 14),
     ),
   );
 }

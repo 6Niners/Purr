@@ -1,27 +1,27 @@
 
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 ///////////////////////////////////////////
 
 
-class ChatBox extends StatelessWidget {
+class ChatBoxNew extends StatelessWidget {
+  ChatBoxNew(this.Chatroom); //widget
 
-  String receivername = " pet name";
+  String receivername = "pet name";
   String sendername = "Sender";
-  String senderid = "69";
+  String Chatroom = "69";
 
   ///////////////////////////////////////////
 
   ///////////////////////////////////////////
   Widget chatMessages() {
     var chat = FirebaseFirestore.instance.collection(
-        'ChatRoom').doc(senderid).collection('messages').orderBy(
-        "time", descending: false);
+        'ChatRoom').doc(Chatroom).collection('messages').orderBy("time", descending: false);
     // print('work work work work work');
     //buid a widget to view the messages
     return Container(
@@ -67,33 +67,18 @@ class ChatBox extends StatelessWidget {
                           topLeft: Radius.circular(23),
                           topRight: Radius.circular(23),
                           bottomRight: Radius.circular(23)),
-                      gradient: LinearGradient(
-
-                        colors: sendByMe ? [
-
-                         /* const Color(0xFFC6FF00),
-                          const Color(0xFF76FF03),
-                          const Color(0xFF00E676),
-                          const Color(0xFF1DE9B6)
-*/
-                         const Color(0xFF64B5F6),
-                          const Color(0xFF1E88E5)
+                      color: sendByMe ?
+                      Get.theme.focusColor:Get.theme.cardColor
 
 
-                        ]
-                            : [
-                          const Color(0xFFCE93D8),
-                          const Color(0xFFAB47BC)
-                        ],
-                      )
+
+
+
+
                   ),
                   child: Text(document.data()['message'],
                       textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: Color(0xFFFFFFFF),
-                          fontSize: 16,
-                          fontFamily: 'OverpassRegular',
-                          fontWeight: FontWeight.w800)),
+                      style: Get.theme.textTheme.bodyText2),
                 ),
               );
             }).toList(),
@@ -105,8 +90,8 @@ class ChatBox extends StatelessWidget {
 
 
 
-    //////////////////////////////////////////
-   //            Chat Functions            //
+  //////////////////////////////////////////
+  //            Chat Functions            //
   //////////////////////////////////////////
 
   Future<void> takePicture() async {
@@ -160,9 +145,9 @@ class ChatBox extends StatelessWidget {
         "sendBy": sendername,
         "message": Message,
         "time": DateTime.now(),
-        'sender_id': senderid,
+        'sender_id': Chatroom,
       };
-      creatChatRoom(senderid, chatroomMap);
+      addmessage(Chatroom, chatroomMap);
     }
     else {
       return ("please write a message");
@@ -171,18 +156,27 @@ class ChatBox extends StatelessWidget {
 
   //////////////////////////////////////////
 
-  creatChatRoom(String chatroomID, chatroomMap) {
+  addmessage(String chatroomID, chatroomMap) {
     //function to create a chat room in the data base
     FirebaseFirestore.instance.collection("ChatRoom")
-        .doc(chatroomID).collection(
-        "messages") //the document is an id store place
+        .doc(chatroomID).collection("messages") //the document is an id store place
     // the set data is a place to store the data
         .add(chatroomMap)
         .catchError((e) {
       print(e.toString());
     }); //if there is any error
   }
-
+  createChatRoom() {
+    receivername=Chatroom.toString()
+        .replaceAll("_", "")
+        .replaceAll(FirebaseAuth.instance.currentUser.uid, "");
+    //function to create a chat room in the data base
+    FirebaseFirestore.instance.collection("ChatRoom")
+        .doc(this.Chatroom).set({"users list":[receivername,FirebaseAuth.instance.currentUser.uid],"users":Chatroom})
+        .catchError((e) {
+      print(e.toString());
+    }); //if there is any error
+  }
 //////////////////////////////////////////
 
   buildMessageComposer() {
@@ -190,7 +184,7 @@ class ChatBox extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10),
       height: 60.0,
-      color: Color(0xFFBBDEFB),
+      color: Get.theme.cursorColor,
       //color: Color(0xFFB2EBF2),
       //color: Color(0xFFFFCDD2),
       child: Row(
@@ -198,17 +192,17 @@ class ChatBox extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.camera),
             iconSize: 25.0,
-            color: Color(0xFF00695C),
+            color: Get.theme.textTheme.bodyText2.color,
             //color: Colors.redAccent,
             onPressed: () => {takePicture()},
           ),
           IconButton(
               icon: Icon(Icons.photo),
               iconSize: 25.0,
-              color: Color(0xFF00695C),
+              color: Get.theme.textTheme.bodyText2.color,
               //color: Colors.redAccent,
               onPressed: () async {
-              /*  var image = await ImagePicker.pickImage(
+                /*  var image = await ImagePicker.pickImage(
                     source: ImageSource.gallery);
                 int timestamp = new DateTime.now().millisecondsSinceEpoch;
                 FirebaseStorage storage = FirebaseStorage.instance;
@@ -226,9 +220,10 @@ class ChatBox extends StatelessWidget {
             child: TextField(
               textCapitalization: TextCapitalization.sentences,
               controller: Message,
-              style: Get.theme.textTheme.bodyText1,
+              style: Get.theme.textTheme.bodyText2,
               decoration: InputDecoration.collapsed(
                 hintText: 'meow your message',
+                hintStyle: Get.theme.textTheme.bodyText2
               ),
             ),
           ),
@@ -236,7 +231,7 @@ class ChatBox extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.send),
             iconSize: 25.0,
-            color: Color(0xFF00695C),
+            color: Get.theme.textTheme.bodyText2.color,
             //color: Colors.redAccent,
             onPressed: () => { addMessage(Message.text),
 
@@ -248,13 +243,15 @@ class ChatBox extends StatelessWidget {
     );
   } //buildMessageComposer
 
-    /////////////////////////////////////////
-   //             Chat UI                 //
+  /////////////////////////////////////////
+  //             Chat UI                 //
   /////////////////////////////////////////
 
 
   @override
   Widget build(BuildContext context) {
+    createChatRoom();
+    //createChatRoom(FirebaseAuth.instance.currentUser.uid+"_"+"Another user1");
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -282,5 +279,6 @@ class ChatBox extends StatelessWidget {
         ),
       ),
     );
-  } //widget
+  }
+
 }//class ChatBox1

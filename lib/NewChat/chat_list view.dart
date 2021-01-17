@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:purr/Chat/Chat_screen_UI.dart';
+import 'package:get/get.dart';
+import 'package:purr/NewChat/chat.dart';
 /*
 class FlutterIcons {
 FlutterIcons._();
@@ -208,8 +210,6 @@ class Constants{
 
 
 
-
-
 class ChatRoom extends StatefulWidget {
   @override
   ChatRoomState createState() => ChatRoomState();
@@ -217,27 +217,34 @@ class ChatRoom extends StatefulWidget {
 
 class ChatRoomState extends State<ChatRoom> {
 
-  var chat = FirebaseFirestore.instance.collection('ChatRoom').orderBy("time", descending: false);
-  Stream chatRooms;
+  //var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").snapshots();
 
+  var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
+  //var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users",isEqualTo: FirebaseAuth.instance.currentUser.uid).snapshots();
+
+  var collection;
   Widget chatRoomsList() {
     return StreamBuilder(
       stream: chatRooms,
       builder: (context, snapshot) {
-        return snapshot.hasData
-            ? ListView.builder(
-            itemCount: snapshot.data.documents.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return ChatRoomsTile(
-                userName: snapshot.data.documents[index].data['chatroomID']
-                    .toString()
-                    .replaceAll("_", "")
-                    .replaceAll(Constants.myName, ""),
-                chatroomID: snapshot.data.documents[index].data["chatroomID"],
-              );
-            })
-            : Container();
+        if (snapshot.hasError) {
+          return Text('Something went wrong',style: TextStyle(color: Colors.red,fontSize: 25),);
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),);
+        }
+        return ListView.builder(
+          itemCount: snapshot.data.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ChatRoomsTile(
+              userName: snapshot.data.docs[index].data()['users']
+                  .toString()
+                  .replaceAll("_", "")
+                  .replaceAll(FirebaseAuth.instance.currentUser.uid, "")??"name",
+              chatroomID: snapshot.data.docs[index].data()['users']??"name",
+            );}
+        );
+
       },
     );
   }
@@ -262,36 +269,22 @@ class ChatRoomState extends State<ChatRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
-        title: Image.asset(
-          "assets/wallpaper-cat.jpg",
-          height: 40,
-        ),
-        elevation: 0.0,
-        centerTitle: false,
-        actions: [
-          GestureDetector(
-          /*  onTap: () {
-              AuthService().signOut();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => Authenticate()));
-            },*/
-            child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.exit_to_app)),
-          )
-        ],
+        title: Text("chat list")
       ),
       body: Container(
         child: chatRoomsList(),
       ),
-      floatingActionButton: FloatingActionButton(
+    /*
+    floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
-       /* onPressed: () {
+        onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Search()));
-        },*/
-      ),
+        },
+
+      ),*/
     );
   }
 }
@@ -307,13 +300,14 @@ class ChatRoomsTile extends StatelessWidget {
     return GestureDetector(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(
-            builder: (context) => ChatBox(
+            builder: (context) => ChatBoxNew(
+                chatroomID
               //chatroomID: chatroomID,
             )
         ));
       },
       child: Container(
-        color: Colors.black26,
+        color: Get.theme.canvasColor,
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Row(
           children: [
@@ -321,26 +315,22 @@ class ChatRoomsTile extends StatelessWidget {
               height: 30,
               width: 30,
               decoration: BoxDecoration(
-                  color: CustomTheme.colorAccent,
+                  color: Get.theme.highlightColor,
                   borderRadius: BorderRadius.circular(30)),
-              child: Text(userName.substring(0, 1),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'OverpassRegular',
-                      fontWeight: FontWeight.w300)),
+              child: Center(
+                child: Text(userName.substring(0, 1),
+                    textAlign: TextAlign.center,
+                  style: Get.theme.textTheme.bodyText1,
+                ),
+              ),
             ),
             SizedBox(
               width: 12,
             ),
             Text(userName,
                 textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'OverpassRegular',
-                    fontWeight: FontWeight.w300))
+              style: Get.theme.textTheme.bodyText1,
+            )
           ],
         ),
       ),
