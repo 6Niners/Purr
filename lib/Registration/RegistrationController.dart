@@ -1,32 +1,40 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
+import 'package:purr/Models/ProfileData.dart';
 import 'package:purr/Registration/SetupProfile.dart';
 import 'package:purr/Registration/VerifyMail.dart';
-import 'package:purr/Services/Database.dart';
 import 'package:purr/UI_Widgets.dart';
+
+import 'package:purr/Registration/CommonClasses-functions.dart';
 
 
 class RegistrationController extends GetxController {
   User firebaseUser;
-
-
+  FirebaseAuth Auth;
+  ProfileData UserInfo=ProfileData();
+  String userEmail = "PlaceHolder@email.com";
   @override
   Future<void> onInit() async {
+    Auth=FirebaseAuth.instance;
     super.onInit();
   }
 
   Future<void> signIn(String email, String password) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      firebaseUser = FirebaseAuth.instance.currentUser;
+      await Auth.signInWithEmailAndPassword(email: email, password: password);
+      firebaseUser = Auth.currentUser;
       if(firebaseUser.emailVerified){
-        Get.offAll(MainPage());
+        if(await profileiscomplete()){
+          Get.offAll(MainPage());
+        }else{
+          Get.offAll(SetupProfilePage());
+        }
       }else{
-        Get.offAll(VerfiyEmailPage());
+        Get.offAll(VerifyEmailPage());
       }
 
     } on FirebaseAuthException catch (e) {
@@ -45,10 +53,10 @@ class RegistrationController extends GetxController {
 
   Future<void> signUp(String email, String password) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await Auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await DatabaseService(uid: FirebaseAuth.instance.currentUser.uid).updateUserData('null', 'null', 'null');
-      Get.offAll(VerfiyEmailPage());
+      await updateUserData(ProfileData(petName:"",petType:"",breed:""));
+      Get.offAll(VerifyEmailPage());
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'weak-password') {
@@ -70,8 +78,7 @@ class RegistrationController extends GetxController {
 
   Future<void> forgotpassword(String email) async {
     try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: email);
+      await Auth.sendPasswordResetEmail(email: email);
       ShowToast(
           "Reset password link has sent your mail please use it to change the password.",
           Background_color: Colors.blue);
@@ -89,7 +96,7 @@ class RegistrationController extends GetxController {
 
   //if the user is logged in
   Future<bool> validatePassword(String password) async {
-    firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser = Auth.currentUser;
     var authCredentials = EmailAuthProvider.credential(
         email: firebaseUser.email, password: password);
     try {
@@ -103,25 +110,136 @@ class RegistrationController extends GetxController {
   }
 
   Future<void> SendEmailVerification() async {
-    firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser = Auth.currentUser;
     firebaseUser.sendEmailVerification();
     ShowToast(
         "verification email has been sent", Background_color: Colors.blue);
   }
 
   Future<void> updatePassword(String password) async {
-    firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser = Auth.currentUser;
 
     firebaseUser.updatePassword(password);
     print("changed to " + password);
-    ShowToast("your password got changed", Background_color: Colors.blue);
+    ShowToast("Your password got changed", Background_color: Colors.blue);
   }
 
   void ismailverified() {
-    firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser = Auth.currentUser;
     firebaseUser.reload();
     if (firebaseUser.emailVerified) {
       Get.offAll(SetupProfilePage());
     }
+  }
+  Future signOut() async {
+    try {
+      return await Auth.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<bool> profileiscomplete() async {
+    await getUserProfileData();
+    return UserInfo.iscompelete();
+  }
+  Future Checkifloggedin() async {
+    firebaseUser = Auth.currentUser;
+    if(firebaseUser!=null){
+      if(firebaseUser.emailVerified){
+        if(await profileiscomplete()){
+        Get.offAll(MainPage());
+        }else{
+          Get.offAll(SetupProfilePage());
+        }
+      }else{
+        Get.offAll(VerifyEmailPage());
+      }
+    }
+  }
+
+
+  Future<void> updateUserData(ProfileData TMP) async {
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    return await user.doc(Auth.currentUser.uid).set(TMP.toMap());
+  }
+
+
+  Future<void> getUserProfileData() async {
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    await user.doc(firebaseUser.uid).get().then((document){
+      if (document.exists){
+        userEmail = firebaseUser.email;
+        UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed']);
+      }
+    });
+    update();
+  }
+
+//ui widgets to avoid repeating the same functions
+  Container buildTextFormField(TextEditingController Controller,String labeltext,Function(String) Validator) {
+    return Container(
+        padding: EdgeInsets.all(10),
+    margin: EdgeInsets.all(5),
+    child: TextFormField(
+        validator:Validator,
+        controller: Controller,
+        style: Get.theme.textTheme.bodyText1,
+        autovalidateMode: AutovalidateMode.disabled,
+        decoration: InputDecoration(
+            labelText: labeltext,
+
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
+          focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,),),
+        )
+    )
+    );
+  }
+
+
+  Container buildTextFormFieldPassword(TextEditingController Controller,String labeltext,BoolToPassByReference ObscureText,{TextEditingController Controller2,String Function(String) Validator}) {
+    if(Validator==null){
+    if(Controller2==null){
+      Validator=passwordValidator;
+    }else{
+      passwordMatchValidatorClass OtherPasswordField=passwordMatchValidatorClass(Controller2);
+      Validator=OtherPasswordField.passwordMatchValidator;
+    }
+    }
+    return Container(
+        padding: EdgeInsets.all(10),
+    margin: EdgeInsets.all(5),
+    child: TextFormField(
+      controller: Controller,
+      style: Get.theme.textTheme.bodyText1,
+      validator: Validator,
+      autovalidateMode: AutovalidateMode.disabled,
+      decoration: InputDecoration(
+        labelText: labeltext,
+
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
+        focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
+        suffixIcon: IconButton(
+          icon: Icon(
+            // Based on passwordVisible state choose the icon
+            ObscureText.obscure
+                ? Icons.visibility
+                : Icons.visibility_off,
+
+          ),
+          onPressed: () {
+            // Update the state i.e. toogle the state of passwordVisible variable
+              ObscureText.obscure = !ObscureText.obscure;
+              update();
+            }
+
+
+        ),
+      ),
+
+      obscureText: ObscureText.obscure,
+    )
+    );
   }
 }

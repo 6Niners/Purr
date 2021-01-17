@@ -1,16 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:purr/Chat/Chat_screen_UI.dart';
 import 'package:purr/MainPage/MainPage.dart';
+import 'package:purr/NewChat/chat.dart';
+import 'package:purr/NewChat/chat_list%20view.dart';
 import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
+import 'package:purr/Registration/MainRegistrationPage.dart';
 import 'package:purr/Registration/SetupProfile.dart';
+import 'package:purr/Registration/VerifyMail.dart';
 import 'package:purr/Registration/forgot_password.dart';
 import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
-import 'MainController.dart';
-
-
+import 'package:purr/MainController.dart';
+import 'package:purr/Registration/CommonClasses-functions.dart';
 
 Future<void> main() async {
 
@@ -24,12 +27,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Purr',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: Themes.light,
+      darkTheme: Themes.dark,
       //home: MainPage(),
       //home: LoginPage(title: 'Sign In'),
       home:ListOfPages(),
@@ -42,23 +43,24 @@ class ListOfPages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text("Main Menu"), centerTitle: true,),
+      appBar: AppBar(title: Text("Main Menu"), centerTitle: true,backgroundColor: Colors.blue,),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              PageButton(LoginPage(), "Main App Route"),
+              PageButton(MainRegistrationPage(), "Main App Route"),
               PageButton(MainPage(), "Main Page!"),
               PageButton(LoginPage(), "Login Page!"),
+              PageButton(VerifyEmailPage(), "Verify Email Page"),
               PageButton(SignUpPage(), "Sign Up Page"),
               PageButton(ForgotpasswordPage(), "Forgot password"),
               PageButton(ChangePasswordPage(), "Change Password"),
               PageButton(FetchProfilePage(), "Profile"),
               PageButton(SetupProfilePage(), "Setup Profile"),
-              PageButton(ChatBox1(), "chat"),
-
+              PageButton(ChatRoom(), "chat list"),
+              //PageButton(ChatBoxNew(FirebaseAuth.instance.currentUser.uid+"_"+"Meow"), "chatNew"),
 
             ],
           ),
