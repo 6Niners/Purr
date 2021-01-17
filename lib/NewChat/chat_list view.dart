@@ -231,16 +231,13 @@ class ChatRoomState extends State<ChatRoom> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),);
         }
+        /*
+        if(snapshot.data.docs.length==0){
+          return ChatRoomsTile(userName: "New Chat", chatroomID: FirebaseAuth.instance.currentUser.uid+"_"+"Meow", );
+        }*/
         return ListView.builder(
-          itemCount: snapshot.data.docs.length+1,
+          itemCount: snapshot.data.docs.length,
           itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return ChatRoomsTile(
-                userName: "New Chat",
-                chatroomID: FirebaseAuth.instance.currentUser.uid+"_"+"Meow",
-              );
-            }
-            index -= 1;
             return ChatRoomsTile(
               userName: snapshot.data.docs[index].data()['users']
                   .toString()
@@ -275,9 +272,6 @@ class ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
-      appBar: AppBar(
-        title: Text("chat list")
-      ),
       body: Container(
         child: chatRoomsList(),
       ),

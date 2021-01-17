@@ -25,15 +25,12 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
     return GetBuilder<RegistrationController>( builder: (_) {
 
       return Scaffold(
-
         backgroundColor: Colors.blueGrey[900],
-
         appBar: AppBar(
           backgroundColor: Colors.blueGrey[800],
           title: Text("Profile"),
           elevation: 0.0,
         ),
-
 
         floatingActionButton: FloatingActionButton.extended(
             label: Text("Update"),
@@ -46,10 +43,8 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
         body: Padding (
           padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
 
-          child: Column(
-
+          child: _.UserInfo.petName!=null?Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-
             children: [
               Center(
                 child: CircleAvatar(
@@ -61,7 +56,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               Divider(height: 60.0, color: Colors.blueGrey[600]),
 
-              Text("NAME", style: TextStyle(
+              Text("Pet Name", style: TextStyle(
                 color: Colors.white,
               ),),
 
@@ -75,7 +70,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               SizedBox(height: 30.0),
 
-              Text("PetType", style: TextStyle(
+              Text("Pet Type", style: TextStyle(
                 color: Colors.white,
               ),),
 
@@ -89,7 +84,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               SizedBox(height: 30.0),
 
-              Text("BREED", style: TextStyle(
+              Text("Breed", style: TextStyle(
                 color: Colors.white,
               ),),
 
@@ -109,7 +104,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
                   SizedBox(width: 10),
 
-                  Text(_.userEmail, style: TextStyle(
+                  Text(_.UserInfo.Email, style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.white,
 
@@ -117,7 +112,11 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
                 ],
               )
             ],
+          ):Container(
+            child: CircularProgressIndicator(),
+            padding: EdgeInsets.all(10),
           ),
+
         ),
       )
     ;});

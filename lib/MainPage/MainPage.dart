@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPageController.dart';
+import 'package:purr/NewChat/chat_list%20view.dart';
 import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
 import 'package:purr/Registration/RegistrationController.dart';
@@ -23,10 +25,8 @@ class _MainPageState extends State<MainPage>
   @override
   Widget build(BuildContext context) {
     TabController TabCont=TabController(vsync:this,length: 3);
-
     return SafeArea(
       child: new Scaffold(
-
         backgroundColor: Colors.grey[900],
         appBar: TabBar(
           controller: TabCont,
@@ -47,26 +47,23 @@ class _MainPageState extends State<MainPage>
           controller: TabCont,
           children: [
             Like_Dislike_Screen(context, controller),
-            Icon(Icons.directions_car),
+            ChatRoom(),
           Column(
             children: [
 
               FlatButton(
-
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
                 onPressed: (){Get.to(ChangePasswordPage()); },
                 color:Colors.grey[800],
                 child: Text("Change Password",style: TextStyle(color: Colors.white),),),
 
               FlatButton(
-
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
                 onPressed: (){Get.to(FetchProfilePage()); },
                 color:Colors.grey[800],
                 child: Text("Profile",style: TextStyle(color: Colors.white),),),
 
               FlatButton(
-
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
                 onPressed: () async {
                   RegistrationController CONT = Get.find();
@@ -75,11 +72,7 @@ class _MainPageState extends State<MainPage>
                 color:Colors.grey[800],
                 child: Text("Sign out",style: TextStyle(color: Colors.white),),)
             ],
-
           ),
-
-
-
            ],
 
         ),
@@ -93,21 +86,20 @@ class _MainPageState extends State<MainPage>
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: [
-              BuildStackCards(context, controller),
-              buttonsRow(),
+              GetBuilder<RegistrationController>( builder: (_) {return BuildStackCards(context, controller,_);}),
+              //buttonsRow(),
             ],
           );
   }
 
-  Container BuildStackCards(BuildContext context, CardController controller) {
+  Container BuildStackCards(BuildContext context, CardController controller,RegistrationController GetxController) {
     return Container(
           height: MediaQuery.of(context).size.width * 0.9,
-
           child: new TinderSwapCard(
             swipeUp: true,
             swipeDown: false,
             orientation: AmassOrientation.BOTTOM,
-            totalNum: welcomeImages.length,
+            totalNum: GetxController.users.length,
             swipeEdge: 4.0,
             maxWidth: MediaQuery.of(context).size.width * 0.9,
             maxHeight: MediaQuery.of(context).size.width * 0.9,
@@ -115,7 +107,39 @@ class _MainPageState extends State<MainPage>
             minHeight: MediaQuery.of(context).size.width * 0.8,
             cardBuilder: (context, index) => Card(
               color: Colors.grey[800],
-              child: Image.asset('${welcomeImages[index]}'),
+              child: GestureDetector(
+                  onTap: () async {
+                    RegistrationController CONT = Get.find();
+                    await CONT.getUserProfileData(UID: GetxController.users[index]);
+                    print(CONT.UserInfo.toMap());
+                    Get.bottomSheet(
+                        Container(
+                            child: ListView.builder(
+                                itemCount: CONT.UserInfo.toMap().length+1,
+                                itemBuilder: (BuildContext context, int index) {
+                                  if (index == 0) {
+                                    return ChatRoomsTile(
+                                      userName: "Start Chat",
+                                      chatroomID: FirebaseAuth.instance.currentUser.uid+"_"+GetxController.users[index],
+                                    );
+                                  }
+                                  index -= 1;
+                                  return Container(
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.all(1),
+                                    color: Colors.grey[600],
+                                    child: RichText(
+                                        text: TextSpan(
+                                            text: CONT.UserInfo.toMap().keys.toList()[index] + ": ",
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                            children: <TextSpan>[
+                                              TextSpan(text: CONT.UserInfo.toMap().values.toList()[index]),
+                                            ])),
+                                  );
+                                })),
+                        backgroundColor: Colors.black45);
+                    print("tapeed");},
+                  child: Image.asset('${welcomeImages[0]}')),
             ),
             cardController: controller = CardController(),
             swipeUpdateCallback:
