@@ -13,18 +13,18 @@ import 'package:purr/Registration/CommonClasses-functions.dart';
 
 class RegistrationController extends GetxController {
   User firebaseUser;
-
+  FirebaseAuth Auth;
 
   @override
   Future<void> onInit() async {
+    Auth=FirebaseAuth.instance;
     super.onInit();
   }
 
   Future<void> signIn(String email, String password) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      firebaseUser = FirebaseAuth.instance.currentUser;
+      await Auth.signInWithEmailAndPassword(email: email, password: password);
+      firebaseUser = Auth.currentUser;
       if(firebaseUser.emailVerified){
         Get.offAll(MainPage());
       }else{
@@ -47,9 +47,9 @@ class RegistrationController extends GetxController {
 
   Future<void> signUp(String email, String password) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await Auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await DatabaseService(uid: FirebaseAuth.instance.currentUser.uid).updateUserData('null', 'null', 'null');
+      await DatabaseService(uid: Auth.currentUser.uid).updateUserData('null', 'null', 'null');
       Get.offAll(VerifyEmailPage());
     } on FirebaseAuthException catch (e) {
       print(e.code);
@@ -72,8 +72,7 @@ class RegistrationController extends GetxController {
 
   Future<void> forgotpassword(String email) async {
     try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: email);
+      await Auth.sendPasswordResetEmail(email: email);
       ShowToast(
           "Reset password link has sent your mail please use it to change the password.",
           Background_color: Colors.blue);
@@ -91,7 +90,7 @@ class RegistrationController extends GetxController {
 
   //if the user is logged in
   Future<bool> validatePassword(String password) async {
-    firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser = Auth.currentUser;
     var authCredentials = EmailAuthProvider.credential(
         email: firebaseUser.email, password: password);
     try {
@@ -105,14 +104,14 @@ class RegistrationController extends GetxController {
   }
 
   Future<void> SendEmailVerification() async {
-    firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser = Auth.currentUser;
     firebaseUser.sendEmailVerification();
     ShowToast(
         "verification email has been sent", Background_color: Colors.blue);
   }
 
   Future<void> updatePassword(String password) async {
-    firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser = Auth.currentUser;
 
     firebaseUser.updatePassword(password);
     print("changed to " + password);
@@ -120,10 +119,28 @@ class RegistrationController extends GetxController {
   }
 
   void ismailverified() {
-    firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser = Auth.currentUser;
     firebaseUser.reload();
     if (firebaseUser.emailVerified) {
       Get.offAll(SetupProfilePage());
+    }
+  }
+  Future signOut() async {
+    try {
+      return await Auth.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+  Future Checkifloggedin() async {
+    firebaseUser = Auth.currentUser;
+    if(firebaseUser!=null){
+      if(firebaseUser.emailVerified){
+        Get.offAll(MainPage());
+      }else{
+        Get.offAll(VerifyEmailPage());
+      }
     }
   }
 

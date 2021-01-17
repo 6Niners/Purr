@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPageController.dart';
 import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
+import 'package:purr/Registration/RegistrationController.dart';
+import 'package:purr/main.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -61,7 +63,17 @@ class _MainPageState extends State<MainPage>
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
                 onPressed: (){Get.to(FetchProfilePage()); },
                 color:Colors.grey[800],
-                child: Text("Profile",style: TextStyle(color: Colors.white),),)
+                child: Text("Profile",style: TextStyle(color: Colors.white),),),
+
+              FlatButton(
+
+                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
+                onPressed: () async {
+                  RegistrationController CONT = Get.find();
+                  await CONT.signOut();
+                  Get.offAll(ListOfPages()); },
+                color:Colors.grey[800],
+                child: Text("Sign out",style: TextStyle(color: Colors.white),),)
             ],
 
           ),
