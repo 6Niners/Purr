@@ -4,7 +4,8 @@ class ProfileData {
   final String petType;
   final String breed;
   final String Email;
-  ProfileData ({this.petName, this.petType, this.breed,this.Email});
+  final String avatarUrl;
+  ProfileData ({this.petName, this.petType, this.breed,this.Email,this.avatarUrl});
   bool iscompelete(){
     return petName!="null"&&petType!="null"&&breed!="null";
   }
@@ -13,6 +14,7 @@ class ProfileData {
       'Pet Name': petName,
       'Pet Type': petType,
       'Breed': breed,
+      'Avatar': avatarUrl,
     };
   }
 }

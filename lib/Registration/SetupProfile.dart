@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Models/ProfileData.dart';
+import 'package:purr/NewChat/chat.dart';
+import 'package:purr/Profile/Avatar.dart';
+import 'package:purr/Registration/RegistrationController.dart';
 
 import 'RegistrationController.dart';
+
 
 class SetupProfilePage extends StatefulWidget {
 
@@ -13,10 +18,11 @@ class SetupProfilePage extends StatefulWidget {
 
 class SetupProfilePageState extends State<SetupProfilePage> {
 
-
+  ChatBoxNew chat;
   TextEditingController _petName=TextEditingController();
   TextEditingController _pet=TextEditingController();
   TextEditingController _breed=TextEditingController();
+  String _avatarUrl;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -41,6 +47,13 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        Avatar(
+                          avatarUrl: REGCONT.UserInfo.avatarUrl,
+                          onTap: () async {
+                            await ImagePicker().getImage(source: ImageSource.gallery);
+
+                          },
+                        ),
                         Center(
                           child: Container(
                               padding: EdgeInsets.all(10),
