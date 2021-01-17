@@ -69,12 +69,6 @@ class ChatBoxNew extends StatelessWidget {
                           bottomRight: Radius.circular(23)),
                       color: sendByMe ?
                       Get.theme.focusColor:Get.theme.cardColor
-
-
-
-
-
-
                   ),
                   child: Text(document.data()['message'],
                       textAlign: TextAlign.start,
@@ -166,16 +160,19 @@ class ChatBoxNew extends StatelessWidget {
       print(e.toString());
     }); //if there is any error
   }
-  createChatRoom() {
-    receivername=Chatroom.toString()
-        .replaceAll("_", "")
-        .replaceAll(FirebaseAuth.instance.currentUser.uid, "");
+  createChatRoom() async {
     //function to create a chat room in the data base
     FirebaseFirestore.instance.collection("ChatRoom")
         .doc(this.Chatroom).set({"users list":[receivername,FirebaseAuth.instance.currentUser.uid],"users":Chatroom})
         .catchError((e) {
       print(e.toString());
-    }); //if there is any error
+    });
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    await user.doc(Chatroom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, "")).get().then((document){
+      if (document.exists){
+        receivername= document.data()['Pet Name'];
+      }
+    });
   }
 //////////////////////////////////////////
 

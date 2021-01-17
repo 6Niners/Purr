@@ -16,7 +16,7 @@ class RegistrationController extends GetxController {
   User firebaseUser;
   FirebaseAuth Auth;
   ProfileData UserInfo=ProfileData();
-  String userEmail = "PlaceHolder@email.com";
+  List<String> users=List<String>();
   @override
   Future<void> onInit() async {
     Auth=FirebaseAuth.instance;
@@ -29,6 +29,7 @@ class RegistrationController extends GetxController {
       firebaseUser = Auth.currentUser;
       if(firebaseUser.emailVerified){
         if(await profileiscomplete()){
+          GetUsers();
           Get.offAll(MainPage());
         }else{
           Get.offAll(SetupProfilePage());
@@ -55,7 +56,7 @@ class RegistrationController extends GetxController {
     try {
       await Auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await updateUserData(ProfileData(petName:"",petType:"",breed:""));
+      await updateUserData(ProfileData(petName:"null",petType:"null",breed:"null"));
       Get.offAll(VerifyEmailPage());
     } on FirebaseAuthException catch (e) {
       print(e.code);
@@ -149,6 +150,7 @@ class RegistrationController extends GetxController {
     if(firebaseUser!=null){
       if(firebaseUser.emailVerified){
         if(await profileiscomplete()){
+          GetUsers();
         Get.offAll(MainPage());
         }else{
           Get.offAll(SetupProfilePage());
@@ -166,17 +168,28 @@ class RegistrationController extends GetxController {
   }
 
 
-  Future<void> getUserProfileData() async {
+  Future<void> getUserProfileData({String UID}) async {
+    firebaseUser = Auth.currentUser;
+    if(UID==null) {
+      UID=firebaseUser.uid;
+    }
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-    await user.doc(firebaseUser.uid).get().then((document){
+    await user.doc(UID).get().then((document){
       if (document.exists){
-        userEmail = firebaseUser.email;
-        UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed']);
+        UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],Email: firebaseUser.email);
       }
     });
     update();
   }
-
+  Future<void> GetUsers() async {
+    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').get();
+    usersInFirebase.docs.forEach((result) {
+      users.add(result.id);
+      print(result.id);
+    });
+    users.remove(Auth.currentUser.uid);
+    update();
+  }
 //ui widgets to avoid repeating the same functions
   Container buildTextFormField(TextEditingController Controller,String labeltext,Function(String) Validator) {
     return Container(
@@ -217,7 +230,6 @@ class RegistrationController extends GetxController {
       autovalidateMode: AutovalidateMode.disabled,
       decoration: InputDecoration(
         labelText: labeltext,
-
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
         focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
         suffixIcon: IconButton(
@@ -226,15 +238,12 @@ class RegistrationController extends GetxController {
             ObscureText.obscure
                 ? Icons.visibility
                 : Icons.visibility_off,
-
           ),
           onPressed: () {
             // Update the state i.e. toogle the state of passwordVisible variable
               ObscureText.obscure = !ObscureText.obscure;
               update();
             }
-
-
         ),
       ),
 

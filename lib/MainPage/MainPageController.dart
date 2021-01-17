@@ -9,6 +9,9 @@ class MainPageController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
   }
+
+
+
   // Start of swiping functions
   void CheckSwipe(CardSwipeOrientation orientation) {
     //enum CardSwipeOrientation { LEFT, RIGHT, RECOVER, UP, DOWN }
