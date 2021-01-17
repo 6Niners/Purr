@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
-import 'package:purr/NewChat/chat.dart';
+import 'package:purr/NewChat/chat_list%20view.dart';
 import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
 import 'package:purr/Registration/MainRegistrationPage.dart';
@@ -13,8 +13,6 @@ import 'package:purr/Registration/sign_in.dart';
 import 'package:purr/Registration/sign_up.dart';
 import 'package:purr/MainController.dart';
 import 'package:purr/Registration/CommonClasses-functions.dart';
-import 'file:///F:/AndroidStudioProjects/Purr/lib/NewChat/chat_list%20view.dart';
-
 
 Future<void> main() async {
 
