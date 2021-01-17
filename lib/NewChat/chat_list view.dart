@@ -216,12 +216,10 @@ class ChatRoom extends StatefulWidget {
 }
 
 class ChatRoomState extends State<ChatRoom> {
-
-  //var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").snapshots();
-
-  var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
-  //var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users",isEqualTo: FirebaseAuth.instance.currentUser.uid).snapshots();
-
+  //this one is for the general use
+  //var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
+//testing one
+  var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: "Q3GtQdi0mKOtui9GzrNPUP5DgE63").snapshots();
   var collection;
   Widget chatRoomsList() {
     return StreamBuilder(
