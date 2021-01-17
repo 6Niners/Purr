@@ -20,7 +20,7 @@ class ChatBoxNew extends StatefulWidget {
 }
 
 class _ChatBoxNewState extends State<ChatBoxNew> {
-
+  RegistrationController CONT = Get.find();
   String receivername = "pet name";
   String sendername = "Sender";
 
@@ -93,32 +93,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
   //////////////////////////////////////////
   //            Chat Functions            //
   //////////////////////////////////////////
-  BackgroundForChat() async {
-    RegistrationController REGCONT = Get.find();
-    await REGCONT.getUserProfileData();
 
-
-    if ( REGCONT.UserInfo.petType =='cat') {
-
-      return "assets/wallpaper-cat.jpg";
-    }
-
-    else if (REGCONT.UserInfo.petType == 'dog') {
-      return "assets/dog.jpg";  }
-
-    else if (REGCONT.UserInfo.petType == 'hamster') {
-      return "assets/hamster.jpg";  }
-
-    else if (REGCONT.UserInfo.petType == 'rabbit') {
-      return "assets/rabbit.jpg";  }
-
-    else if (REGCONT.UserInfo.petType == 'bird'){
-      return "assets/wallpaper-bird.jpg";  }
-
-    else{
-      return "assets/other.jpg";
-    }
-  }
 ///////////////////////////////////////////
   Future<void> takePicture() async {
     // print('function works');
@@ -195,7 +170,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
   }
 
   createChatRoom() async {
-    if(receivername=="pet name"){
+
     //function to create a chat room in the data base
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     await user.doc(widget.Chatroom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, "")).get().then((document){
@@ -207,7 +182,6 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
         });
       }
     });
-    RegistrationController CONT = Get.find();
     FirebaseFirestore.instance.collection("ChatRoom")
         .doc(this.widget.Chatroom).set({
       "users Names":receivername+"_"+CONT.UserInfo.petName,
@@ -217,7 +191,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
       print(e.toString());
     });
     sendername=CONT.UserInfo.petName;
-    }
+
   }
 
 //////////////////////////////////////////
@@ -263,6 +237,9 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
             child: TextField(
               textCapitalization: TextCapitalization.sentences,
               controller: Message,
+              textInputAction: TextInputAction.done,
+              onEditingComplete: (){addMessage(Message.text);
+              Message.text="";},
               style: Get.theme.textTheme.bodyText2,
               decoration: InputDecoration.collapsed(
                 hintText: 'meow your message',
@@ -289,37 +266,45 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
   //             Chat UI                 //
   /////////////////////////////////////////
 
+  @override
+  void initState() {
+    createChatRoom();
 
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    createChatRoom();
+
     //createChatRoom(FirebaseAuth.instance.currentUser.uid+"_"+"Another user1");
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/rabbit.jpg"),//BackgroundForChat()),
-              fit: BoxFit.cover)),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Color(0xFF0D47A1), //appBar color
-          title: Text(receivername,
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+    return
+      Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(CONT.Background),//BackgroundForChat()),
+                fit: BoxFit.cover)),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Color(0xFF0D47A1), //appBar color
+            title: Text(receivername,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          body: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
+              children: <Widget>[
+                Expanded(child: chatMessages()),
+                buildMessageComposer(),
+              ],
             ),
           ),
         ),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Column(
-            children: <Widget>[
-              Expanded(child: chatMessages()),
-              buildMessageComposer(),
-            ],
-          ),
-        ),
-      ),
+
     );
   }
 }//class ChatBox1

@@ -18,6 +18,8 @@ class RegistrationController extends GetxController {
   ProfileData UserInfo=ProfileData();
   ProfileData AnotherUserInfo=ProfileData();
   List<String> users=List<String>();
+  String Background="assets/other.jpg";
+
   @override
   Future<void> onInit() async {
     Auth=FirebaseAuth.instance;
@@ -169,7 +171,28 @@ class RegistrationController extends GetxController {
     return await user.doc(Auth.currentUser.uid).set(TMP.toMap());
   }
 
+  BackgroundForChat() async {
+    await getUserProfileData();
 
+    if ( UserInfo.petType =='cat') {
+      Background= "assets/wallpaper-cat.jpg";
+    }
+    else if (UserInfo.petType == 'dog') {
+      Background=  "assets/dog.jpg";  }
+    else if (UserInfo.petType == 'hamster') {
+      Background=  "assets/hamster.jpg";  }
+
+    else if (UserInfo.petType == 'rabbit') {
+      Background=  "assets/rabbit.jpg";  }
+
+    else if (UserInfo.petType == 'bird'){
+      Background=  "assets/wallpaper-bird.jpg";  }
+
+    else{
+      Background=  "assets/other.jpg";
+    }
+
+  }
   Future<void> getUserProfileData({String UID}) async {
     firebaseUser = Auth.currentUser;
     if(UID==null) {
@@ -180,6 +203,7 @@ class RegistrationController extends GetxController {
           UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],Email: firebaseUser.email);
         }
       });
+      BackgroundForChat();
       update();
     }else{
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
