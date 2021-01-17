@@ -53,7 +53,7 @@ class ListOfPages extends StatelessWidget {
               PageButton(MainRegistrationPage(), "Main App Route"),
               PageButton(MainPage(), "Main Page!"),
               PageButton(LoginPage(), "Login Page!"),
-              PageButton(VerfiyEmailPage(), "Verfiy Email Page"),
+              PageButton(VerifyEmailPage(), "Verify Email Page"),
               PageButton(SignUpPage(), "Sign Up Page"),
               PageButton(ForgotpasswordPage(), "Forgot password"),
               PageButton(ChangePasswordPage(), "Change Password"),
