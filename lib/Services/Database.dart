@@ -6,7 +6,7 @@ import 'package:purr/Models/ProfileData.dart';
 class DatabaseService extends GetxController {
   final String uid;
 
-  List<String> profileData = List();
+  List<String> profileData = ["PlaceHolder", "PlaceHolder", "PlaceHolder"];
 
 
   DatabaseService({this.uid});
