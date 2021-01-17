@@ -217,9 +217,9 @@ class ChatRoom extends StatefulWidget {
 
 class ChatRoomState extends State<ChatRoom> {
   //this one is for the general use
-  //var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
+  var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
 //testing one
-  var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: "Q3GtQdi0mKOtui9GzrNPUP5DgE63").snapshots();
+  //var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: "Q3GtQdi0mKOtui9GzrNPUP5DgE63").snapshots();
   var collection;
   Widget chatRoomsList() {
     return StreamBuilder(
@@ -232,8 +232,15 @@ class ChatRoomState extends State<ChatRoom> {
           return Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),);
         }
         return ListView.builder(
-          itemCount: snapshot.data.docs.length,
+          itemCount: snapshot.data.docs.length+1,
           itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return ChatRoomsTile(
+                userName: "New Chat",
+                chatroomID: FirebaseAuth.instance.currentUser.uid+"_"+"Meow",
+              );
+            }
+            index -= 1;
             return ChatRoomsTile(
               userName: snapshot.data.docs[index].data()['users']
                   .toString()
