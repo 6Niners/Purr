@@ -189,7 +189,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
         .catchError((e) {
       print(e.toString());
     });
-
+    sendername=CONT.UserInfo.petName;
     }
   }
 
@@ -249,8 +249,8 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
             iconSize: 25.0,
             color: Get.theme.textTheme.bodyText2.color,
             //color: Colors.redAccent,
-            onPressed: () => { addMessage(Message.text),
-
+            onPressed: () { addMessage(Message.text);
+              Message.text="";
             }, //onPressed
           ),
 
