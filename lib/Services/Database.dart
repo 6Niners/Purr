@@ -6,6 +6,7 @@ import 'package:purr/Models/ProfileData.dart';
 class DatabaseService extends GetxController {
   final String uid;
 
+  String userEmail = "PlaceHolder@email.com";
   List<String> profileData = ["PlaceHolder", "PlaceHolder", "PlaceHolder"];
 
 
@@ -33,6 +34,8 @@ class DatabaseService extends GetxController {
       if (document.exists){
         profileData.clear();
 
+        userEmail = firebaseUser.email;
+
         document.data().forEach((key, value) {
           profileData.add(value);
         });
@@ -41,6 +44,8 @@ class DatabaseService extends GetxController {
 
     update();
   }
+
+
 
 
   /*

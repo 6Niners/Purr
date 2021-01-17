@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/Models/ProfileData.dart';
 import 'package:purr/Services/Database.dart';
-import 'package:purr/Profile/UserDataList.dart';
+
 
 
 class FetchProfilePage extends StatefulWidget {
@@ -15,29 +15,111 @@ class FetchProfilePage extends StatefulWidget {
 
 class _FetchProfilePageState extends State<FetchProfilePage> {
 
+  DatabaseService controller = Get.find();
+
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    controller.getUserProfileData();
 
-      backgroundColor: Colors.blueGrey[900],
+    return GetBuilder<DatabaseService>( builder: (_) {
 
-      appBar: AppBar(
-        backgroundColor: Colors.blueGrey[800],
-        title: Text("Profile"),
-        elevation: 0.0,
-      ),
+      return Scaffold(
 
+        backgroundColor: Colors.blueGrey[900],
 
-      floatingActionButton: FloatingActionButton.extended(
-          label: Text("Update"),
-          icon: Icon(Icons.wifi_protected_setup),
+        appBar: AppBar(
           backgroundColor: Colors.blueGrey[800],
-          onPressed: (){},
-      ),
+          title: Text("Profile"),
+          elevation: 0.0,
+        ),
 
 
-      body: UserDataList(),
-    );
+        floatingActionButton: FloatingActionButton.extended(
+            label: Text("Update"),
+            icon: Icon(Icons.wifi_protected_setup),
+            backgroundColor: Colors.blueGrey[800],
+            onPressed: (){},
+        ),
+
+
+        body: Padding (
+          padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
+
+          child: Column(
+
+            crossAxisAlignment: CrossAxisAlignment.start,
+
+            children: [
+              Center(
+                child: CircleAvatar(
+                  backgroundImage: AssetImage(
+                      "assets/Profile/Images/cat_avatar.jpg"),
+                  radius: 50.0,
+                ),
+              ),
+
+              Divider(height: 60.0, color: Colors.blueGrey[600]),
+
+              Text("NAME", style: TextStyle(
+                color: Colors.white,
+              ),),
+
+              SizedBox(height: 5.0),
+
+              Text(_.profileData[2], style: TextStyle(
+                color: Colors.amberAccent[200],
+                fontSize: 23.0,
+                fontWeight: FontWeight.bold,
+              ),),
+
+              SizedBox(height: 30.0),
+
+              Text("Pet", style: TextStyle(
+                color: Colors.white,
+              ),),
+
+              SizedBox(height: 5.0),
+
+              Text(_.profileData[1], style: TextStyle(
+                color: Colors.amberAccent[200],
+                fontSize: 23.0,
+                fontWeight: FontWeight.bold,
+              ),),
+
+              SizedBox(height: 30.0),
+
+              Text("BREED", style: TextStyle(
+                color: Colors.white,
+              ),),
+
+              SizedBox(height: 5.0),
+
+              Text(_.profileData[0], style: TextStyle(
+                color: Colors.amberAccent[200],
+                fontSize: 23.0,
+                fontWeight: FontWeight.bold,
+              ),),
+
+              SizedBox(height: 30.0),
+
+              Row(
+                children: [
+                  Icon(Icons.email, color: Colors.white,),
+
+                  SizedBox(width: 10),
+
+                  Text(_.userEmail, style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+
+                  ),)
+                ],
+              )
+            ],
+          ),
+        ),
+      )
+    ;});
   }
 }
