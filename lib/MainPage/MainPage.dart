@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPageController.dart';
+import 'package:purr/NewChat/chat.dart';
 import 'package:purr/NewChat/chat_list%20view.dart';
 import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
@@ -91,7 +93,21 @@ class _MainPageState extends State<MainPage>
             ],
           );
   }
-
+StartaNewChat(int index,RegistrationController GetxController) async {
+    String chatroomID=FirebaseAuth.instance.currentUser.uid+"_"+GetxController.users[index];
+    await FirebaseFirestore.instance.collection('ChatRoom').doc(chatroomID).get().then((document){
+      if (document.exists){
+        Get.to(ChatBoxNew(
+            chatroomID
+        ));
+      }else{
+        chatroomID=GetxController.users[index]+"_"+FirebaseAuth.instance.currentUser.uid;
+        Get.to(ChatBoxNew(
+            chatroomID
+        ));
+      }
+    });
+}
   Container BuildStackCards(BuildContext context, CardController controller,RegistrationController GetxController) {
     return Container(
           height: MediaQuery.of(context).size.width * 0.9,
@@ -111,34 +127,40 @@ class _MainPageState extends State<MainPage>
                   onTap: () async {
                     RegistrationController CONT = Get.find();
                     await CONT.getUserProfileData(UID: GetxController.users[index]);
-                    print(CONT.UserInfo.toMap());
+                    print(GetxController.users[index]);
+                    print(CONT.AnotherUserInfo.toMap());
                     Get.bottomSheet(
                         Container(
                             child: ListView.builder(
-                                itemCount: CONT.UserInfo.toMap().length+1,
-                                itemBuilder: (BuildContext context, int index) {
-                                  if (index == 0) {
-                                    return ChatRoomsTile(
-                                      userName: "Start Chat",
-                                      chatroomID: FirebaseAuth.instance.currentUser.uid+"_"+GetxController.users[index],
-                                    );
+                                itemCount: CONT.AnotherUserInfo.toMap().length+1,
+                                itemBuilder: (BuildContext context, int indexList) {
+                                  if (indexList == 0) {
+                                    return GestureDetector(
+                                      onTap: (){StartaNewChat(index,GetxController);},
+                                        child: Container(
+                                          color: Colors.black54,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: Text("Start Chat",style: Get.theme.textTheme.bodyText2,),
+                                          ),
+                                        ));
                                   }
-                                  index -= 1;
+                                  indexList -= 1;
                                   return Container(
                                     padding: EdgeInsets.all(10),
                                     margin: EdgeInsets.all(1),
                                     color: Colors.grey[600],
                                     child: RichText(
                                         text: TextSpan(
-                                            text: CONT.UserInfo.toMap().keys.toList()[index] + ": ",
+                                            text: CONT.AnotherUserInfo.toMap().keys.toList()[indexList] + ": ",
                                             style: TextStyle(fontWeight: FontWeight.bold),
                                             children: <TextSpan>[
-                                              TextSpan(text: CONT.UserInfo.toMap().values.toList()[index]),
+                                              TextSpan(text: CONT.AnotherUserInfo.toMap().values.toList()[indexList]),
                                             ])),
                                   );
                                 })),
                         backgroundColor: Colors.black45);
-                    print("tapeed");},
+                    print("tapped");},
                   child: Image.asset('${welcomeImages[0]}')),
             ),
             cardController: controller = CardController(),

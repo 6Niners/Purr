@@ -47,12 +47,15 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Avatar(
-                          avatarUrl: REGCONT.UserInfo.avatarUrl,
-                          onTap: () async {
-                            await ImagePicker().getImage(source: ImageSource.gallery);
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Avatar(
+                            avatarUrl: REGCONT.UserInfo.avatarUrl,
+                            onTap: () async {
+                              await ImagePicker().getImage(source: ImageSource.gallery);
 
-                          },
+                            },
+                          ),
                         ),
                         Center(
                           child: Container(
@@ -100,6 +103,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                   //print("in");
                                   if (_formKey.currentState.validate()) {
                                     await REGCONT.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text));
+                                    REGCONT.GetUsers();
                                     Get.offAll(MainPage());
                                   }
                                 },

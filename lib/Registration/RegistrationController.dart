@@ -144,6 +144,7 @@ class RegistrationController extends GetxController {
 
   Future<bool> profileiscomplete() async {
     await getUserProfileData();
+    print(UserInfo.toMap());
     return UserInfo.iscompelete();
   }
   Future Checkifloggedin() async {
@@ -184,7 +185,7 @@ class RegistrationController extends GetxController {
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     await user.doc(UID).get().then((document){
       if (document.exists){
-        AnotherUserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],Email: firebaseUser.email);
+        AnotherUserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed']);
       }
     });
     update();
@@ -194,7 +195,7 @@ class RegistrationController extends GetxController {
     var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').get();
     usersInFirebase.docs.forEach((result) {
       users.add(result.id);
-      print(result.id);
+      //print(result.id);
     });
     users.remove(Auth.currentUser.uid);
     update();

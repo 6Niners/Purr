@@ -243,6 +243,7 @@ class ChatRoomState extends State<ChatRoom> {
         return ListView.builder(
           itemCount: snapshot.data.docs.length,
           itemBuilder: (BuildContext context, int index) {
+            print(snapshot.data.docs[index].data()['users']);
             return ChatRoomsTile(
               userName: snapshot.data.docs[index].data()['users Names']
                   .toString()

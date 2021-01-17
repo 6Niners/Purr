@@ -7,7 +7,7 @@ class ProfileData {
   final String avatarUrl;
   ProfileData ({this.petName, this.petType, this.breed,this.Email,this.avatarUrl});
   bool iscompelete(){
-    return petName!="null"&&petType!="null"&&breed!="null";
+    return petName!="null"&&petType!="null"&&breed!="null"&&petName!=null&&petType!=null&&breed!=null;
   }
   Map<String, dynamic> toMap() {
     return {
