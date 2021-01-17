@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/Models/ProfileData.dart';
-import 'package:purr/Services/Database.dart';
+import 'package:purr/Registration/RegistrationController.dart';
 
 
 
@@ -15,14 +15,14 @@ class FetchProfilePage extends StatefulWidget {
 
 class _FetchProfilePageState extends State<FetchProfilePage> {
 
-  DatabaseService controller = Get.find();
+  RegistrationController REGCONT = Get.find();
 
   @override
   Widget build(BuildContext context) {
 
-    controller.getUserProfileData();
+    REGCONT.getUserProfileData();
 
-    return GetBuilder<DatabaseService>( builder: (_) {
+    return GetBuilder<RegistrationController>( builder: (_) {
 
       return Scaffold(
 
@@ -67,7 +67,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               SizedBox(height: 5.0),
 
-              Text(_.profileData[2], style: TextStyle(
+              Text(_.UserInfo.petName, style: TextStyle(
                 color: Colors.amberAccent[200],
                 fontSize: 23.0,
                 fontWeight: FontWeight.bold,
@@ -75,13 +75,13 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               SizedBox(height: 30.0),
 
-              Text("Pet", style: TextStyle(
+              Text("PetType", style: TextStyle(
                 color: Colors.white,
               ),),
 
               SizedBox(height: 5.0),
 
-              Text(_.profileData[1], style: TextStyle(
+              Text(_.UserInfo.petType, style: TextStyle(
                 color: Colors.amberAccent[200],
                 fontSize: 23.0,
                 fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               SizedBox(height: 5.0),
 
-              Text(_.profileData[0], style: TextStyle(
+              Text(_.UserInfo.breed, style: TextStyle(
                 color: Colors.amberAccent[200],
                 fontSize: 23.0,
                 fontWeight: FontWeight.bold,

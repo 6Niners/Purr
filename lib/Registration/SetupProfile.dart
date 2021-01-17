@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
-import 'package:purr/Services/Database.dart';
+import 'package:purr/Models/ProfileData.dart';
 
 import 'RegistrationController.dart';
 
@@ -20,7 +20,6 @@ class SetupProfilePageState extends State<SetupProfilePage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  DatabaseService CONT=Get.find();
   RegistrationController REGCONT = Get.find();
   @override
   Widget build(BuildContext context) {
@@ -73,23 +72,8 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                           }
                         },),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.all(5),
-                              width: 150,
-                              height: 70,
-
-                              child: RaisedButton(
-                                color: Get.theme.canvasColor,
-                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-                                onPressed: () async {
-                                  Get.back();
-                                },
-                                child: Text('Back',style:Get.theme.textTheme.bodyText1),
-                              ),
-                            ),
                             Container(
                               padding: EdgeInsets.all(10),
                               margin: EdgeInsets.all(5),
@@ -102,7 +86,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                 onPressed: () async {
                                   //print("in");
                                   if (_formKey.currentState.validate()) {
-                                    await CONT.updateUserData(_petName.text, _pet.text, _breed.text);
+                                    await REGCONT.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text));
                                     Get.offAll(MainPage());
                                   }
                                 },

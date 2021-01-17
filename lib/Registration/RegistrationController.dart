@@ -1,11 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
+import 'package:purr/Models/ProfileData.dart';
 import 'package:purr/Registration/SetupProfile.dart';
 import 'package:purr/Registration/VerifyMail.dart';
-import 'package:purr/Services/Database.dart';
 import 'package:purr/UI_Widgets.dart';
 
 import 'package:purr/Registration/CommonClasses-functions.dart';
@@ -14,7 +15,8 @@ import 'package:purr/Registration/CommonClasses-functions.dart';
 class RegistrationController extends GetxController {
   User firebaseUser;
   FirebaseAuth Auth;
-
+  ProfileData UserInfo=ProfileData();
+  String userEmail = "PlaceHolder@email.com";
   @override
   Future<void> onInit() async {
     Auth=FirebaseAuth.instance;
@@ -26,7 +28,11 @@ class RegistrationController extends GetxController {
       await Auth.signInWithEmailAndPassword(email: email, password: password);
       firebaseUser = Auth.currentUser;
       if(firebaseUser.emailVerified){
-        Get.offAll(MainPage());
+        if(await profileiscomplete()){
+          Get.offAll(MainPage());
+        }else{
+          Get.offAll(SetupProfilePage());
+        }
       }else{
         Get.offAll(VerifyEmailPage());
       }
@@ -49,7 +55,7 @@ class RegistrationController extends GetxController {
     try {
       await Auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await DatabaseService(uid: Auth.currentUser.uid).updateUserData('null', 'null', 'null');
+      await updateUserData(ProfileData(petName:"",petType:"",breed:""));
       Get.offAll(VerifyEmailPage());
     } on FirebaseAuthException catch (e) {
       print(e.code);
@@ -133,11 +139,20 @@ class RegistrationController extends GetxController {
       return null;
     }
   }
+
+  Future<bool> profileiscomplete() async {
+    await getUserProfileData();
+    return UserInfo.iscompelete();
+  }
   Future Checkifloggedin() async {
     firebaseUser = Auth.currentUser;
     if(firebaseUser!=null){
       if(firebaseUser.emailVerified){
+        if(await profileiscomplete()){
         Get.offAll(MainPage());
+        }else{
+          Get.offAll(SetupProfilePage());
+        }
       }else{
         Get.offAll(VerifyEmailPage());
       }
@@ -145,6 +160,22 @@ class RegistrationController extends GetxController {
   }
 
 
+  Future<void> updateUserData(ProfileData TMP) async {
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    return await user.doc(Auth.currentUser.uid).set(TMP.toMap());
+  }
+
+
+  Future<void> getUserProfileData() async {
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    await user.doc(firebaseUser.uid).get().then((document){
+      if (document.exists){
+        userEmail = firebaseUser.email;
+        UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed']);
+      }
+    });
+    update();
+  }
 
 //ui widgets to avoid repeating the same functions
   Container buildTextFormField(TextEditingController Controller,String labeltext,Function(String) Validator) {
