@@ -23,7 +23,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
   TextEditingController _pet=TextEditingController();
   TextEditingController _breed=TextEditingController();
   String _avatarUrl;
-
+  List<String> PetTypes=["Dog","Cat","Hamster","Bird","Rabbit","Turtle","Other"];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   RegistrationController REGCONT = Get.find();
@@ -38,81 +38,108 @@ class SetupProfilePageState extends State<SetupProfilePage> {
           body: Form(
               key: _formKey,
               child: Center(
-                child: Card(
-                  color: Get.theme.backgroundColor,
-                  elevation: 30,
+                child: SingleChildScrollView(
+                  child: Card(
+                    color: Get.theme.backgroundColor,
+                    elevation: 30,
 
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Avatar(
-                            avatarUrl: REGCONT.UserInfo.avatarUrl,
-                            onTap: () async {
-                              await ImagePicker().getImage(source: ImageSource.gallery);
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.all(5),
+                                child: Text("Setup Profile",style: Get.theme.textTheme.headline6,),)),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Avatar(
+                              avatarUrl: REGCONT.UserInfo.avatarUrl,
+                              onTap: () async {
+                                await ImagePicker().getImage(source: ImageSource.gallery);
 
-                            },
+                              },
+                            ),
                           ),
-                        ),
-                        Center(
-                          child: Container(
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.all(5),
-                              child: Text("Setup Profile",style: Get.theme.textTheme.headline6,),)),
-                        REGCONT.buildTextFormField(_petName, 'Pet Name', (input) {
-                          if (input == '') {
-                            return 'Please type a your pet name';
-                          }
-                          else{
-                            return null;
-                          }
-                        },),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                          padding: EdgeInsets.all(10),
+                                          height: 50,
+                                          child: Text(
+                                            'Pet Type',
+                                            style: Get.textTheme.bodyText1)
+                                      ),
+                                    ),
+                                    Theme(
+                                      data: Get.theme.copyWith(canvasColor: Colors.black,),
+                                      child: Center(
+                                        child: DropdownButton(
+                                          value: _pet.text!=""?_pet.text:PetTypes[0],
+                                          onChanged: (newValue) {
+                                            _pet.text=newValue;
+                                            setState(() {});
+                                          },
+                                          hint: Text("Please pick your pet type"),
+                                          items: PetTypes.map((location) {
+                                            return DropdownMenuItem(
+                                              child: new Text(location, style: Get.textTheme.bodyText1),
+                                              value: location,
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                          REGCONT.buildTextFormField(_petName, 'Pet Name', (input) {
+                            if (input == '') {
+                              return 'Please type a your pet name';
+                            }
+                            else{
+                              return null;
+                            }
+                          },),
 
-                        REGCONT.buildTextFormField(_pet, 'Pet', (input) {
-                          if (input == '') {
-                            return 'Please your pet type';
-                          }
-                          else{
-                            return null;
-                          }
-                        },),
-                        REGCONT.buildTextFormField(_breed, 'Breed', (input) {
-                          if (input == '') {
-                            return 'Please your pet breed';
-                          }
-                          else{
-                            return null;
-                          }
-                        },),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.all(5),
-                              width: 150,
-                              height: 70,
+                          REGCONT.buildTextFormField(_breed, 'Breed', (input) {
+                            if (input == '') {
+                              return 'Please your pet breed';
+                            }
+                            else{
+                              return null;
+                            }
+                          },),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.all(5),
+                                width: 150,
+                                height: 70,
 
-                              child: RaisedButton(
-                                color: Get.theme.buttonColor,
-                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-                                onPressed: () async {
-                                  //print("in");
-                                  if (_formKey.currentState.validate()) {
-                                    await REGCONT.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text));
-                                    REGCONT.GetUsers();
-                                    Get.offAll(MainPage());
-                                  }
-                                },
-                                child: Text('Next',style:Get.theme.textTheme.bodyText1),
-                              ),
-                            )
-                          ],
-                        ),
-                      ]
+                                child: RaisedButton(
+                                  color: Get.theme.buttonColor,
+                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+                                  onPressed: () async {
+                                    //print("in");
+                                    if (_formKey.currentState.validate()) {
+                                      await REGCONT.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text));
+                                      REGCONT.GetUsers();
+                                      Get.offAll(MainPage());
+                                    }
+                                  },
+                                  child: Text('Next',style:Get.theme.textTheme.bodyText1),
+                                ),
+                              )
+                            ],
+                          ),
+                        ]
+                    ),
                   ),
                 ),
               )

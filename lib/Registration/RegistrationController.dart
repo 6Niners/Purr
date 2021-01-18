@@ -169,6 +169,7 @@ class RegistrationController extends GetxController {
 
 
   Future<void> updateUserData(ProfileData TMP) async {
+    UserInfo=TMP;
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     return await user.doc(Auth.currentUser.uid).set(TMP.toMap());
   }
