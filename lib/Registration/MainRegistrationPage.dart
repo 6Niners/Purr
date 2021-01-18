@@ -13,11 +13,12 @@ class MainRegistrationPage extends StatefulWidget {
 class MainRegistrationPageState extends State<MainRegistrationPage> {
 
 
-  RegistrationController CONT=Get.find();
+
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      RegistrationController CONT=Get.find();
       CONT.Checkifloggedin();
     });
     return Container(

@@ -22,8 +22,9 @@ class RegistrationController extends GetxController {
 
   @override
   Future<void> onInit() async {
+    await super.onInit();
     Auth=FirebaseAuth.instance;
-    super.onInit();
+
   }
 
   Future<void> signIn(String email, String password) async {
