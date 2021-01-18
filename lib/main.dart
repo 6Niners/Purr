@@ -14,10 +14,8 @@ import 'package:purr/MainController.dart';
 import 'package:purr/Registration/CommonClasses-functions.dart';
 
 Future<void> main() async {
-
   runApp(MyApp());
   Get.put(MainController());
-
 }
 
 class MyApp extends StatelessWidget {

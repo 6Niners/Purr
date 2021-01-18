@@ -212,7 +212,7 @@ class RegistrationController extends GetxController {
       final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
       await user.doc(UID).get().then((document){
         if (document.exists){
-          UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],Email: firebaseUser.email);
+          UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'] ,Email: firebaseUser.email);
         }
       });
       BackgroundForChat();
@@ -221,14 +221,14 @@ class RegistrationController extends GetxController {
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     await user.doc(UID).get().then((document){
       if (document.exists){
-        AnotherUserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed']);
+        AnotherUserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'] );
       }
     });
     update();
     }
   }
   Future<void> GetUsers() async {
-    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').get();
+    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: UserInfo.petType).where("Gender", isNotEqualTo: UserInfo.gender).get();
     usersInFirebase.docs.forEach((result) {
       users.add(result.id);
       //print(result.id);
