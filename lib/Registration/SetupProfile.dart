@@ -23,7 +23,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
   TextEditingController _pet=TextEditingController();
   TextEditingController _breed=TextEditingController();
   String _avatarUrl;
-  List<String> PetTypes=["Dog","Cat","Hamster","Bird","Rabbit","Turtle","Other"];
+  List<String> PetTypes=["Dog","Cat","Hamster","Bird","parrot","Rabbit","Turtle","squirrel","Other"];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   RegistrationController REGCONT = Get.find();

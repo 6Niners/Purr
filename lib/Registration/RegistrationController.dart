@@ -182,10 +182,13 @@ class RegistrationController extends GetxController {
     }
 
     else if ( equalsIgnoreCase(UserInfo.petType,'dog')) {
-      Background=  "assets/dog.jpg";  }
+      Background=  "assets/dog2.jpg";  }
 
     else if ( equalsIgnoreCase(UserInfo.petType,'hamster')) {
       Background=  "assets/hamster.jpg";  }
+
+    else if ( equalsIgnoreCase(UserInfo.petType,'squirrel')) {
+      Background=  "assets/squirrel.jpg";  }
 
     else if ( equalsIgnoreCase(UserInfo.petType,'turtle')) {
       Background=  "assets/turtle1.jpg";  }
@@ -194,7 +197,10 @@ class RegistrationController extends GetxController {
       Background=  "assets/rabbit.jpg";  }
 
     else if ( equalsIgnoreCase(UserInfo.petType,'bird')){
-      Background=  "assets/wallpaper-bird.jpg";  }
+      Background=  "assets/bird1.jpg";  }
+
+    else if ( equalsIgnoreCase(UserInfo.petType,'parrot')){
+      Background=  "assets/parrot.jpg";  }
 
     else{
       Background=  "assets/other.jpg";
