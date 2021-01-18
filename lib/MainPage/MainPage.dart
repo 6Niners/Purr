@@ -94,14 +94,14 @@ class _MainPageState extends State<MainPage>
           );
   }
 StartaNewChat(int index,RegistrationController GetxController) async {
-    String chatroomID=FirebaseAuth.instance.currentUser.uid+"_"+GetxController.users[index];
+    String chatroomID=FirebaseAuth.instance.currentUser.uid+"_"+GetxController.users[index].uid;
     await FirebaseFirestore.instance.collection('ChatRoom').doc(chatroomID).get().then((document){
       if (document.exists){
         Get.to(ChatBoxNew(
             chatroomID
         ));
       }else{
-        chatroomID=GetxController.users[index]+"_"+FirebaseAuth.instance.currentUser.uid;
+        chatroomID=GetxController.users[index].uid+"_"+FirebaseAuth.instance.currentUser.uid;
         Get.to(ChatBoxNew(
             chatroomID
         ));
@@ -126,13 +126,10 @@ StartaNewChat(int index,RegistrationController GetxController) async {
               child: GestureDetector(
                   onTap: () async {
                     RegistrationController CONT = Get.find();
-                    await CONT.getUserProfileData(UID: GetxController.users[index]);
-                    print(GetxController.users[index]);
-                    print(CONT.AnotherUserInfo.toMap());
                     Get.bottomSheet(
                         Container(
                             child: ListView.builder(
-                                itemCount: CONT.AnotherUserInfo.toMap().length+1,
+                                itemCount: CONT.users.length+1,
                                 itemBuilder: (BuildContext context, int indexList) {
                                   if (indexList == 0) {
                                     return GestureDetector(
@@ -152,10 +149,10 @@ StartaNewChat(int index,RegistrationController GetxController) async {
                                     color: Colors.grey[600],
                                     child: RichText(
                                         text: TextSpan(
-                                            text: CONT.AnotherUserInfo.toMap().keys.toList()[indexList] + ": ",
+                                            text: CONT.users[index].toMap().keys.toList()[indexList] + ": ",
                                             style: TextStyle(fontWeight: FontWeight.bold),
                                             children: <TextSpan>[
-                                              TextSpan(text: CONT.AnotherUserInfo.toMap().values.toList()[indexList]),
+                                              TextSpan(text: CONT.users[index].toMap().values.toList()[indexList]),
                                             ])),
                                   );
                                 })),

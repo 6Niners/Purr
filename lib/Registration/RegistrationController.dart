@@ -16,8 +16,8 @@ class RegistrationController extends GetxController {
   User firebaseUser;
   FirebaseAuth Auth;
   ProfileData UserInfo=ProfileData();
-  ProfileData AnotherUserInfo=ProfileData();
-  List<String> users=List<String>();
+
+  List<ProfileData> users=List<ProfileData>();
   String Background="assets/other.jpg";
 
   @override
@@ -212,7 +212,7 @@ class RegistrationController extends GetxController {
       final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
       await user.doc(UID).get().then((document){
         if (document.exists){
-          UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'] ,Email: firebaseUser.email);
+          UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar']  ,email: firebaseUser.email);
         }
       });
       BackgroundForChat();
@@ -221,7 +221,7 @@ class RegistrationController extends GetxController {
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     await user.doc(UID).get().then((document){
       if (document.exists){
-        AnotherUserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'] );
+        users.add(ProfileData(uid: UID,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] ));
       }
     });
     update();
@@ -230,10 +230,9 @@ class RegistrationController extends GetxController {
   Future<void> GetUsers() async {
     var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: UserInfo.petType).where("Gender", isNotEqualTo: UserInfo.gender).get();
     usersInFirebase.docs.forEach((result) {
-      users.add(result.id);
+      getUserProfileData(UID: result.id);
       //print(result.id);
     });
-    users.remove(Auth.currentUser.uid);
     update();
   }
 

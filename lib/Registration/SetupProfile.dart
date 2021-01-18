@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,7 +9,7 @@ import 'package:purr/Models/ProfileData.dart';
 import 'package:purr/NewChat/chat.dart';
 import 'package:purr/Profile/Avatar.dart';
 import 'package:purr/Registration/RegistrationController.dart';
-
+import 'package:path/path.dart';
 import 'RegistrationController.dart';
 
 
@@ -64,13 +67,21 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Avatar(
-                              avatarUrl: REGCONT.UserInfo.avatarUrl,
+                              avatarUrl: _avatarUrl,
                               onTap: () async {
-                                await ImagePicker().getImage(source: ImageSource.gallery);
+                                var image=await ImagePicker().getImage(source: ImageSource.gallery);
+                                String fileName = basename(image.path);
+                                StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child('uploads/$fileName');
+                                StorageUploadTask uploadTask = firebaseStorageRef.putFile(File(image.path));
+                                StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+                                taskSnapshot.ref.getDownloadURL().then(
+                                      (value) { print("Done: $value"); _avatarUrl=value;}
+                                );
+                                setState(() {
 
-                              },
+                                });
+                              }),
                             ),
-                          ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
@@ -169,7 +180,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                   onPressed: () async {
                                     //print("in");
                                     if (_formKey.currentState.validate()) {
-                                      await REGCONT.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text,gender:_Gender.text));
+                                      await REGCONT.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text,gender:_Gender.text,avatarUrl: _avatarUrl));
                                       REGCONT.GetUsers();
                                       Get.offAll(MainPage());
                                     }

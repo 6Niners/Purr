@@ -48,8 +48,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
             children: [
               Center(
                 child: CircleAvatar(
-                  backgroundImage: AssetImage(
-                      "assets/Profile/Images/cat_avatar.jpg"),
+                  backgroundImage: NetworkImage(_.UserInfo.avatarUrl),
                   radius: 50.0,
                 ),
               ),
@@ -97,14 +96,27 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
               ),),
 
               SizedBox(height: 30.0),
+              Text("Gender", style: TextStyle(
+                color: Colors.white,
+              ),),
 
+              SizedBox(height: 5.0),
+
+              Text(_.UserInfo.gender, style: TextStyle(
+                color: Colors.amberAccent[200],
+                fontSize: 23.0,
+                fontWeight: FontWeight.bold,
+              ),),
+
+
+              SizedBox(height: 30.0),
               Row(
                 children: [
                   Icon(Icons.email, color: Colors.white,),
 
                   SizedBox(width: 10),
 
-                  Text(_.UserInfo.Email, style: TextStyle(
+                  Text(_.UserInfo.email, style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.white,
 
