@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purr/MainPage/MainPage.dart';
 import 'package:purr/Models/ProfileData.dart';
+import 'package:purr/Registration/CommonClasses-functions.dart';
 import 'package:purr/Registration/SetupProfile.dart';
 import 'package:purr/Registration/VerifyMail.dart';
 import 'package:purr/UI_Widgets.dart';
-
-import 'package:purr/Registration/CommonClasses-functions.dart';
 
 bool equalsIgnoreCase(String string1, String string2) {
   return string1?.toLowerCase() == string2?.toLowerCase();}
@@ -238,6 +236,9 @@ class RegistrationController extends GetxController {
     users.remove(Auth.currentUser.uid);
     update();
   }
+
+
+
 //ui widgets to avoid repeating the same functions
   Container buildTextFormField(TextEditingController Controller,String labeltext,Function(String) Validator) {
     return Container(
