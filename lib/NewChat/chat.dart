@@ -281,6 +281,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
       Container(
         decoration: BoxDecoration(
             image: DecorationImage(
+              colorFilter: ColorFilter.mode(Colors.black26, BlendMode.darken),
                 image: AssetImage(CONT.Background),//BackgroundForChat()),
                 fit: BoxFit.cover)),
         child: Scaffold(
