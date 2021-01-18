@@ -22,4 +22,12 @@ class ProfileData {
       'Avatar': avatarUrl,
     };
   }
+  Map<String, dynamic> toMapShowToUser() {
+    return {
+      'Pet Name': petName,
+      'Pet Type': petType,
+      'Breed': breed,
+      'Gender': gender,
+    };
+  }
 }

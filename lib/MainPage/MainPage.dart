@@ -109,6 +109,7 @@ StartaNewChat(int index,RegistrationController GetxController) async {
     });
 }
   Container BuildStackCards(BuildContext context, CardController controller,RegistrationController GetxController) {
+
     return Container(
           height: MediaQuery.of(context).size.width * 0.9,
           child: new TinderSwapCard(
@@ -125,11 +126,10 @@ StartaNewChat(int index,RegistrationController GetxController) async {
               color: Colors.grey[800],
               child: GestureDetector(
                   onTap: () async {
-                    RegistrationController CONT = Get.find();
                     Get.bottomSheet(
                         Container(
                             child: ListView.builder(
-                                itemCount: CONT.users.length+1,
+                                itemCount: GetxController.users[0].toMapShowToUser().length+1,
                                 itemBuilder: (BuildContext context, int indexList) {
                                   if (indexList == 0) {
                                     return GestureDetector(
@@ -149,16 +149,16 @@ StartaNewChat(int index,RegistrationController GetxController) async {
                                     color: Colors.grey[600],
                                     child: RichText(
                                         text: TextSpan(
-                                            text: CONT.users[index].toMap().keys.toList()[indexList] + ": ",
+                                            text: GetxController.users[index].toMapShowToUser().keys.toList()[indexList] + ": ",
                                             style: TextStyle(fontWeight: FontWeight.bold),
                                             children: <TextSpan>[
-                                              TextSpan(text: CONT.users[index].toMap().values.toList()[indexList]),
+                                              TextSpan(text: GetxController.users[index].toMapShowToUser().values.toList()[indexList]),
                                             ])),
                                   );
                                 })),
                         backgroundColor: Colors.black45);
                     print("tapped");},
-                  child: Image.asset('${welcomeImages[0]}')),
+                  child: Image.network(GetxController.users[index].avatarUrl)),
             ),
             cardController: controller = CardController(),
             swipeUpdateCallback:

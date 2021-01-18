@@ -10,7 +10,6 @@ import 'package:purr/NewChat/chat.dart';
 import 'package:purr/Profile/Avatar.dart';
 import 'package:purr/Registration/RegistrationController.dart';
 import 'package:path/path.dart';
-import 'RegistrationController.dart';
 
 
 class SetupProfilePage extends StatefulWidget {
