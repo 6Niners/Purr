@@ -11,6 +11,8 @@ import 'package:purr/UI_Widgets.dart';
 
 import 'package:purr/Registration/CommonClasses-functions.dart';
 
+bool equalsIgnoreCase(String string1, String string2) {
+  return string1?.toLowerCase() == string2?.toLowerCase();}
 
 class RegistrationController extends GetxController {
   User firebaseUser;
@@ -174,18 +176,20 @@ class RegistrationController extends GetxController {
   BackgroundForChat() async {
     await getUserProfileData();
 
-    if ( UserInfo.petType =='cat') {
+    if ( equalsIgnoreCase(UserInfo.petType,'cat')) {
       Background= "assets/wallpaper-cat.jpg";
     }
-    else if (UserInfo.petType == 'dog') {
+
+    else if ( equalsIgnoreCase(UserInfo.petType,'dog')) {
       Background=  "assets/dog.jpg";  }
-    else if (UserInfo.petType == 'hamster') {
+
+    else if ( equalsIgnoreCase(UserInfo.petType,'hamster')) {
       Background=  "assets/hamster.jpg";  }
 
-    else if (UserInfo.petType == 'rabbit') {
+    else if ( equalsIgnoreCase(UserInfo.petType,'rabbit')) {
       Background=  "assets/rabbit.jpg";  }
 
-    else if (UserInfo.petType == 'bird'){
+    else if ( equalsIgnoreCase(UserInfo.petType,'bird')){
       Background=  "assets/wallpaper-bird.jpg";  }
 
     else{
