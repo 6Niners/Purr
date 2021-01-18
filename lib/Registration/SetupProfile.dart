@@ -75,11 +75,13 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                 StorageUploadTask uploadTask = firebaseStorageRef.putFile(File(image.path));
                                 StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
                                 taskSnapshot.ref.getDownloadURL().then(
-                                      (value) { print("Done: $value"); _avatarUrl=value;}
-                                );
-                                setState(() {
+                                      (value) { print("Done: $value"); _avatarUrl=value;
+                                      setState(() {
 
-                                });
+                                      });
+                                      }
+                                );
+
                               }),
                             ),
                           Column(
