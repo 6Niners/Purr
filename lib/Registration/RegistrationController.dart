@@ -8,6 +8,10 @@ import 'package:purr/Registration/CommonClasses-functions.dart';
 import 'package:purr/Registration/SetupProfile.dart';
 import 'package:purr/Registration/VerifyMail.dart';
 import 'package:purr/UI_Widgets.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
+
+
 
 bool equalsIgnoreCase(String string1, String string2) {
   return string1?.toLowerCase() == string2?.toLowerCase();}
@@ -309,4 +313,79 @@ class RegistrationController extends GetxController {
     )
     );
   }
+
+
+  Future<Position> getCurrentLocation() async {
+
+    bool serviceEnabled = false;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error("Location services disabled");
+    }
+
+
+    permission = await Geolocator.checkPermission();
+
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+
+    // request location on start up when (only once location services) is selected
+    if (permission == LocationPermission.denied) {
+
+      permission = await Geolocator.requestPermission();
+
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+
+        return Future.error('Location permissions are denied (actual value: $permission).');
+      }
+    }
+
+
+    var location = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    print( "LAT: ${location.latitude}, LNG: ${location.longitude}" );
+
+    return location;
+  }
+
+
+
+  Future<String> getAddressFromLatLng() async {
+
+    var location = await getCurrentLocation();
+
+    List<Placemark> address =  await placemarkFromCoordinates(location.latitude, location.longitude);
+    print("ADDRESS: ${address},");
+    return address[0].toString();
+  }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

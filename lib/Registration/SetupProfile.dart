@@ -30,6 +30,8 @@ class SetupProfilePageState extends State<SetupProfilePage> {
   List<String> Gender=["Male","Female"];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   RegistrationController REGCONT = Get.find();
+
+
   @override
   void initState() {
     _Gender.text=Gender[0];
