@@ -322,6 +322,7 @@ class RegistrationController extends GetxController {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      ShowToast("Location services disabled", Background_color: Colors.red);
       return Future.error("Location services disabled");
     }
 
@@ -330,6 +331,7 @@ class RegistrationController extends GetxController {
 
 
     if (permission == LocationPermission.deniedForever) {
+      ShowToast('Location permissions are permanently denied, we cannot request permissions.', Background_color: Colors.red);
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -342,6 +344,7 @@ class RegistrationController extends GetxController {
 
       if (permission != LocationPermission.whileInUse &&
           permission != LocationPermission.always) {
+        ShowToast('Location permissions are denied (actual value: $permission).', Background_color: Colors.red);
 
         return Future.error('Location permissions are denied (actual value: $permission).');
       }
