@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,12 +27,12 @@ class _MainPageState extends State<MainPage>
   CardController controller; //Use this to trigger swap.
   @override
   Widget build(BuildContext context) {
-    TabController TabCont=TabController(vsync:this,length: 3);
+    TabController tabCont=TabController(vsync:this,length: 3);
     return SafeArea(
       child: new Scaffold(
         backgroundColor: Colors.grey[900],
         appBar: TabBar(
-          controller: TabCont,
+          controller: tabCont,
           labelPadding: EdgeInsets.all(20),
           indicatorPadding: EdgeInsets.all(500),
           indicatorColor: Colors.red,
@@ -46,9 +47,9 @@ class _MainPageState extends State<MainPage>
         body: TabBarView(
           //physics: TabCont.index==0?NeverScrollableScrollPhysics():BouncingScrollPhysics(),
           physics: NeverScrollableScrollPhysics(),
-          controller: TabCont,
+          controller: tabCont,
           children: [
-            Like_Dislike_Screen(context, controller),
+            likeDislikeScreen(context, controller),
             ChatRoom(),
           Column(
             children: [
@@ -68,8 +69,8 @@ class _MainPageState extends State<MainPage>
               FlatButton(
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
                 onPressed: () async {
-                  RegistrationController CONT = Get.find();
-                  await CONT.signOut();
+                  RegistrationController controller = Get.find();
+                  await controller.signOut();
                   Get.offAll(ListOfPages()); },
                 color:Colors.grey[800],
                 child: Text("Sign out",style: TextStyle(color: Colors.white),),)
@@ -82,117 +83,144 @@ class _MainPageState extends State<MainPage>
     );
   }
 
-  Column Like_Dislike_Screen(BuildContext context, CardController controller) {
+  Column likeDislikeScreen(BuildContext context, CardController controller) {
     return Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
-              GetBuilder<RegistrationController>( builder: (_) {return BuildStackCards(context, controller,_);}),
-              //buttonsRow(),
+              GetBuilder<RegistrationController>( builder: (_) {return buildStackCards(context, controller,_);}),
+              buttonsRow(),
             ],
           );
   }
-StartaNewChat(int index,RegistrationController GetxController) async {
-    String chatroomID=FirebaseAuth.instance.currentUser.uid+"_"+GetxController.users[index].uid;
-    await FirebaseFirestore.instance.collection('ChatRoom').doc(chatroomID).get().then((document){
+startANewChat(int index,RegistrationController getXController) async {
+    String chatRoomID=FirebaseAuth.instance.currentUser.uid+"_"+getXController.users[index].uid;
+    await FirebaseFirestore.instance.collection('ChatRoom').doc(chatRoomID).get().then((document){
       if (document.exists){
         Get.to(ChatBoxNew(
-            chatroomID
+            chatRoomID
         ));
       }else{
-        chatroomID=GetxController.users[index].uid+"_"+FirebaseAuth.instance.currentUser.uid;
+        chatRoomID=getXController.users[index].uid+"_"+FirebaseAuth.instance.currentUser.uid;
         Get.to(ChatBoxNew(
-            chatroomID
+            chatRoomID
         ));
       }
     });
 }
-  Container BuildStackCards(BuildContext context, CardController controller,RegistrationController GetxController) {
+  Container buildStackCards(BuildContext context, CardController controller,RegistrationController getxController) {
 
     return Container(
-          height: MediaQuery.of(context).size.width * 0.9,
-          child: new TinderSwapCard(
-            swipeUp: true,
-            swipeDown: false,
-            orientation: AmassOrientation.BOTTOM,
-            totalNum: GetxController.users.length,
-            swipeEdge: 4.0,
-            maxWidth: MediaQuery.of(context).size.width * 0.9,
-            maxHeight: MediaQuery.of(context).size.width * 0.9,
-            minWidth: MediaQuery.of(context).size.width * 0.8,
-            minHeight: MediaQuery.of(context).size.width * 0.8,
-            cardBuilder: (context, index) => Card(
-              color: Colors.grey[800],
-              child: GestureDetector(
-                  onTap: () async {
-                    Get.bottomSheet(
-                        Container(
+          height: Get.height/1.5,
+          width: Get.width,
+          child: TinderSwapCard(
+          swipeUp: true,
+          swipeDown: false,
+          orientation: AmassOrientation.BOTTOM,
+          totalNum: getxController.users.length,
+          swipeEdge: 4.0,
+          maxWidth: Get.width,
+          maxHeight: Get.height,
+          minWidth: Get.width * 0.8,
+          minHeight: Get.height-1,
+          cardBuilder: (context, index) => Card(
+            color: Colors.grey[800],
+            child: Stack(
+              children: [
+                CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl: getxController.users[index].avatarUrl,
+                  imageBuilder: (context, imageProvider) {
+                    //print(GetxController.users[index].avatarUrl);
+                    return Ink.image(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                  progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(value: downloadProgress.progress),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+                Container(
+                  width: Get.width,
+                  height: Get.height,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.blue,
+                          ),
+                          padding: const EdgeInsets.all(6.0),
+                          margin: EdgeInsets.all(6),
+                          child: IconButton(icon: Icon(Icons.chat), onPressed:(){ startANewChat(index,getxController);}))
+                    ],),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            width: Get.width,
+                            height: Get.height/5,
                             child: ListView.builder(
-                                itemCount: GetxController.users[0].toMapShowToUser().length+1,
+                                itemCount: getxController.users[0].toMapShowToUser().length,
                                 itemBuilder: (BuildContext context, int indexList) {
-                                  if (indexList == 0) {
-                                    return GestureDetector(
-                                      onTap: (){StartaNewChat(index,GetxController);},
-                                        child: Container(
-                                          color: Colors.black54,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(20.0),
-                                            child: Text("Start Chat",style: Get.theme.textTheme.bodyText2,),
-                                          ),
-                                        ));
-                                  }
-                                  indexList -= 1;
                                   return Container(
                                     padding: EdgeInsets.all(10),
                                     margin: EdgeInsets.all(1),
-                                    color: Colors.grey[600],
+                                    color: Colors.black38,
                                     child: RichText(
                                         text: TextSpan(
-                                            text: GetxController.users[index].toMapShowToUser().keys.toList()[indexList] + ": ",
+                                            text: getxController.users[index].toMapShowToUser().keys.toList()[indexList] + ": ",
                                             style: TextStyle(fontWeight: FontWeight.bold),
                                             children: <TextSpan>[
-                                              TextSpan(text: GetxController.users[index].toMapShowToUser().values.toList()[indexList]),
+                                              TextSpan(text: getxController.users[index].toMapShowToUser().values.toList()[indexList]),
                                             ])),
                                   );
-                                })),
-                        backgroundColor: Colors.black45);
-                    print("tapped");},
-                  child: Image.network(GetxController.users[index].avatarUrl)),
-            ),
-            cardController: controller = CardController(),
-            swipeUpdateCallback:
-                (DragUpdateDetails details, Alignment align) {
-              /// Get swiping card's alignment
-              if (align.x < 0) {
-                //Card is LEFT swiping
-                //print("left");
-              } else if (align.x > 0) {
-                //Card is RIGHT swiping
-                //print("right");
-              }
-              if (align.y < 0) {
-                //Card is LEFT swiping
-                //print("up");
-              } else if (align.y > 0) {
-                //Card is RIGHT swiping
-                //print("down");
-              }
-            },
-            swipeCompleteCallback:
-                (CardSwipeOrientation orientation, int index) {
+                                }),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
 
-              //print(welcomeImages[index]);
-              //print(orientation);
-              Get.find<MainPageController>().CheckSwipe(orientation);
-              /// Get orientation & index of swiped card!
-            },
+              ],
+            ),
           ),
+          cardController: controller = CardController(),
+          swipeUpdateCallback:
+              (DragUpdateDetails details, Alignment align) {
+            /// Get swiping card's alignment
+            if (align.x < 0) {
+              //Card is LEFT swiping
+              //print("left");
+            } else if (align.x > 0) {
+              //Card is RIGHT swiping
+              //print("right");
+            }
+            if (align.y < 0) {
+              //Card is LEFT swiping
+              //print("up");
+            } else if (align.y > 0) {
+              //Card is RIGHT swiping
+              //print("down");
+            }
+          },
+          swipeCompleteCallback:
+              (CardSwipeOrientation orientation, int index) {
+
+            //print(welcomeImages[index]);
+            //print(orientation);
+            Get.find<MainPageController>().checkSwipe(orientation);
+            /// Get orientation & index of swiped card!
+          },
+            ),
         );
   }
   Widget buttonsRow() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 48.0),
+      margin: EdgeInsets.symmetric(vertical: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

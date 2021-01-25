@@ -78,12 +78,12 @@ String passwordValidator(String password){
   return null;
 }
 
-class passwordMatchValidatorClass{
-  TextEditingController otherpasswordController;
-  passwordMatchValidatorClass(this.otherpasswordController);
+class PasswordMatchValidatorClass{
+  TextEditingController otherPasswordController;
+  PasswordMatchValidatorClass(this.otherPasswordController);
 
   String passwordMatchValidator(String password) {
-    if (password != otherpasswordController.text) {
+    if (password != otherPasswordController.text) {
       return "These passwords don't match";
     } else {
       return null;

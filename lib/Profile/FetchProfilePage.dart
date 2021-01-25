@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:purr/Models/ProfileData.dart';
 import 'package:purr/Registration/RegistrationController.dart';
 
 
@@ -15,12 +13,12 @@ class FetchProfilePage extends StatefulWidget {
 
 class _FetchProfilePageState extends State<FetchProfilePage> {
 
-  RegistrationController REGCONT = Get.find();
+  RegistrationController regController = Get.find();
 
   @override
   Widget build(BuildContext context) {
 
-    REGCONT.getUserProfileData();
+    regController.getUserProfileData();
 
     return GetBuilder<RegistrationController>( builder: (_) {
 

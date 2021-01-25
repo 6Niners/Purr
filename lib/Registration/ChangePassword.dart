@@ -11,17 +11,17 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class ChangePasswordPageState extends State<ChangePasswordPage> {
-  TextEditingController _Currentpassword = TextEditingController();
-  TextEditingController _Newpassword = TextEditingController();
-  TextEditingController _NewpasswordConfirm = TextEditingController();
+  TextEditingController _currentPassword = TextEditingController();
+  TextEditingController _newPassword = TextEditingController();
+  TextEditingController _newPasswordConfirm = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  BoolToPassByReference password_validated=BoolToPassByReference();
+  BoolToPassByReference passwordValidated=BoolToPassByReference();
 
   BoolToPassByReference _obscureTextCurrentPassword=BoolToPassByReference();
   BoolToPassByReference _obscureTextNewPassword=BoolToPassByReference();
   BoolToPassByReference _obscureTextConfirmPassword=BoolToPassByReference();
 
-  RegistrationController CONT = Get.find();
+  RegistrationController controller = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,9 +55,9 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                           GetBuilder<RegistrationController>(
                               builder: (_) {
                                 return _.buildTextFormFieldPassword(
-                                    _Currentpassword, 'Current Password',
+                                    _currentPassword, 'Current Password',
                                     _obscureTextCurrentPassword,Validator: (value) {
-                                  if(password_validated.obscure){return null;}else{return "wrong password";}
+                                  if(passwordValidated.obscure){return null;}else{return "wrong password";}
                                 },);
                               }
                           ),
@@ -65,7 +65,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                           GetBuilder<RegistrationController>(
                               builder: (_) {
                                 return _.buildTextFormFieldPassword(
-                                    _Newpassword, 'Password',
+                                    _newPassword, 'Password',
                                     _obscureTextNewPassword);
                               }
                           ),
@@ -73,8 +73,8 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                           GetBuilder<RegistrationController>(
                             builder: (_) {
                               return  _.buildTextFormFieldPassword(
-                                  _NewpasswordConfirm, 'Confirm Password',
-                                  _obscureTextConfirmPassword, Controller2:_Newpassword);
+                                  _newPasswordConfirm, 'Confirm Password',
+                                  _obscureTextConfirmPassword, Controller2:_newPassword);
 
                             },
 
@@ -108,10 +108,10 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
 
                                   onPressed: () async {
                                     //print("in");
-                                    password_validated.obscure=await CONT.validatePassword(_Currentpassword.text);
+                                    passwordValidated.obscure=await controller.validatePassword(_currentPassword.text);
                                     setState(() {});
-                                    if (_formKey.currentState.validate()&&password_validated.obscure) {
-                                      await CONT.updatePassword(_Newpassword.text);
+                                    if (_formKey.currentState.validate()&&passwordValidated.obscure) {
+                                      await controller.updatePassword(_newPassword.text);
                                     }
                                   },
                                   child: Text('Sign Up',style: Get.theme.textTheme.bodyText1,),

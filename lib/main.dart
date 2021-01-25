@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       darkTheme: Themes.dark,
       //home: MainPage(),
       //home: LoginPage(title: 'Sign In'),
-      home:MainRegistrationPage(),
+      home:ListOfPages(),
     );
   }
 }

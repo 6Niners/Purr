@@ -172,7 +172,16 @@ class RegistrationController extends GetxController {
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     return await user.doc(Auth.currentUser.uid).set(TMP.toMap());
   }
-
+  Future<void> addUserSwipeLeft(ProfileData TMP) async {
+    FirebaseFirestore.instance.collection('UserData').doc(Auth.currentUser.uid).update({
+      "Swiped Left": FieldValue.arrayUnion([TMP.uid])
+    });
+  }
+  Future<void> addUserSwipeRight(ProfileData TMP) async {
+    FirebaseFirestore.instance.collection('UserData').doc(Auth.currentUser.uid).update( {
+      "Swiped Right": FieldValue.arrayUnion([TMP.uid])
+    });
+  }
   BackgroundForChat() async {
     await getUserProfileData();
 
@@ -207,9 +216,8 @@ class RegistrationController extends GetxController {
 
   }
   Future<void> getUserProfileData({String UID}) async {
-    firebaseUser = Auth.currentUser;
     if(UID==null) {
-      UID=firebaseUser.uid;
+      UID=Auth.currentUser.uid;
       final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
       await user.doc(UID).get().then((document){
         if (document.exists){
@@ -229,6 +237,7 @@ class RegistrationController extends GetxController {
     }
   }
   Future<void> GetUsers() async {
+    
     var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: UserInfo.petType).where("Gender", isNotEqualTo: UserInfo.gender).get();
     usersInFirebase.docs.forEach((result) {
       getUserProfileData(UID: result.id);
@@ -265,7 +274,7 @@ class RegistrationController extends GetxController {
     if(Controller2==null){
       Validator=passwordValidator;
     }else{
-      passwordMatchValidatorClass OtherPasswordField=passwordMatchValidatorClass(Controller2);
+      PasswordMatchValidatorClass OtherPasswordField=PasswordMatchValidatorClass(Controller2);
       Validator=OtherPasswordField.passwordMatchValidator;
     }
     }

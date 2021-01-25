@@ -11,25 +11,25 @@ import 'package:purr/Registration/RegistrationController.dart';
 
 
 class ChatBoxNew extends StatefulWidget {
-  ChatBoxNew(this.Chatroom); //widget
 
-  String Chatroom = "69";
+  String chatRoom = "";
+  ChatBoxNew(this.chatRoom); //widget
 
   @override
   _ChatBoxNewState createState() => _ChatBoxNewState();
 }
 
 class _ChatBoxNewState extends State<ChatBoxNew> {
-  RegistrationController CONT = Get.find();
-  String receivername = "pet name";
-  String sendername = "Sender";
+  RegistrationController controller = Get.find();
+  String receiverName = "pet name";
+  String senderName = "Sender";
 
   ///////////////////////////////////////////
 
   ///////////////////////////////////////////
   Widget chatMessages() {
     var chat = FirebaseFirestore.instance.collection(
-        'ChatRoom').doc(widget.Chatroom).collection('messages').orderBy("time", descending: false);
+        'ChatRoom').doc(widget.chatRoom).collection('messages').orderBy("time", descending: false);
     // print('work work work work work');
     //buid a widget to view the messages
     return Container(
@@ -46,7 +46,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
           return new ListView(
             children: snapshot.data.docs.map((DocumentSnapshot document) {
               bool sendByMe = false;
-              if (document.data()['sendBy'] == sendername) {
+              if (document.data()['sendBy'] == senderName) {
                 sendByMe = true;
               } else {
                 sendByMe = false;
@@ -136,20 +136,20 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
 
   ///////////////////////////////////////////
 
-   addMessage(String Message) {
+   createMessageMap(String message) {
     // print('function works'+ Message);
 
     //function to writ the message
-    if (Message.isNotEmpty) { // if there is something in the writing bare
-      Map<String, dynamic> chatroomMap = {
+    if (message.isNotEmpty) { // if there is something in the writing bare
+      Map<String, dynamic> chatRoomMap = {
 
         //save the data in the database using mapping
-        "sendBy": sendername,
-        "message": Message,
+        "sendBy": senderName,
+        "message": message,
         "time": DateTime.now(),
-        'sender_id': widget.Chatroom,
+        'sender_id': widget.chatRoom,
       };
-      addmessage(widget.Chatroom, chatroomMap);
+      addmessage(widget.chatRoom, chatRoomMap);
     }
     else {
       return ("please write a message");
@@ -173,31 +173,31 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
 
     //function to create a chat room in the data base
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-    await user.doc(widget.Chatroom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, "")).get().then((document){
+    await user.doc(widget.chatRoom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, "")).get().then((document){
       if (document.exists){
         //print(receivername);
-        receivername= document.data()['Pet Name'];
-        print(receivername);
+        receiverName= document.data()['Pet Name'];
+        print(receiverName);
         setState(() {
         });
       }
     });
+
     FirebaseFirestore.instance.collection("ChatRoom")
-        .doc(this.widget.Chatroom).set({
-      "users Names":receivername+"_"+CONT.UserInfo.petName,
-      "users list":[widget.Chatroom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, ""),FirebaseAuth.instance.currentUser.uid],
-      "users":widget.Chatroom})
+        .doc(this.widget.chatRoom).set({
+      "users Names":receiverName+"_"+controller.UserInfo.petName,
+      "users list":[widget.chatRoom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, ""),FirebaseAuth.instance.currentUser.uid],
+      "users":widget.chatRoom})
         .catchError((e) {
       print(e.toString());
     });
-    sendername=CONT.UserInfo.petName;
-
+    senderName=controller.UserInfo.petName;
   }
 
 //////////////////////////////////////////
 
   buildMessageComposer() {
-    TextEditingController Message = TextEditingController();
+    TextEditingController messageController = TextEditingController();
     return Container(
       padding: EdgeInsets.all(10),
       height: 60.0,
@@ -236,10 +236,10 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
           Expanded(
             child: TextField(
               textCapitalization: TextCapitalization.sentences,
-              controller: Message,
+              controller: messageController,
               textInputAction: TextInputAction.done,
-              onEditingComplete: (){addMessage(Message.text);
-              Message.text="";},
+              onEditingComplete: (){createMessageMap(messageController.text);
+              messageController.text="";},
               style: Get.theme.textTheme.bodyText2,
               decoration: InputDecoration.collapsed(
                 hintText: 'meow your message',
@@ -253,8 +253,8 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
             iconSize: 25.0,
             color: Get.theme.textTheme.bodyText2.color,
             //color: Colors.redAccent,
-            onPressed: () { addMessage(Message.text);
-              Message.text="";
+            onPressed: () { createMessageMap(messageController.text);
+              messageController.text="";
             }, //onPressed
           ),
 
@@ -282,13 +282,13 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
         decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(Colors.black26, BlendMode.darken),
-                image: AssetImage(CONT.Background),//BackgroundForChat()),
+                image: AssetImage(controller.Background),//BackgroundForChat()),
                 fit: BoxFit.cover)),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Color(0xFF0D47A1), //appBar color
-            title: Text(receivername,
+            title: Text(receiverName,
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,

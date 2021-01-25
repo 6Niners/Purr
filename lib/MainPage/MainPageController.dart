@@ -1,5 +1,6 @@
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:get/get.dart';
+import 'package:purr/Registration/RegistrationController.dart';
 import 'package:purr/UI_Widgets.dart';
 
 class MainPageController extends GetxController {
@@ -13,37 +14,42 @@ class MainPageController extends GetxController {
 
 
   // Start of swiping functions
-  void CheckSwipe(CardSwipeOrientation orientation) {
+  void checkSwipe(CardSwipeOrientation orientation) {
     //enum CardSwipeOrientation { LEFT, RIGHT, RECOVER, UP, DOWN }
     //                          {   0  ,  1  ,    2   , 3 ,   4  }
+    RegistrationController regController =Get.find();
     if (orientation.index == 0) {
-      SwipeLeft();
+      swipeLeft();
+      regController.addUserSwipeLeft(regController.users[0]);
     }
     if (orientation.index == 1) {
-      SwipeRight();
+      swipeRight();
+      regController.addUserSwipeRight(regController.users[0]);
     }
     if (orientation.index == 3) {
-      SwipeUp();
+      swipeUp();
     }
+    //removes user from list when the user is swiped
+    regController.users.removeAt(0);
   }
 
   //in each of those functions do the function in the database
-  void SwipeLeft() {
-    String Left = "Left";
-    ShowToast(Left);
-    print(Left);
+  void swipeLeft() {
+    String left = "left";
+    ShowToast(left);
+    print(left);
   }
 
-  void SwipeRight() {
-    String RIGHT = "RIGHT";
-    ShowToast(RIGHT);
-    print(RIGHT);
+  void swipeRight() {
+    String right = "right";
+    ShowToast(right);
+    print(right);
   }
 
-  void SwipeUp() {
-    String UP = "UP";
-    ShowToast(UP);
-    print(UP);
+  void swipeUp() {
+    String up = "up";
+    ShowToast(up);
+    print(up);
   }
 
   //end of swiping functions

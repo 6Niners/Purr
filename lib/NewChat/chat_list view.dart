@@ -218,11 +218,9 @@ class ChatRoom extends StatefulWidget {
 
 class ChatRoomState extends State<ChatRoom> {
   //this one is for the general use
-  RegistrationController CONT = Get.find();
+  RegistrationController controller = Get.find();
 
   var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
-//testing one
-  //var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: "Q3GtQdi0mKOtui9GzrNPUP5DgE63").snapshots();
   var collection;
   Widget chatRoomsList() {
     return StreamBuilder(
@@ -248,7 +246,7 @@ class ChatRoomState extends State<ChatRoom> {
               userName: snapshot.data.docs[index].data()['users Names']
                   .toString()
                   .replaceAll("_", "")
-                  .replaceAll(CONT.UserInfo.petName, ""),
+                  .replaceAll(controller.UserInfo.petName, ""),
               chatroomID: snapshot.data.docs[index].data()['users'],
             );}
         );
