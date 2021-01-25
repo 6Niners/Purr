@@ -19,7 +19,6 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
   Widget build(BuildContext context) {
 
     regController.getUserProfileData();
-    regController.getAddressFromLatLng();
 
 
     return GetBuilder<RegistrationController>( builder: (_) {

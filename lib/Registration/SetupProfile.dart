@@ -28,7 +28,9 @@ class SetupProfilePageState extends State<SetupProfilePage> {
   String _avatarUrl;
   List<String> PetTypes=["Dog","Cat","Hamster","Bird","Rabbit","Turtle","Other"];
   List<String> Gender=["Male","Female"];
+  var _userLocation;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   RegistrationController REGCONT = Get.find();
 
 
@@ -36,6 +38,8 @@ class SetupProfilePageState extends State<SetupProfilePage> {
   void initState() {
     _Gender.text=Gender[0];
     _pet.text=PetTypes[0];
+
+    REGCONT.getAddressFromLatLng();
     // TODO: implement initState
     super.initState();
   }
@@ -183,7 +187,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                   onPressed: () async {
                                     //print("in");
                                     if (_formKey.currentState.validate()) {
-                                      await REGCONT.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text,gender:_Gender.text,avatarUrl: _avatarUrl));
+                                      await REGCONT.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text,gender:_Gender.text,avatarUrl: _avatarUrl, location: REGCONT.userLocation));
                                       REGCONT.GetUsers();
                                       Get.offAll(MainPage());
                                     }

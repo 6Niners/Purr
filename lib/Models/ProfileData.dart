@@ -7,9 +7,10 @@ class ProfileData {
   final String gender;
   final String email;
   final String avatarUrl;
+  final UserLocation location;
 
 
-  ProfileData ({this.petName, this.petType, this.breed,this.email,this.avatarUrl,this.gender,this.uid});
+  ProfileData ({this.petName, this.petType, this.breed,this.email,this.avatarUrl,this.gender, this.location, this.uid});
   bool iscompelete(){
     return petName!="null"&&petType!="null"&&breed!="null"&&gender!="null"&&petName!=null&&petType!=null&&breed!=null&&gender!=null;
   }
@@ -20,6 +21,7 @@ class ProfileData {
       'Breed': breed,
       'Gender': gender,
       'Avatar': avatarUrl,
+      'Location': location.toMap(),
     };
   }
   Map<String, dynamic> toMapShowToUser() {
@@ -30,4 +32,21 @@ class ProfileData {
       'Gender': gender,
     };
   }
+}
+
+
+class UserLocation {
+
+  String area;
+  String country;
+
+  UserLocation();
+
+  Map<String, dynamic> toMap() {
+    return {
+      "Area": area,
+      "Country": country
+    };
+  }
+
 }

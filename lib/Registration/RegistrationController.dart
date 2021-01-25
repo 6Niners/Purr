@@ -24,6 +24,8 @@ class RegistrationController extends GetxController {
   List<ProfileData> users=List<ProfileData>();
   String Background="assets/other.jpg";
 
+  UserLocation userLocation = UserLocation();
+
   @override
   Future<void> onInit() async {
     await super.onInit();
@@ -359,13 +361,15 @@ class RegistrationController extends GetxController {
 
 
 
-  Future<String> getAddressFromLatLng() async {
+  Future<void> getAddressFromLatLng() async {
 
     var location = await getCurrentLocation();
 
     List<Placemark> address =  await placemarkFromCoordinates(location.latitude, location.longitude);
-    print("ADDRESS: ${address},");
-    return address[0].toString();
+    print("ADDRESS: ${address[0].administrativeArea}, Country: ${address[0].country}");
+
+    userLocation.area = address[0].administrativeArea;
+    userLocation.country = address[0].country;
   }
 
 
