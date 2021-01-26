@@ -47,7 +47,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Text("Loading");
           }
-          return new ListView(
+          return ListView(
             children: snapshot.data.docs.map((DocumentSnapshot document) {
               bool sendByMe = false;
               if (document.data()['sendBy'] == senderName) {
@@ -61,39 +61,41 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
               } else {
                 image = false;
               }
-              if(image){
-                return Container(
-                  height: Get.height/4,
-                  width: Get.width/9,
-                  alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
-                  decoration: BoxDecoration(
-                      borderRadius: sendByMe ? BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                          bottomLeft: Radius.circular(30)
-                      ) :
-                      BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                          bottomRight: Radius.circular(30)),
-                  ),
-                  padding: EdgeInsets.only(
-                      top: 8,
-                      bottom: 8,
-                      right: sendByMe ? 0 : 100,
-                      left: sendByMe ? 100 : 0),
-                  child: CachedNetworkImage(
-                    height: Get.height/4,
-                    width: Get.width,
-                    imageUrl: document.data()['message'],
-                    imageBuilder: (context, imageProvider) {
-                      return Ink.image(
-                        image: imageProvider,
-                      );
-                    },
-                    progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(value: downloadProgress.progress),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
+              if(image) {
+                return Stack(
+                  children: [
+                    Container(
+                      alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: sendByMe ? BorderRadius.only(
+                                topLeft: Radius.circular(23),
+                                topRight: Radius.circular(23),
+                                bottomLeft: Radius.circular(23)
+                            ) :
+                            BorderRadius.only(
+                                topLeft: Radius.circular(23),
+                                topRight: Radius.circular(23),
+                                bottomRight: Radius.circular(23)),
+                        ),
+                        child: CachedNetworkImage(
+                          height: Get.height / 4,
+                          width: Get.width/2,
+                          imageUrl: document.data()['message'],
+                          imageBuilder: (context, imageProvider) {
+                            return Ink.image(
+                              image: imageProvider,
+                            );
+                          },
+                          progressIndicatorBuilder: (context, url,
+                              downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),),
+                    ),
+
+                  ],
                 );
               }else{
               return Container(
