@@ -215,7 +215,7 @@ class RegistrationController extends GetxController {
       background=  "assets/rabbit.jpg";  }
 
     else if ( equalsIgnoreCase(userInfo.petType,'bird')){
-      background=  "assets/bird1.jpg";  }
+      background=  "assets/bird.jpg";  }
 
     else if ( equalsIgnoreCase(userInfo.petType,'parrot')){
       background=  "assets/parrot.jpg";  }
