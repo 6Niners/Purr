@@ -18,28 +18,28 @@ bool equalsIgnoreCase(String string1, String string2) {
 
 class RegistrationController extends GetxController {
   User firebaseUser;
-  FirebaseAuth Auth;
-  ProfileData UserInfo=ProfileData();
+  FirebaseAuth auth;
+  ProfileData userInfo=ProfileData();
 
   List<ProfileData> users=List<ProfileData>();
-  String Background="assets/other.jpg";
+  String background="assets/other.jpg";
 
   UserLocation userLocation = UserLocation();
 
   @override
   Future<void> onInit() async {
     await super.onInit();
-    Auth=FirebaseAuth.instance;
+    auth=FirebaseAuth.instance;
 
   }
 
   Future<void> signIn(String email, String password) async {
     try {
-      await Auth.signInWithEmailAndPassword(email: email, password: password);
-      firebaseUser = Auth.currentUser;
+      await auth.signInWithEmailAndPassword(email: email, password: password);
+      firebaseUser = auth.currentUser;
       if(firebaseUser.emailVerified){
-        if(await profileiscomplete()){
-          GetUsers();
+        if(await profileIsComplete()){
+          getUsers();
           Get.offAll(MainPage());
         }else{
           Get.offAll(SetupProfilePage());
@@ -51,12 +51,12 @@ class RegistrationController extends GetxController {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
-        ShowToast(
-            'No user found for that email.', Background_color: Colors.red);
+        showToast(
+            'No user found for that email.', backgroundColor: Colors.red);
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
-        ShowToast('Wrong password provided for that user.',
-            Background_color: Colors.red);
+        showToast('Wrong password provided for that user.',
+            backgroundColor: Colors.red);
       }
     }
   }
@@ -64,7 +64,7 @@ class RegistrationController extends GetxController {
 
   Future<void> signUp(String email, String password) async {
     try {
-      await Auth.createUserWithEmailAndPassword(
+      await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       await updateUserData(ProfileData(petName:"null",petType:"null",breed:"null"));
       Get.offAll(VerifyEmailPage());
@@ -72,14 +72,14 @@ class RegistrationController extends GetxController {
       print(e.code);
       if (e.code == 'weak-password') {
         print('The password provided is very weak');
-        ShowToast(
-            'The password provided is very weak', Background_color: Colors.red);
+        showToast(
+            'The password provided is very weak', backgroundColor: Colors.red);
       } else if (e.code == 'email-already-in-use') {
         print('This email is already in use, try to sign in instead');
-        ShowToast('This email is already in use, try to sign in instead',
-            Background_color: Colors.red);
+        showToast('This email is already in use, try to sign in instead',
+            backgroundColor: Colors.red);
       } else {
-        ShowToast(e.message, Background_color: Colors.red);
+        showToast(e.message, backgroundColor: Colors.red);
       }
 
     } catch (e) {
@@ -87,27 +87,27 @@ class RegistrationController extends GetxController {
     }
   }
 
-  Future<void> forgotpassword(String email) async {
+  Future<void> forgotPassword(String email) async {
     try {
-      await Auth.sendPasswordResetEmail(email: email);
-      ShowToast(
+      await auth.sendPasswordResetEmail(email: email);
+      showToast(
           "Reset password link has sent your mail please use it to change the password.",
-          Background_color: Colors.blue);
+          backgroundColor: Colors.blue);
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'user-not-found') {
-        ShowToast(
-            'There is no user with that email', Background_color: Colors.red);
+        showToast(
+            'There is no user with that email', backgroundColor: Colors.red);
       }
       else {
-        ShowToast(e.message, Background_color: Colors.red);
+        showToast(e.message, backgroundColor: Colors.red);
       }
     }
   }
 
   //if the user is logged in
   Future<bool> validatePassword(String password) async {
-    firebaseUser = Auth.currentUser;
+    firebaseUser = auth.currentUser;
     var authCredentials = EmailAuthProvider.credential(
         email: firebaseUser.email, password: password);
     try {
@@ -120,23 +120,23 @@ class RegistrationController extends GetxController {
     }
   }
 
-  Future<void> SendEmailVerification() async {
-    firebaseUser = Auth.currentUser;
+  Future<void> sendEmailVerification() async {
+    firebaseUser = auth.currentUser;
     firebaseUser.sendEmailVerification();
-    ShowToast(
-        "verification email has been sent", Background_color: Colors.blue);
+    showToast(
+        "verification email has been sent", backgroundColor: Colors.blue);
   }
 
   Future<void> updatePassword(String password) async {
-    firebaseUser = Auth.currentUser;
+    firebaseUser = auth.currentUser;
 
     firebaseUser.updatePassword(password);
     print("changed to " + password);
-    ShowToast("Your password got changed", Background_color: Colors.blue);
+    showToast("Your password got changed", backgroundColor: Colors.blue);
   }
 
-  void ismailverified() {
-    firebaseUser = Auth.currentUser;
+  void isEmailVerified() {
+    firebaseUser = auth.currentUser;
     firebaseUser.reload();
     if (firebaseUser.emailVerified) {
       Get.offAll(SetupProfilePage());
@@ -144,24 +144,24 @@ class RegistrationController extends GetxController {
   }
   Future signOut() async {
     try {
-      return await Auth.signOut();
+      return await auth.signOut();
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future<bool> profileiscomplete() async {
+  Future<bool> profileIsComplete() async {
     await getUserProfileData();
-    print(UserInfo.toMap());
-    return UserInfo.iscompelete();
+    print(userInfo.toMap());
+    return userInfo.isComplete();
   }
-  Future Checkifloggedin() async {
-    firebaseUser = Auth.currentUser;
+  Future checkIfLoggedIn() async {
+    firebaseUser = auth.currentUser;
     if(firebaseUser!=null){
       if(firebaseUser.emailVerified){
-        if(await profileiscomplete()){
-          GetUsers();
+        if(await profileIsComplete()){
+          getUsers();
         Get.offAll(MainPage());
         }else{
           Get.offAll(SetupProfilePage());
@@ -173,80 +173,81 @@ class RegistrationController extends GetxController {
   }
 
 
-  Future<void> updateUserData(ProfileData TMP) async {
-    UserInfo=TMP;
+  Future<void> updateUserData(ProfileData tmp) async {
+    userInfo=tmp;
+
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-    return await user.doc(Auth.currentUser.uid).set(TMP.toMap());
+    return await user.doc(auth.currentUser.uid).set(tmp.toMap());
   }
-  Future<void> addUserSwipeLeft(ProfileData TMP) async {
-    FirebaseFirestore.instance.collection('UserData').doc(Auth.currentUser.uid).update({
-      "Swiped Left": FieldValue.arrayUnion([TMP.uid])
+  Future<void> addUserSwipeLeft(ProfileData tmp) async {
+    FirebaseFirestore.instance.collection('UserData').doc(auth.currentUser.uid).update({
+      "Swiped Left": FieldValue.arrayUnion([tmp.uid])
     });
   }
-  Future<void> addUserSwipeRight(ProfileData TMP) async {
-    FirebaseFirestore.instance.collection('UserData').doc(Auth.currentUser.uid).update( {
-      "Swiped Right": FieldValue.arrayUnion([TMP.uid])
+  Future<void> addUserSwipeRight(ProfileData tmp) async {
+    FirebaseFirestore.instance.collection('UserData').doc(auth.currentUser.uid).update( {
+      "Swiped Right": FieldValue.arrayUnion([tmp.uid])
     });
   }
-  BackgroundForChat() async {
+  backgroundForChat() async {
     await getUserProfileData();
 
-    if ( equalsIgnoreCase(UserInfo.petType,'cat')) {
-      Background= "assets/wallpaper-cat.jpg";
+    if ( equalsIgnoreCase(userInfo.petType,'cat')) {
+      background= "assets/wallpaper-cat.jpg";
     }
 
-    else if ( equalsIgnoreCase(UserInfo.petType,'dog')) {
-      Background=  "assets/dog2.jpg";  }
+    else if ( equalsIgnoreCase(userInfo.petType,'dog')) {
+      background=  "assets/dog2.jpg";  }
 
-    else if ( equalsIgnoreCase(UserInfo.petType,'hamster')) {
-      Background=  "assets/hamster.jpg";  }
+    else if ( equalsIgnoreCase(userInfo.petType,'hamster')) {
+      background=  "assets/hamster.jpg";  }
 
-    else if ( equalsIgnoreCase(UserInfo.petType,'squirrel')) {
-      Background=  "assets/squirrel.jpg";  }
+    else if ( equalsIgnoreCase(userInfo.petType,'squirrel')) {
+      background=  "assets/squirrel.jpg";  }
 
-    else if ( equalsIgnoreCase(UserInfo.petType,'turtle')) {
-      Background=  "assets/turtle1.jpg";  }
+    else if ( equalsIgnoreCase(userInfo.petType,'turtle')) {
+      background=  "assets/turtle1.jpg";  }
 
-    else if ( equalsIgnoreCase(UserInfo.petType,'rabbit')) {
-      Background=  "assets/rabbit.jpg";  }
+    else if ( equalsIgnoreCase(userInfo.petType,'rabbit')) {
+      background=  "assets/rabbit.jpg";  }
 
-    else if ( equalsIgnoreCase(UserInfo.petType,'bird')){
-      Background=  "assets/bird1.jpg";  }
+    else if ( equalsIgnoreCase(userInfo.petType,'bird')){
+      background=  "assets/bird1.jpg";  }
 
-    else if ( equalsIgnoreCase(UserInfo.petType,'parrot')){
-      Background=  "assets/parrot.jpg";  }
+    else if ( equalsIgnoreCase(userInfo.petType,'parrot')){
+      background=  "assets/parrot.jpg";  }
 
     else{
-      Background=  "assets/other.jpg";
+      background=  "assets/other.jpg";
     }
 
   }
-  Future<void> getUserProfileData({String UID}) async {
-    if(UID==null) {
-      UID=Auth.currentUser.uid;
+  Future<void> getUserProfileData({String uid}) async {
+    if(uid==null) {
+      uid=auth.currentUser.uid;
       final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-      await user.doc(UID).get().then((document){
+      await user.doc(uid).get().then((document){
         if (document.exists){
-          UserInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar']  ,email: firebaseUser.email);
+          userInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar']  ,email: firebaseUser.email);
         }
       });
-      BackgroundForChat();
+      backgroundForChat();
       update();
     }else{
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-    await user.doc(UID).get().then((document){
+    await user.doc(uid).get().then((document){
       if (document.exists){
-        users.add(ProfileData(uid: UID,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] ));
+        users.add(ProfileData(uid: uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] ));
       }
     });
     update();
     }
   }
-  Future<void> GetUsers() async {
+  Future<void> getUsers() async {
     
-    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: UserInfo.petType).where("Gender", isNotEqualTo: UserInfo.gender).get();
+    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).get();
     usersInFirebase.docs.forEach((result) {
-      getUserProfileData(UID: result.id);
+      getUserProfileData(uid: result.id);
       //print(result.id);
     });
     update();
@@ -255,17 +256,17 @@ class RegistrationController extends GetxController {
 
 
 //ui widgets to avoid repeating the same functions
-  Container buildTextFormField(TextEditingController Controller,String labeltext,Function(String) Validator) {
+  Container buildTextFormField(TextEditingController textController,String labelText,Function(String) validator) {
     return Container(
         padding: EdgeInsets.all(10),
     margin: EdgeInsets.all(5),
     child: TextFormField(
-        validator:Validator,
-        controller: Controller,
+        validator:validator,
+        controller: textController,
         style: Get.theme.textTheme.bodyText1,
         autovalidateMode: AutovalidateMode.disabled,
         decoration: InputDecoration(
-            labelText: labeltext,
+            labelText: labelText,
 
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
           focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,),),
@@ -275,43 +276,43 @@ class RegistrationController extends GetxController {
   }
 
 
-  Container buildTextFormFieldPassword(TextEditingController Controller,String labeltext,BoolToPassByReference ObscureText,{TextEditingController Controller2,String Function(String) Validator}) {
-    if(Validator==null){
-    if(Controller2==null){
-      Validator=passwordValidator;
+  Container buildTextFormFieldPassword(TextEditingController textController,String labelText,BoolToPassByReference obscureText,{TextEditingController textController2,String Function(String) validator}) {
+    if(validator==null){
+    if(textController2==null){
+      validator=passwordValidator;
     }else{
-      PasswordMatchValidatorClass OtherPasswordField=PasswordMatchValidatorClass(Controller2);
-      Validator=OtherPasswordField.passwordMatchValidator;
+      PasswordMatchValidatorClass otherPasswordField=PasswordMatchValidatorClass(textController2);
+      validator=otherPasswordField.passwordMatchValidator;
     }
     }
     return Container(
         padding: EdgeInsets.all(10),
     margin: EdgeInsets.all(5),
     child: TextFormField(
-      controller: Controller,
+      controller: textController,
       style: Get.theme.textTheme.bodyText1,
-      validator: Validator,
+      validator: validator,
       autovalidateMode: AutovalidateMode.disabled,
       decoration: InputDecoration(
-        labelText: labeltext,
+        labelText: labelText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
         focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
         suffixIcon: IconButton(
           icon: Icon(
             // Based on passwordVisible state choose the icon
-            ObscureText.obscure
+            obscureText.obscure
                 ? Icons.visibility
                 : Icons.visibility_off,
           ),
           onPressed: () {
             // Update the state i.e. toogle the state of passwordVisible variable
-              ObscureText.obscure = !ObscureText.obscure;
+              obscureText.obscure = !obscureText.obscure;
               update();
             }
         ),
       ),
 
-      obscureText: ObscureText.obscure,
+      obscureText: obscureText.obscure,
     )
     );
   }
@@ -324,7 +325,7 @@ class RegistrationController extends GetxController {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ShowToast("Location services disabled", Background_color: Colors.red);
+      showToast("Location services disabled", backgroundColor: Colors.red);
       return Future.error("Location services disabled");
     }
 
@@ -333,7 +334,7 @@ class RegistrationController extends GetxController {
 
 
     if (permission == LocationPermission.deniedForever) {
-      ShowToast('Location permissions are permanently denied, we cannot request permissions.', Background_color: Colors.red);
+      showToast('Location permissions are permanently denied, we cannot request permissions.', backgroundColor: Colors.red);
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -346,7 +347,7 @@ class RegistrationController extends GetxController {
 
       if (permission != LocationPermission.whileInUse &&
           permission != LocationPermission.always) {
-        ShowToast('Location permissions are denied (actual value: $permission).', Background_color: Colors.red);
+        showToast('Location permissions are denied (actual value: $permission).', backgroundColor: Colors.red);
 
         return Future.error('Location permissions are denied (actual value: $permission).');
       }

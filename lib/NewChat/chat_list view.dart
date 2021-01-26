@@ -246,7 +246,7 @@ class ChatRoomState extends State<ChatRoom> {
               userName: snapshot.data.docs[index].data()['users Names']
                   .toString()
                   .replaceAll("_", "")
-                  .replaceAll(controller.UserInfo.petName, ""),
+                  .replaceAll(controller.userInfo.petName, ""),
               chatroomID: snapshot.data.docs[index].data()['users'],
             );}
         );

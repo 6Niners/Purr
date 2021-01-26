@@ -46,16 +46,16 @@ class ListOfPages extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              PageButton(MainRegistrationPage(), "Main App Route"),
-              PageButton(MainPage(), "Main Page!"),
-              PageButton(LoginPage(), "Login Page!"),
-              PageButton(VerifyEmailPage(), "Verify Email Page"),
-              PageButton(SignUpPage(), "Sign Up Page"),
-              PageButton(ForgotpasswordPage(), "Forgot password"),
-              PageButton(ChangePasswordPage(), "Change Password"),
-              PageButton(FetchProfilePage(), "Profile"),
-              PageButton(SetupProfilePage(), "Setup Profile"),
-              PageButton(ChatRoom(), "chat list"),
+              pageButton(MainRegistrationPage(), "Main App Route"),
+              pageButton(MainPage(), "Main Page!"),
+              pageButton(LoginPage(), "Login Page!"),
+              pageButton(VerifyEmailPage(), "Verify Email Page"),
+              pageButton(SignUpPage(), "Sign Up Page"),
+              pageButton(ForgotpasswordPage(), "Forgot password"),
+              pageButton(ChangePasswordPage(), "Change Password"),
+              pageButton(FetchProfilePage(), "Profile"),
+              pageButton(SetupProfilePage(), "Setup Profile"),
+              pageButton(ChatRoom(), "chat list"),
 
               //PageButton(ChatBoxNew(FirebaseAuth.instance.currentUser.uid+"_"+"Meow"), "chatNew"),
 
@@ -66,7 +66,7 @@ class ListOfPages extends StatelessWidget {
     );
   }
 
-  FlatButton PageButton(var page,String text) {
+  FlatButton pageButton(var page,String text) {
     return FlatButton(
 
     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),

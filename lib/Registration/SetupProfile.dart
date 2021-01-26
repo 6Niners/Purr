@@ -23,23 +23,22 @@ class SetupProfilePageState extends State<SetupProfilePage> {
   ChatBoxNew chat;
   TextEditingController _petName=TextEditingController();
   TextEditingController _pet=TextEditingController();
-  TextEditingController _Gender=TextEditingController();
+  TextEditingController _gender=TextEditingController();
   TextEditingController _breed=TextEditingController();
   String _avatarUrl;
-  List<String> PetTypes=["Dog","Cat","Hamster","Bird","Rabbit","Turtle","Other"];
-  List<String> Gender=["Male","Female"];
-  var _userLocation;
+  List<String> petTypes=["Dog","Cat","Hamster","Bird","Rabbit","Turtle","Other"];
+  List<String> genders=["Male","Female"];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  RegistrationController REGCONT = Get.find();
+  RegistrationController regController = Get.find();
 
 
   @override
   void initState() {
-    _Gender.text=Gender[0];
-    _pet.text=PetTypes[0];
+    _gender.text=genders[0];
+    _pet.text=petTypes[0];
 
-    REGCONT.getAddressFromLatLng();
+    regController.getAddressFromLatLng();
     // TODO: implement initState
     super.initState();
   }
@@ -111,7 +110,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                             setState(() {});
                                           },
                                           hint: Text("Please pick your pet type"),
-                                          items: PetTypes.map((location) {
+                                          items: petTypes.map((location) {
                                             return DropdownMenuItem(
                                               child: new Text(location, style: Get.textTheme.bodyText1),
                                               value: location,
@@ -138,13 +137,13 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                 data: Get.theme.copyWith(canvasColor: Get.theme.highlightColor,),
                                 child: Center(
                                   child: DropdownButton(
-                                    value: _Gender.text,
+                                    value: _gender.text,
                                     onChanged: (newValue) {
-                                      _Gender.text=newValue;
+                                      _gender.text=newValue;
                                       setState(() {});
                                     },
                                     hint: Text("Please pick your pet Gender"),
-                                    items: Gender.map((location) {
+                                    items: genders.map((location) {
                                       return DropdownMenuItem(
                                         child: new Text(location, style: Get.textTheme.bodyText1),
                                         value: location,
@@ -155,7 +154,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                               ),
                             ],
                           ),
-                          REGCONT.buildTextFormField(_petName, 'Pet Name', (input) {
+                          regController.buildTextFormField(_petName, 'Pet Name', (input) {
                             if (input == '') {
                               return 'Please type a your pet name';
                             }
@@ -164,7 +163,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                             }
                           },),
 
-                          REGCONT.buildTextFormField(_breed, 'Breed', (input) {
+                          regController.buildTextFormField(_breed, 'Breed', (input) {
                             if (input == '') {
                               return 'Please your pet breed';
                             }
@@ -187,8 +186,8 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                   onPressed: () async {
                                     //print("in");
                                     if (_formKey.currentState.validate()) {
-                                      await REGCONT.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text,gender:_Gender.text,avatarUrl: _avatarUrl, location: REGCONT.userLocation));
-                                      REGCONT.GetUsers();
+                                      await regController.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text,gender:_gender.text,avatarUrl: _avatarUrl, location: regController.userLocation));
+                                      regController.getUsers();
                                       Get.offAll(MainPage());
                                     }
                                   },

@@ -15,11 +15,11 @@ class SignUpPageState extends State<SignUpPage> {
 
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
-  TextEditingController _confirmpassword = TextEditingController();
+  TextEditingController _confirmPassword = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   BoolToPassByReference _obscureTextPassword = BoolToPassByReference();
   BoolToPassByReference _obscureTextConfirmPassword = BoolToPassByReference();
-  RegistrationController CONT = Get.find();
+  RegistrationController regController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class SignUpPageState extends State<SignUpPage> {
                                 margin: EdgeInsets.all(5),
                                 child: Text("Sign Up",style: Get.theme.textTheme.headline6,)),
                           ),
-                          CONT.buildTextFormField(
+                          regController.buildTextFormField(
                                   _email,
                                   "Email",
                                   emailValidator
@@ -65,8 +65,8 @@ class SignUpPageState extends State<SignUpPage> {
                           GetBuilder<RegistrationController>(
                               builder: (_) {
                                 return  _.buildTextFormFieldPassword(
-                                      _confirmpassword, 'Confirm Password',
-                                      _obscureTextConfirmPassword, Controller2:_password);
+                                      _confirmPassword, 'Confirm Password',
+                                      _obscureTextConfirmPassword, textController2:_password);
 
                               },
 
@@ -103,7 +103,7 @@ class SignUpPageState extends State<SignUpPage> {
                                   onPressed: () async {
                                     //print("in");
                                     if (_formKey.currentState.validate()) {
-                                      await CONT.signUp(
+                                      await regController.signUp(
                                           _email.text, _password.text);
                                     }
                                   },

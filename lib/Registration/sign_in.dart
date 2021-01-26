@@ -14,7 +14,7 @@ class LoginPageState extends State<LoginPage> {
   TextEditingController _password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   BoolToPassByReference _obscureTextPassword = BoolToPassByReference();
-  RegistrationController CONT = Get.find();
+  RegistrationController regController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,7 +46,7 @@ class LoginPageState extends State<LoginPage> {
                                   )),
                             ),
 
-                           CONT.buildTextFormField(_email, "Email", emailValidator),
+                           regController.buildTextFormField(_email, "Email", emailValidator),
 
                             GetBuilder<RegistrationController>(
                               builder: (_) {
@@ -96,7 +96,7 @@ class LoginPageState extends State<LoginPage> {
                                     onPressed: () async {
                                       //print("in");
                                       if (_formKey.currentState.validate()) {
-                                        await CONT.signIn(
+                                        await regController.signIn(
                                             _email.text, _password.text);
                                       }
                                     },

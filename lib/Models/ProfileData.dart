@@ -11,7 +11,7 @@ class ProfileData {
 
 
   ProfileData ({this.petName, this.petType, this.breed,this.email,this.avatarUrl,this.gender, this.location, this.uid});
-  bool iscompelete(){
+  bool isComplete(){
     return petName!="null"&&petType!="null"&&breed!="null"&&gender!="null"&&petName!=null&&petType!=null&&breed!=null&&gender!=null;
   }
   Map<String, dynamic> toMap() {

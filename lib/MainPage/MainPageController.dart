@@ -36,19 +36,19 @@ class MainPageController extends GetxController {
   //in each of those functions do the function in the database
   void swipeLeft() {
     String left = "left";
-    ShowToast(left);
+    showToast(left);
     print(left);
   }
 
   void swipeRight() {
     String right = "right";
-    ShowToast(right);
+    showToast(right);
     print(right);
   }
 
   void swipeUp() {
     String up = "up";
-    ShowToast(up);
+    showToast(up);
     print(up);
   }
 

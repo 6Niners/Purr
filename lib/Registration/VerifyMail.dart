@@ -17,13 +17,13 @@ class VerifyEmailPage extends StatefulWidget {
 class VerifyEmailPageState extends State<VerifyEmailPage> {
   int time;
   int count=1;
-  Timer timer,timerforbutton;
-  RegistrationController CONT=Get.find();
+  Timer timer,timerForButton;
+  RegistrationController regController=Get.find();
   @override
   void initState() {
-    CONT.SendEmailVerification();
+    regController.sendEmailVerification();
     timer=Timer.periodic(Duration(seconds: 5),(timer){
-      CONT.ismailverified();
+      regController.isEmailVerified();
     }
     );
     setbuttontimer();
@@ -33,7 +33,7 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
   @override
   void dispose() {
     // TODO: implement dispose
-    timerforbutton.cancel();
+    timerForButton.cancel();
     timer.cancel();
     super.dispose();
   }
@@ -66,7 +66,7 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
                       Container(
                         padding: EdgeInsets.all(10),
                         margin: EdgeInsets.all(5),
-                        child: Text("Please click the link sent to "+CONT.firebaseUser.email+" to proceed",style:Get.theme.textTheme.headline6,)),
+                        child: Text("Please click the link sent to "+regController.firebaseUser.email+" to proceed",style:Get.theme.textTheme.headline6,)),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -102,9 +102,9 @@ String buttontext(){
 }
 setbuttontimer(){
   time=60*count;
-  timerforbutton= new Timer.periodic(Duration(seconds: 1),(timer){
+  timerForButton= new Timer.periodic(Duration(seconds: 1),(timer){
     if(time==0){
-      timerforbutton.cancel();
+      timerForButton.cancel();
 
     }else{
       setState(() {time--;
@@ -119,16 +119,16 @@ resendbutton() {
   if (count <= 3) {
     return ()
     {
-    CONT.SendEmailVerification();
+    regController.sendEmailVerification();
     count++;
-    timerforbutton.cancel();
+    timerForButton.cancel();
     setbuttontimer();
     };
 
   }
   else {
-    ShowToast("too much email requests sent, please check your email",
-        Background_color: Colors.red);
+    showToast("too much email requests sent, please check your email",
+        backgroundColor: Colors.red);
     return null;
   }
 

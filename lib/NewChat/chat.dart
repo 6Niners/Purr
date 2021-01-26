@@ -185,13 +185,13 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
 
     FirebaseFirestore.instance.collection("ChatRoom")
         .doc(this.widget.chatRoom).set({
-      "users Names":receiverName+"_"+controller.UserInfo.petName,
+      "users Names":receiverName+"_"+controller.userInfo.petName,
       "users list":[widget.chatRoom.toString().replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, ""),FirebaseAuth.instance.currentUser.uid],
       "users":widget.chatRoom})
         .catchError((e) {
       print(e.toString());
     });
-    senderName=controller.UserInfo.petName;
+    senderName=controller.userInfo.petName;
   }
 
 //////////////////////////////////////////
@@ -282,7 +282,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
         decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(Colors.black26, BlendMode.darken),
-                image: AssetImage(controller.Background),//BackgroundForChat()),
+                image: AssetImage(controller.background),//BackgroundForChat()),
                 fit: BoxFit.cover)),
         child: Scaffold(
           backgroundColor: Colors.transparent,

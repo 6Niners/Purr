@@ -18,8 +18,8 @@ class MainRegistrationPageState extends State<MainRegistrationPage> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      RegistrationController CONT=Get.find();
-      CONT.Checkifloggedin();
+      RegistrationController regController=Get.find();
+      regController.checkIfLoggedIn();
     });
     return Container(
         decoration: BoxDecoration(

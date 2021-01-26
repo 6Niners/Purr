@@ -42,12 +42,12 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
         body: Padding (
           padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
 
-          child: _.UserInfo.petName!=null?Column(
+          child: _.userInfo.petName!=null?Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(_.UserInfo.avatarUrl),
+                  backgroundImage: NetworkImage(_.userInfo.avatarUrl),
                   radius: 50.0,
                 ),
               ),
@@ -60,7 +60,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               SizedBox(height: 5.0),
 
-              Text(_.UserInfo.petName, style: TextStyle(
+              Text(_.userInfo.petName, style: TextStyle(
                 color: Colors.amberAccent[200],
                 fontSize: 23.0,
                 fontWeight: FontWeight.bold,
@@ -74,7 +74,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               SizedBox(height: 5.0),
 
-              Text(_.UserInfo.petType, style: TextStyle(
+              Text(_.userInfo.petType, style: TextStyle(
                 color: Colors.amberAccent[200],
                 fontSize: 23.0,
                 fontWeight: FontWeight.bold,
@@ -88,7 +88,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               SizedBox(height: 5.0),
 
-              Text(_.UserInfo.breed, style: TextStyle(
+              Text(_.userInfo.breed, style: TextStyle(
                 color: Colors.amberAccent[200],
                 fontSize: 23.0,
                 fontWeight: FontWeight.bold,
@@ -101,7 +101,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
               SizedBox(height: 5.0),
 
-              Text(_.UserInfo.gender, style: TextStyle(
+              Text(_.userInfo.gender, style: TextStyle(
                 color: Colors.amberAccent[200],
                 fontSize: 23.0,
                 fontWeight: FontWeight.bold,
@@ -115,7 +115,7 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
                   SizedBox(width: 10),
 
-                  Text(_.UserInfo.email, style: TextStyle(
+                  Text(_.userInfo.email, style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.white,
 

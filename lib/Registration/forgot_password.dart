@@ -13,7 +13,7 @@ class ForgotpasswordPageState extends State<ForgotpasswordPage> {
 
   TextEditingController _email=TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  RegistrationController CONT=Get.find();
+  RegistrationController regController=Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +42,7 @@ class ForgotpasswordPageState extends State<ForgotpasswordPage> {
                                   margin: EdgeInsets.all(5),
                                   child: Text('Forgot password',style: Get.theme.textTheme.headline6,)),
                             ),
-                            CONT.buildTextFormField(_email, "Email", emailValidator),
+                            regController.buildTextFormField(_email, "Email", emailValidator),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -74,7 +74,7 @@ class ForgotpasswordPageState extends State<ForgotpasswordPage> {
                                       onPressed: () async {
                                       //print("in");
                                       if (_formKey.currentState.validate()) {
-                                        await CONT.forgotpassword(_email.text);
+                                        await regController.forgotPassword(_email.text);
                                     }
                                     },
                                     child: Text('Send Mail',style: Get.theme.textTheme.bodyText1)

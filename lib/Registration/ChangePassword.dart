@@ -56,7 +56,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                               builder: (_) {
                                 return _.buildTextFormFieldPassword(
                                     _currentPassword, 'Current Password',
-                                    _obscureTextCurrentPassword,Validator: (value) {
+                                    _obscureTextCurrentPassword,validator: (value) {
                                   if(passwordValidated.obscure){return null;}else{return "wrong password";}
                                 },);
                               }
@@ -74,7 +74,7 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                             builder: (_) {
                               return  _.buildTextFormFieldPassword(
                                   _newPasswordConfirm, 'Confirm Password',
-                                  _obscureTextConfirmPassword, Controller2:_newPassword);
+                                  _obscureTextConfirmPassword, textController2:_newPassword);
 
                             },
 
