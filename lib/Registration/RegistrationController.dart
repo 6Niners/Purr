@@ -30,6 +30,7 @@ class RegistrationController extends GetxController {
     await super.onInit();
     auth=FirebaseAuth.instance;
 
+
   }
 
   Future<void> signIn(String email, String password) async {
@@ -150,7 +151,8 @@ class RegistrationController extends GetxController {
     if(firebaseUser!=null){
       if(firebaseUser.emailVerified){
         if(await profileIsComplete()){
-        Get.offAll(MainPage());
+          getAddressFromLatLng();
+          Get.offAll(MainPage());
         }else{
           Get.offAll(SetupProfilePage());
         }
@@ -165,6 +167,13 @@ class RegistrationController extends GetxController {
     userInfo=tmp;
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     await user.doc(userInfo.uid).set(tmp.toMapTesting());
+  }
+  Future<void> updateUserDataLocation(UserLocation tmp) async {
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    await user.doc(userInfo.uid).update({
+      "Location":tmp.toMap(),
+    }
+    );
   }
 
   Future<void> addUserSwipeLeft(ProfileData tmp) async {
@@ -397,6 +406,7 @@ class RegistrationController extends GetxController {
     print("ADDRESS: ${address[0].administrativeArea}, Country: ${address[0].country}");
 
     userLocation = UserLocation(area: address[0].administrativeArea,country: address[0].country);
+    updateUserDataLocation(userLocation);
   }
 
 
