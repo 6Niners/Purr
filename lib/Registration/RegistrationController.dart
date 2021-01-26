@@ -10,6 +10,7 @@ import 'package:purr/Registration/VerifyMail.dart';
 import 'package:purr/UI_Widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:purr/main.dart';
 
 
 
@@ -20,12 +21,10 @@ class RegistrationController extends GetxController {
   User firebaseUser;
   FirebaseAuth auth;
   ProfileData userInfo=ProfileData();
-
   List<ProfileData> users=List<ProfileData>();
   String background="assets/other.jpg";
-
   UserLocation userLocation = UserLocation();
-
+  bool likeBack=false;
   @override
   Future<void> onInit() async {
     await super.onInit();
@@ -37,17 +36,7 @@ class RegistrationController extends GetxController {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
       firebaseUser = auth.currentUser;
-      if(firebaseUser.emailVerified){
-        if(await profileIsComplete()){
-          getUsers();
-          Get.offAll(MainPage());
-        }else{
-          Get.offAll(SetupProfilePage());
-        }
-      }else{
-        Get.offAll(VerifyEmailPage());
-      }
-
+      await checkIfLoggedIn();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -72,8 +61,7 @@ class RegistrationController extends GetxController {
       print(e.code);
       if (e.code == 'weak-password') {
         print('The password provided is very weak');
-        showToast(
-            'The password provided is very weak', backgroundColor: Colors.red);
+        showToast('The password provided is very weak', backgroundColor: Colors.red);
       } else if (e.code == 'email-already-in-use') {
         print('This email is already in use, try to sign in instead');
         showToast('This email is already in use, try to sign in instead',
@@ -144,7 +132,8 @@ class RegistrationController extends GetxController {
   }
   Future signOut() async {
     try {
-      return await auth.signOut();
+      await auth.signOut();
+      Get.offAll(ListOfPages());
     } catch (e) {
       print(e.toString());
       return null;
@@ -153,7 +142,7 @@ class RegistrationController extends GetxController {
 
   Future<bool> profileIsComplete() async {
     await getUserProfileData();
-    print(userInfo.toMap());
+    print(userInfo.toMapTesting());
     return userInfo.isComplete();
   }
   Future checkIfLoggedIn() async {
@@ -161,7 +150,6 @@ class RegistrationController extends GetxController {
     if(firebaseUser!=null){
       if(firebaseUser.emailVerified){
         if(await profileIsComplete()){
-          getUsers();
         Get.offAll(MainPage());
         }else{
           Get.offAll(SetupProfilePage());
@@ -175,27 +163,42 @@ class RegistrationController extends GetxController {
 
   Future<void> updateUserData(ProfileData tmp) async {
     userInfo=tmp;
-
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-    return await user.doc(auth.currentUser.uid).set(tmp.toMap());
+    await user.doc(userInfo.uid).set(tmp.toMapTesting());
   }
+
   Future<void> addUserSwipeLeft(ProfileData tmp) async {
-    FirebaseFirestore.instance.collection('UserData').doc(auth.currentUser.uid).update({
+    FirebaseFirestore.instance.collection('UserData').doc(userInfo.uid).update({
       "Swiped Left": FieldValue.arrayUnion([tmp.uid])
     });
   }
+
   Future<void> addUserSwipeRight(ProfileData tmp) async {
-    FirebaseFirestore.instance.collection('UserData').doc(auth.currentUser.uid).update( {
+    FirebaseFirestore.instance.collection('UserData').doc(userInfo.uid).update( {
       "Swiped Right": FieldValue.arrayUnion([tmp.uid])
+    });
+    FirebaseFirestore.instance.collection('UserData').doc(tmp.uid).update({
+      "Swiped Right For": FieldValue.arrayUnion([userInfo.uid+"_"+userInfo.avatarUrl])
+    });
+  }
+
+  Future<void> matchUsers(ProfileData tmp) async {
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    DocumentSnapshot document=await user.doc(tmp.uid).get();
+    if (document.exists){
+      tmp=ProfileData(uid: tmp.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] );
+    }
+    FirebaseFirestore.instance.collection('UserData').doc(tmp.uid).update({
+      "Swiped Right": FieldValue.arrayRemove([userInfo.uid])
+    });
+    FirebaseFirestore.instance.collection('UserData').doc(userInfo.uid).update({
+      "Swiped Right For": FieldValue.arrayRemove([tmp.uid+"_"+tmp.avatarUrl])
     });
   }
   backgroundForChat() async {
-    await getUserProfileData();
-
     if ( equalsIgnoreCase(userInfo.petType,'cat')) {
       background= "assets/wallpaper-cat.jpg";
     }
-
     else if ( equalsIgnoreCase(userInfo.petType,'dog')) {
       background=  "assets/dog2.jpg";  }
 
@@ -226,31 +229,48 @@ class RegistrationController extends GetxController {
     if(uid==null) {
       uid=auth.currentUser.uid;
       final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-      await user.doc(uid).get().then((document){
+      DocumentSnapshot document=await user.doc(uid).get();
         if (document.exists){
-          userInfo=ProfileData(petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar']  ,email: firebaseUser.email);
+          userInfo=ProfileData(uid:auth.currentUser.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar']  ,email: firebaseUser.email,swipedLeft:(document.data()['Swiped Left'] as List)?.map((item) => item as String)?.toList(),swipedRight:(document.data()['Swiped Right'] as List)?.map((item) => item as String)?.toList() );
         }
-      });
       backgroundForChat();
       update();
     }else{
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-    await user.doc(uid).get().then((document){
+    DocumentSnapshot document=await user.doc(uid).get();
       if (document.exists){
         users.add(ProfileData(uid: uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] ));
       }
-    });
-    update();
     }
+    update();
+  }
+  removeAlreadySeenUsers(){
+    List<String> toRemove=List<String>();
+    print("users");
+    print(users);
+    print(userInfo.swipedLeft);
+    users.forEach((element) {
+      if(userInfo.swipedLeft.contains(element.uid)){
+        toRemove.add(element.uid);
+      }
+      if(userInfo.swipedRight.contains(element.uid)){
+        print(element.uid);
+        print(userInfo.swipedRight);
+        toRemove.add(element.uid);
+      }
+    });
+    print(toRemove);
+    toRemove.forEach((element) {users.remove(element); });
   }
   Future<void> getUsers() async {
-    
     var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).get();
-    usersInFirebase.docs.forEach((result) {
-      getUserProfileData(uid: result.id);
+    usersInFirebase.docs.forEach((result) async {
+      await getUserProfileData(uid: result.id);
       //print(result.id);
     });
+    removeAlreadySeenUsers();
     update();
+
   }
 
 
@@ -363,14 +383,10 @@ class RegistrationController extends GetxController {
 
 
   Future<void> getAddressFromLatLng() async {
-
     var location = await getCurrentLocation();
-
     List<Placemark> address =  await placemarkFromCoordinates(location.latitude, location.longitude);
     print("ADDRESS: ${address[0].administrativeArea}, Country: ${address[0].country}");
-
-    userLocation.area = address[0].administrativeArea;
-    userLocation.country = address[0].country;
+    userLocation=UserLocation(area: address[0].administrativeArea,country: address[0].country);
   }
 
 

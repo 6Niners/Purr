@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import 'package:purr/Registration/RegistrationController.dart';
 import 'package:purr/Registration/CommonClasses-functions.dart';
 
-class ForgotpasswordPage extends StatefulWidget {
+class ForgotPasswordPage extends StatefulWidget {
 
   @override
-  ForgotpasswordPageState createState() => ForgotpasswordPageState();
+  ForgotPasswordPageState createState() => ForgotPasswordPageState();
 }
 
-class ForgotpasswordPageState extends State<ForgotpasswordPage> {
+class ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   TextEditingController _email=TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

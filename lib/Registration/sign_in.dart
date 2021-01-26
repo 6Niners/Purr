@@ -57,7 +57,7 @@ class LoginPageState extends State<LoginPage> {
                             Center(
                               child: GestureDetector(
                                 onTap: () {
-                                  Get.to(ForgotpasswordPage());
+                                  Get.to(ForgotPasswordPage());
                                 },
                                 child: new Text(
                                   'Forgot Password?',

@@ -10,7 +10,6 @@ import 'package:purr/NewChat/chat_list%20view.dart';
 import 'package:purr/Profile/FetchProfilePage.dart';
 import 'package:purr/Registration/ChangePassword.dart';
 import 'package:purr/Registration/RegistrationController.dart';
-import 'package:purr/main.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -25,6 +24,15 @@ class _MainPageState extends State<MainPage>
     "assets/Not_Found.png",
   ];
   CardController controller; //Use this to trigger swap.
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    RegistrationController controller = Get.find();
+    controller.getUsers();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     TabController tabCont=TabController(vsync:this,length: 3);
@@ -36,12 +44,12 @@ class _MainPageState extends State<MainPage>
           labelPadding: EdgeInsets.all(20),
           indicatorPadding: EdgeInsets.all(500),
           indicatorColor: Colors.red,
-      tabs: [
-      Tab(icon: Icon(Icons.favorite),),
-      Tab(icon: Icon(Icons.chat)),
-      Tab(icon: Icon(Icons.account_box)),
-      ],
-      ),
+          tabs: [
+          Tab(icon: Icon(Icons.favorite),),
+          Tab(icon: Icon(Icons.chat)),
+          Tab(icon: Icon(Icons.account_box)),
+          ],
+          ),
 
 
         body: TabBarView(
@@ -71,7 +79,8 @@ class _MainPageState extends State<MainPage>
                 onPressed: () async {
                   RegistrationController controller = Get.find();
                   await controller.signOut();
-                  Get.offAll(ListOfPages()); },
+
+                  },
                 color:Colors.grey[800],
                 child: Text("Sign out",style: TextStyle(color: Colors.white),),)
             ],
@@ -97,18 +106,14 @@ startANewChat(int index,RegistrationController getXController) async {
     String chatRoomID=FirebaseAuth.instance.currentUser.uid+"_"+getXController.users[index].uid;
     await FirebaseFirestore.instance.collection('ChatRoom').doc(chatRoomID).get().then((document){
       if (document.exists){
-        Get.to(ChatBoxNew(
-            chatRoomID
-        ));
+        Get.to(ChatBoxNew(chatRoomID));
       }else{
         chatRoomID=getXController.users[index].uid+"_"+FirebaseAuth.instance.currentUser.uid;
-        Get.to(ChatBoxNew(
-            chatRoomID
-        ));
+        Get.to(ChatBoxNew(chatRoomID));
       }
     });
 }
-  Container buildStackCards(BuildContext context, CardController controller,RegistrationController getxController) {
+  Container buildStackCards(BuildContext context, CardController controller,RegistrationController getXController) {
 
     return Container(
           height: Get.height/1.5,
@@ -117,7 +122,7 @@ startANewChat(int index,RegistrationController getXController) async {
           swipeUp: true,
           swipeDown: false,
           orientation: AmassOrientation.BOTTOM,
-          totalNum: getxController.users.length,
+          totalNum: getXController.users.length,
           swipeEdge: 4.0,
           maxWidth: Get.width,
           maxHeight: Get.height,
@@ -129,7 +134,7 @@ startANewChat(int index,RegistrationController getXController) async {
               children: [
                 CachedNetworkImage(
                   fit: BoxFit.cover,
-                  imageUrl: getxController.users[index].avatarUrl,
+                  imageUrl: getXController.users[index].avatarUrl,
                   imageBuilder: (context, imageProvider) {
                     //print(GetxController.users[index].avatarUrl);
                     return Ink.image(
@@ -156,7 +161,7 @@ startANewChat(int index,RegistrationController getXController) async {
                           ),
                           padding: const EdgeInsets.all(6.0),
                           margin: EdgeInsets.all(6),
-                          child: IconButton(icon: Icon(Icons.chat), onPressed:(){ startANewChat(index,getxController);}))
+                          child: IconButton(icon: Icon(Icons.chat), onPressed:(){ startANewChat(index,getXController);}))
                     ],),
                       Align(
                           alignment: Alignment.bottomCenter,
@@ -164,7 +169,7 @@ startANewChat(int index,RegistrationController getXController) async {
                             width: Get.width,
                             height: Get.height/5,
                             child: ListView.builder(
-                                itemCount: getxController.users[0].toMapShowToUser().length,
+                                itemCount: getXController.users[0].toMapShowToUser().length,
                                 itemBuilder: (BuildContext context, int indexList) {
                                   return Container(
                                     padding: EdgeInsets.all(10),
@@ -172,10 +177,10 @@ startANewChat(int index,RegistrationController getXController) async {
                                     color: Colors.black38,
                                     child: RichText(
                                         text: TextSpan(
-                                            text: getxController.users[index].toMapShowToUser().keys.toList()[indexList] + ": ",
+                                            text: getXController.users[index].toMapShowToUser().keys.toList()[indexList] + ": ",
                                             style: TextStyle(fontWeight: FontWeight.bold),
                                             children: <TextSpan>[
-                                              TextSpan(text: getxController.users[index].toMapShowToUser().values.toList()[indexList]),
+                                              TextSpan(text: getXController.users[index].toMapShowToUser().values.toList()[indexList]),
                                             ])),
                                   );
                                 }),
@@ -212,7 +217,7 @@ startANewChat(int index,RegistrationController getXController) async {
 
             //print(welcomeImages[index]);
             //print(orientation);
-            Get.find<MainPageController>().checkSwipe(orientation);
+            Get.find<MainPageController>().checkSwipe(orientation,index);
             /// Get orientation & index of swiped card!
           },
             ),

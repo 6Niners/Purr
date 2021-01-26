@@ -1,215 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:purr/Models/ProfileData.dart';
 import 'package:purr/NewChat/chat.dart';
+import 'package:purr/Profile/Avatar.dart';
 import 'package:purr/Registration/RegistrationController.dart';
-/*
-class FlutterIcons {
-FlutterIcons._();
 
-static const _kFontFam = 'FlutterIcons';
-
-static const IconData home = IconData(0xe800, fontFamily: _kFontFam);
-static const IconData chat = IconData(0xe83f, fontFamily: _kFontFam);
-static const IconData search = IconData(0xe86f, fontFamily: _kFontFam);
-static const IconData menu = IconData(0xe871, fontFamily: _kFontFam);
-static const IconData back = IconData(0xe879, fontFamily: _kFontFam);
-static const IconData filter = IconData(0xf1de, fontFamily: _kFontFam);
-}
-
-
-
-class AppColors {
-  static Color mainColor = Color(0XFF252331);
-  static Color darkColor = Color(0XFF1e1c26);
-  static Color blueColor = Color(0XFF2c75fd);
-}
-/*
-class ChatModel {
-  final bool isTyping;
-  final String lastMessage;
-  final String lastMessageTime;
-  final String sendername;
-
-  ChatModel(
-      {this.isTyping, this.lastMessage, this.lastMessageTime,this.sendername});
-
-  static List<ChatModel> list = [
-  ChatModel (
-  isTyping: true,
-  lastMessage: "hello!",
-  lastMessageTime: "2d",
-  sendername: "AHMED",
-  ),
-  ];
-}
-
-*/
-class ChatPage extends StatefulWidget {
-
-  @override
-  _ChatPageState createState() => _ChatPageState();
-}
-
-class _ChatPageState extends State<ChatPage> {
-   final bool isTyping;
-   final String lastMessage;
-   final String lastMessageTime;
-   final String sendername;
-   final items = List<String>.generate(10000, (i) => "Item $i");
-
-
-   _ChatPageState(
-      {this.isTyping, this.lastMessage, this.lastMessageTime,this.sendername});
-
-  @override
-  Widget build(BuildContext context) {
-    var chat = FirebaseFirestore.instance.collection('ChatRoom').orderBy("time", descending: false);
-
-    return Scaffold(
-      backgroundColor: AppColors.mainColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: AppColors.mainColor,
-        title: Text(
-          "Chat",
-          style: TextStyle(
-            fontSize: 32,
-          ),
-        ),
-      ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.all(16),
-            padding: EdgeInsets.all(6),
-            decoration: BoxDecoration(
-                color: AppColors.darkColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                )),
-            child: TextField(
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  FlutterIcons.search,
-                  color: Colors.white54,
-                ),
-                hintText: "Search",
-                hintStyle: TextStyle(
-                  color: Colors.white54,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-                child: Container(
-                height: 1000,
-                child: StreamBuilder<QuerySnapshot>(
-                stream: chat.snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Something went wrong');
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Text("Loading");
-                  }
-
-                  return new ListView(
-                  children: snapshot.data.docs.map((DocumentSnapshot document) {
-                        return ListTile(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => ChatBox(),
-                              ),
-                            );
-                          },
-
-
-
-
-
-
-
-
-
-                          leading: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(100),
-                              ),
-                              image: DecorationImage(
-                                image: ExactAssetImage("assets/default.jpg"),
-                              ),
-                            ),
-                          ),
-                          title: Text(
-                            document.data()["sender name"],
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          subtitle: document.data()["isTyping"]
-                              ? Row(
-                            children: <Widget>[
-                              /*
-                      SpinKitThreeBounce(
-                        color: AppColors.blueColor,
-                        size: 20.0,
-                      ),*/
-                            ],
-                          )
-                              : Row(
-                            children: <Widget>[
-                              Text(
-                                document.data()[lastMessage],
-                                style: TextStyle(
-                                  color: Colors.white54,
-                                ),
-                              ),
-                              SizedBox(width: 25),
-                              Text(
-                                document.data()[lastMessageTime] +
-                                    " days ago",
-                                style: TextStyle(
-                                  color: Colors.white54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList());
-                }),
-                )
-                )
-
-        ],
-
-      ),
-    );
-  }
-}
-
-*/
-//////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
 class CustomTheme {
   static Color colorAccent = Color(0xff007EF4);
   static Color textColor = Color(0xff071930);
 }
-
-
-/////////////////////////////////////////////////////////
-class Constants{
-
-  static String myName = "";
-}
-///////////////////////////////////////////////////////////////////////////////
-
-
 
 class ChatRoom extends StatefulWidget {
   @override
@@ -217,68 +19,133 @@ class ChatRoom extends StatefulWidget {
 }
 
 class ChatRoomState extends State<ChatRoom> {
-  //this one is for the general use
   RegistrationController controller = Get.find();
-
-  var chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
+  Stream<QuerySnapshot> chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
+  Stream<DocumentSnapshot> matchesStream = FirebaseFirestore.instance.collection("UserData").doc(FirebaseAuth.instance.currentUser.uid).snapshots();
   var collection;
-  Widget chatRoomsList() {
-    return StreamBuilder(
-      stream: chatRooms,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Something went wrong',style: TextStyle(color: Colors.red,fontSize: 25),);
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),));
-        }
-        if(snapshot.data.docs.length==0){
-          return Center(
-            child: Container(
-              child: Text("There no chats",style: TextStyle(color: Colors.red,fontSize: 20),), ),
-          );
-        }
-        return ListView.builder(
-          itemCount: snapshot.data.docs.length,
-          itemBuilder: (BuildContext context, int index) {
-            print(snapshot.data.docs[index].data()['users']);
-            return ChatRoomsTile(
-              userName: snapshot.data.docs[index].data()['users Names']
-                  .toString()
-                  .replaceAll("_", "")
-                  .replaceAll(controller.userInfo.petName, ""),
-              chatroomID: snapshot.data.docs[index].data()['users'],
-            );}
-        );
+  Widget matches() {
+    //check if the person in swiped for is the in swiped right
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text("Likes You",style: Get.theme.textTheme.headline6,),
+            ],
+          ),
+        ),
+        StreamBuilder(
+          stream: matchesStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong',style: TextStyle(color: Colors.red,fontSize: 25),);
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),));
+            }
+            try{
+              // ignore: unnecessary_statements
+              if(snapshot.data['Swiped Right For'].length==0){
+                return Center(
+                  child: Container(
+                    child: Text("There are no Matches yet",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+                );
+              }
+            }catch(_){
+              return Center(
+                child: Container(
+                  child: Text("There are no Matches yet",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+              );
+            }
 
-      },
+            return Container(
+              height: 100,
+              child: ListView.builder(
+                  itemCount: snapshot.data['Swiped Right For'].length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+                    //print(snapshot.data['Swiped Right For'].toString().substring(snapshot.data['Swiped Right For'].toString().indexOf("_")+1));
+                    var selectedItem=(snapshot.data['Swiped Right For'] as List)?.map((item) => item as String)?.toList()[index];
+                    return MatchesTile(
+                      avatarUrl:selectedItem.substring(selectedItem.indexOf("_")+1),
+                      otherUserUID: selectedItem.split("_")[0],
+                    );
+                  }
+              ),
+            );
+
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget chatRoomsList() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text("Chats",style: Get.theme.textTheme.headline6,),
+            ],
+          ),
+        ),
+        StreamBuilder(
+          stream: chatRooms,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong',style: TextStyle(color: Colors.red,fontSize: 25),);
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),));
+            }
+            if(snapshot.data.docs.length==0){
+              return Center(
+                child: Container(
+                  child: Text("There no chats",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+              );
+            }
+            return ListView.builder(
+              itemCount: snapshot.data.docs.length,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                print(snapshot.data.docs[index].data()['users']);
+                var userNames=snapshot.data.docs[index].data()['users Names'].toString().split("_");
+                userNames.remove(controller.userInfo.petName);
+                String username=userNames[0];
+                return ChatRoomsTile(
+                  userName: username,
+                  chatRoomID: snapshot.data.docs[index].data()['users'],
+                );}
+            );
+
+          },
+        ),
+      ],
     );
   }
 
   @override
   void initState() {
-  //  getUserInfogetChats();
     super.initState();
   }
-/*
-  getUserInfogetChats() async {
-    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
-    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
-      setState(() {
-        chatRooms = snapshots;
-        print(
-            "we got the data + ${chatRooms.toString()} this is name  ${Constants.myName}");
-      });
-    });
-  }
-*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
-      body: Container(
-        child: chatRoomsList(),
+      body: Column(
+        children: [
+          matches(),
+          chatRoomsList(),
+        ],
       ),
+
     /*
     floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
@@ -294,21 +161,13 @@ class ChatRoomState extends State<ChatRoom> {
 
 class ChatRoomsTile extends StatelessWidget {
   final String userName;
-  final String chatroomID;
-
-  ChatRoomsTile({this.userName,@required this.chatroomID});
-
+  final String chatRoomID;
+  ChatRoomsTile({this.userName,this.chatRoomID});
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(
-            builder: (context) => ChatBoxNew(
-                chatroomID
-              //chatroomID: chatroomID,
-            )
-        ));
+        Get.to(ChatBoxNew(chatRoomID));
       },
       child: Container(
         color: Get.theme.canvasColor,
@@ -336,6 +195,79 @@ class ChatRoomsTile extends StatelessWidget {
               style: Get.theme.textTheme.bodyText1,
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+Future<void> likeBack() async {
+  RegistrationController controller = Get.find();
+  controller.likeBack=false;
+  await Get.dialog(
+    AlertDialog(
+      backgroundColor: Colors.grey[700],
+      title: new Text(
+        'Like Back',
+        style: TextStyle(color: Colors.white),
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Get.back();
+            //registraioon controller remove from list
+          },
+          child: new Text(
+            'Delete from list',
+          ),
+        ),
+        new FlatButton(
+          onPressed: () {
+            Get.back();
+            controller.likeBack=false;
+          },
+          child: new Text(
+            'No',
+          ),
+        ),
+        new FlatButton(
+          onPressed: () {
+            Get.back();
+            controller.likeBack=true;
+          },
+          child: new Text(
+            'Yes',
+          ),
+        ),
+      ],
+    ),
+  );
+}
+class MatchesTile extends StatelessWidget {
+  final String avatarUrl;
+  String otherUserUID;
+  MatchesTile({this.avatarUrl,this.otherUserUID});
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+            await likeBack();
+            RegistrationController controller = Get.find();
+            if(controller.likeBack){
+            String roomId=otherUserUID+"_"+FirebaseAuth.instance.currentUser.uid;
+            await FirebaseFirestore.instance.collection('ChatRoom').doc(roomId).get().then((document){
+            if (document.exists){
+              Get.to(ChatBoxNew(roomId));
+            }else{
+              roomId=FirebaseAuth.instance.currentUser.uid+"_"+otherUserUID;
+              Get.to(ChatBoxNew(roomId));
+            }
+            });
+            controller.matchUsers(ProfileData(uid: otherUserUID));
+            }
+      },
+      child: Center(
+        child:Avatar(
+          avatarUrl: avatarUrl,
         ),
       ),
     );
