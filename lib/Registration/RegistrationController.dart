@@ -231,7 +231,11 @@ class RegistrationController extends GetxController {
       final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
       DocumentSnapshot document=await user.doc(uid).get();
         if (document.exists){
-          userInfo=ProfileData(uid:auth.currentUser.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar']  ,email: firebaseUser.email,swipedLeft:(document.data()['Swiped Left'] as List)?.map((item) => item as String)?.toList(),swipedRight:(document.data()['Swiped Right'] as List)?.map((item) => item as String)?.toList() );
+          userInfo=ProfileData(uid:auth.currentUser.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],
+              breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'],
+              location: UserLocation(area: document.data()["Location"]["Area"], country: document.data()["Location"]["Country"]),
+              email: firebaseUser.email,swipedLeft:(document.data()['Swiped Left'] as List)?.map((item) => item as String)?.toList(),
+              swipedRight:(document.data()['Swiped Right'] as List)?.map((item) => item as String)?.toList() );
         }
       backgroundForChat();
       update();
@@ -384,9 +388,11 @@ class RegistrationController extends GetxController {
 
   Future<void> getAddressFromLatLng() async {
     var location = await getCurrentLocation();
+
     List<Placemark> address =  await placemarkFromCoordinates(location.latitude, location.longitude);
     print("ADDRESS: ${address[0].administrativeArea}, Country: ${address[0].country}");
-    userLocation=UserLocation(area: address[0].administrativeArea,country: address[0].country);
+
+    userLocation = UserLocation(area: address[0].administrativeArea,country: address[0].country);
   }
 
 

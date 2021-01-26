@@ -31,13 +31,6 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
           elevation: 0.0,
         ),
 
-        floatingActionButton: FloatingActionButton.extended(
-            label: Text("Update"),
-            icon: Icon(Icons.wifi_protected_setup),
-            backgroundColor: Colors.blueGrey[800],
-            onPressed: (){},
-        ),
-
 
         body: Padding (
           padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
@@ -107,8 +100,8 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
                 fontWeight: FontWeight.bold,
               ),),
 
-
               SizedBox(height: 30.0),
+
               Row(
                 children: [
                   Icon(Icons.email, color: Colors.white,),
@@ -121,7 +114,24 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
                   ),)
                 ],
+              ),
+
+              SizedBox(height: 20.0),
+
+              Row(
+                children: [
+                  Icon(Icons.location_on, color: Colors.white,),
+
+                  SizedBox(width: 10),
+
+                  Text("${_.userInfo.location.country}, ${_.userInfo.location.area}", style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+
+                  ),)
+                ],
               )
+
             ],
           ):Container(
             child: CircularProgressIndicator(),
