@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -46,7 +47,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Text("Loading");
           }
-          return new ListView(
+          return ListView(
             children: snapshot.data.docs.map((DocumentSnapshot document) {
               bool sendByMe = false;
               if (document.data()['sendBy'] == senderName) {
@@ -54,12 +55,49 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
               } else {
                 sendByMe = false;
               }
-              bool imageurl = false;
+              bool image = false;
               if (document.data()['type'] == "Image") {
-                imageurl = true;
+                image = true;
               } else {
-                imageurl = false;
+                image = false;
               }
+              if(image) {
+                return Stack(
+                  children: [
+                    Container(
+                      alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: sendByMe ? BorderRadius.only(
+                                topLeft: Radius.circular(23),
+                                topRight: Radius.circular(23),
+                                bottomLeft: Radius.circular(23)
+                            ) :
+                            BorderRadius.only(
+                                topLeft: Radius.circular(23),
+                                topRight: Radius.circular(23),
+                                bottomRight: Radius.circular(23)),
+                        ),
+                        child: CachedNetworkImage(
+                          height: Get.height / 4,
+                          width: Get.width/2,
+                          imageUrl: document.data()['message'],
+                          imageBuilder: (context, imageProvider) {
+                            return Ink.image(
+                              image: imageProvider,
+                            );
+                          },
+                          progressIndicatorBuilder: (context, url,
+                              downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),),
+                    ),
+
+                  ],
+                );
+              }else{
               return Container(
                 padding: EdgeInsets.only(
                     top: 8,
@@ -92,8 +130,9 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
                       style: Get.theme.textTheme.bodyText2),
                 ),
               );
-            }).toList(),
+              }}).toList(),
           );
+
         },
       ),
     );
@@ -131,7 +170,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
 
   ///////////////////////////////////////////
 
-  createImageMessage(String message) async {
+  createImageMessage() async {
     // print('function works'+ Message);
       String _imageURL;
       var image=await ImagePicker().getImage(source: ImageSource.gallery);
@@ -141,23 +180,22 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
       StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
       taskSnapshot.ref.getDownloadURL().then(
               (value) { print("Done: $value"); _imageURL=value;
+              // if there is something in the writing bare
+              Map<String, dynamic> chatRoomMap = {
+                //save the data in the database using mapping
+                "sendBy": senderName,
+                "message": _imageURL,
+                "type": "Image",
+                "time": DateTime.now(),
+                'sender_id': widget.chatRoom,
+              };
+              addmessage(widget.chatRoom, chatRoomMap);
           }
       );
-    if (message.isNotEmpty) {
-      // if there is something in the writing bare
-      Map<String, dynamic> chatRoomMap = {
-        //save the data in the database using mapping
-        "sendBy": senderName,
-        "message": message,
-        "type": "Image",
-        "time": DateTime.now(),
-        'sender_id': widget.chatRoom,
-      };
-      addmessage(widget.chatRoom, chatRoomMap);
-    }
-    else {
-      return ("please write a message");
-    }
+
+
+
+
   }
 
   ///////////////////////////////////////////
@@ -231,31 +269,20 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
       //color: Color(0xFFFFCDD2),
       child: Row(
         children: <Widget>[
-          IconButton(
+         /* IconButton(
             icon: Icon(Icons.camera),
             iconSize: 25.0,
             color: Get.theme.textTheme.bodyText2.color,
             //color: Colors.redAccent,
             onPressed: () => {takePicture()},
-          ),
+          ),*/
           IconButton(
               icon: Icon(Icons.photo),
               iconSize: 25.0,
               color: Get.theme.textTheme.bodyText2.color,
               //color: Colors.redAccent,
               onPressed: () async {
-                /*  var image = await ImagePicker.pickImage(
-                    source: ImageSource.gallery);
-                int timestamp = new DateTime.now().millisecondsSinceEpoch;
-                FirebaseStorage storage = FirebaseStorage.instance;
-                Reference ref = storage.ref().child(
-                    "image" + DateTime.now().toString());
-                UploadTask uploadTask = ref.putFile(image);
-                String fileUrl;
-                uploadTask.then((res) async {
-                  fileUrl = await res.ref.getDownloadURL();
-                });  */
-                //    _sendImage(messageText: null, imageUrl: fileUrl);
+                createImageMessage();
               }),
 
           Expanded(

@@ -191,9 +191,10 @@ class RegistrationController extends GetxController {
     FirebaseFirestore.instance.collection('UserData').doc(tmp.uid).update({
       "Swiped Right": FieldValue.arrayRemove([userInfo.uid])
     });
+    /*
     FirebaseFirestore.instance.collection('UserData').doc(userInfo.uid).update({
       "Swiped Right For": FieldValue.arrayRemove([tmp.uid+"_"+tmp.avatarUrl])
-    });
+    });*/
   }
   backgroundForChat() async {
     if ( equalsIgnoreCase(userInfo.petType,'cat')) {
@@ -226,9 +227,9 @@ class RegistrationController extends GetxController {
 
   }
   Future<void> getUserProfileData({String uid}) async {
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     if(uid==null) {
       uid=auth.currentUser.uid;
-      final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
       DocumentSnapshot document=await user.doc(uid).get();
         if (document.exists){
           userInfo=ProfileData(uid:auth.currentUser.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],
@@ -240,7 +241,6 @@ class RegistrationController extends GetxController {
       backgroundForChat();
       update();
     }else{
-    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     DocumentSnapshot document=await user.doc(uid).get();
       if (document.exists){
         users.add(ProfileData(uid: uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] ));
@@ -252,25 +252,28 @@ class RegistrationController extends GetxController {
     List<String> toRemove=List<String>();
     print("users");
     print(users);
+    print("swipedRight");
+    print(userInfo.swipedRight);
+    print("swipedLeft");
     print(userInfo.swipedLeft);
     users.forEach((element) {
       if(userInfo.swipedLeft.contains(element.uid)){
+        print("yes");
         toRemove.add(element.uid);
       }
       if(userInfo.swipedRight.contains(element.uid)){
-        print(element.uid);
-        print(userInfo.swipedRight);
+        print("yes");
         toRemove.add(element.uid);
       }
     });
     print(toRemove);
     toRemove.forEach((element) {users.remove(element); });
   }
+
   Future<void> getUsers() async {
     var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).get();
     usersInFirebase.docs.forEach((result) async {
       await getUserProfileData(uid: result.id);
-      //print(result.id);
     });
     removeAlreadySeenUsers();
     update();
