@@ -1,11 +1,15 @@
 
 import 'dart:async';
+import 'dart:io';
+import 'dart:js';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:purr/Registration/RegistrationController.dart';
+import 'package:path/path.dart';
 
 ///////////////////////////////////////////
 
@@ -23,6 +27,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
   RegistrationController controller = Get.find();
   String receiverName = "pet name";
   String senderName = "Sender";
+
 
   ///////////////////////////////////////////
 
@@ -50,6 +55,12 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
                 sendByMe = true;
               } else {
                 sendByMe = false;
+              }
+              bool imageurl = false;
+              if (document.data()['type'] == "Image") {
+                imageurl = true;
+              } else {
+                imageurl = false;
               }
               return Container(
                 padding: EdgeInsets.only(
@@ -122,30 +133,46 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
 
   ///////////////////////////////////////////
 
-
-/*  void _sendImage({String messageText, String imageUrl}) {
-    chatReference.add({
-      'text': messageText,
-      'sender_id': Widget.prefs.getString('uid'),
-      'sender_name': Widget.prefs.getString('name'),
-      'profile_photo': Widget.prefs.getString('profile_photo'),
-      'image_url': imageUrl,
-      'time': FieldValue.serverTimestamp(),
-    });
-  } */
+  createImageMessage(String message) async {
+    // print('function works'+ Message);
+      String _imageURL;
+      var image=await ImagePicker().getImage(source: ImageSource.gallery);
+      String fileName = basename(image.path);
+      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child('uploads/$fileName');
+      StorageUploadTask uploadTask = firebaseStorageRef.putFile(File(image.path));
+      StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+      taskSnapshot.ref.getDownloadURL().then(
+              (value) { print("Done: $value"); _imageURL=value;
+          }
+      );
+    if (message.isNotEmpty) {
+      // if there is something in the writing bare
+      Map<String, dynamic> chatRoomMap = {
+        //save the data in the database using mapping
+        "sendBy": senderName,
+        "message": message,
+        "type": "Image",
+        "time": DateTime.now(),
+        'sender_id': widget.chatRoom,
+      };
+      addmessage(widget.chatRoom, chatRoomMap);
+    }
+    else {
+      return ("please write a message");
+    }
+  }
 
   ///////////////////////////////////////////
 
    createMessageMap(String message) {
     // print('function works'+ Message);
-
-    //function to writ the message
+      //function to writ the message
     if (message.isNotEmpty) { // if there is something in the writing bare
       Map<String, dynamic> chatRoomMap = {
-
         //save the data in the database using mapping
         "sendBy": senderName,
         "message": message,
+        "type":"text",
         "time": DateTime.now(),
         'sender_id': widget.chatRoom,
       };
