@@ -271,7 +271,8 @@ class RegistrationController extends GetxController {
   }
 
   Future<void> getUsers() async {
-    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).get();
+    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).where("Location.Country", isEqualTo:userInfo.location.country).where("Location.Area", isEqualTo:userInfo.location.area)
+        .get();
     usersInFirebase.docs.forEach((result) async {
       await getUserProfileData(uid: result.id);
     });
