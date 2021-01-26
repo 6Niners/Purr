@@ -14,11 +14,15 @@ class FetchProfilePage extends StatefulWidget {
 class _FetchProfilePageState extends State<FetchProfilePage> {
 
   RegistrationController regController = Get.find();
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    regController.getUserProfileData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
-    regController.getUserProfileData();
 
 
     return GetBuilder<RegistrationController>( builder: (_) {

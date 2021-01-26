@@ -122,8 +122,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
                           topLeft: Radius.circular(23),
                           topRight: Radius.circular(23),
                           bottomRight: Radius.circular(23)),
-                      color: sendByMe ?
-                      Get.theme.focusColor:Get.theme.cardColor
+                      color: sendByMe ? Get.theme.focusColor:Get.theme.cardColor
                   ),
                   child: Text(document.data()['message'],
                       textAlign: TextAlign.start,

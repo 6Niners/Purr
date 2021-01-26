@@ -197,13 +197,14 @@ class RegistrationController extends GetxController {
     if (document.exists){
       tmp=ProfileData(uid: tmp.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] );
     }
+    /*
     FirebaseFirestore.instance.collection('UserData').doc(tmp.uid).update({
       "Swiped Right": FieldValue.arrayRemove([userInfo.uid])
     });
-    /*
+    */
     FirebaseFirestore.instance.collection('UserData').doc(userInfo.uid).update({
       "Swiped Right For": FieldValue.arrayRemove([tmp.uid+"_"+tmp.avatarUrl])
-    });*/
+    });
   }
   backgroundForChat() async {
     if ( equalsIgnoreCase(userInfo.petType,'cat')) {
