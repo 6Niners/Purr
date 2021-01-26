@@ -28,7 +28,6 @@ class _MainPageState extends State<MainPage>
 
   @override
   void initState() {
-    // TODO: implement initState
     RegistrationController controller = Get.find();
     controller.getUsers();
     super.initState();
