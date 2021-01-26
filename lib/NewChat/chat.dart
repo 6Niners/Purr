@@ -33,8 +33,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
 
   ///////////////////////////////////////////
   Widget chatMessages() {
-    var chat = FirebaseFirestore.instance.collection(
-        'ChatRoom').doc(widget.chatRoom).collection('messages').orderBy("time", descending: false);
+    var chat = FirebaseFirestore.instance.collection('ChatRoom').doc(widget.chatRoom).collection('messages').orderBy("time", descending: false);
     // print('work work work work work');
     //buid a widget to view the messages
     return Container(

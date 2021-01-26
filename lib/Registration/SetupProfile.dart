@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -186,8 +187,7 @@ class SetupProfilePageState extends State<SetupProfilePage> {
                                   onPressed: () async {
                                     //print("in");
                                     if (_formKey.currentState.validate()) {
-                                      await regController.updateUserData(ProfileData(petName:_petName.text, petType:_pet.text, breed:_breed.text,gender:_gender.text,avatarUrl: _avatarUrl, location: regController.userLocation));
-                                      regController.getUsers();
+                                      await regController.updateUserData(ProfileData(uid:FirebaseAuth.instance.currentUser.uid,petName:_petName.text, petType:_pet.text, breed:_breed.text,gender:_gender.text,avatarUrl: _avatarUrl, location: regController.userLocation));
                                       Get.offAll(MainPage());
                                     }
                                   },
