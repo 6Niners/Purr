@@ -151,7 +151,7 @@ class RegistrationController extends GetxController {
     if(firebaseUser!=null){
       if(firebaseUser.emailVerified){
         if(await profileIsComplete()){
-          getAddressFromLatLng();
+          await getAddressFromLatLng();
           Get.offAll(MainPage());
         }else{
           Get.offAll(SetupProfilePage());
