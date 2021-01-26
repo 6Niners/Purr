@@ -258,35 +258,39 @@ class RegistrationController extends GetxController {
     }
     update();
   }
-  removeAlreadySeenUsers(){
+  List<String> removeAlreadySeenUsers(QuerySnapshot list){
+    List<String> filteredList=List<String>();
     List<String> toRemove=List<String>();
+
+    list.docs.forEach((element) {
+      filteredList.add(element.id);
+      if(userInfo.swipedLeft.contains(element.id)){
+        print("yes");
+        toRemove.add(element.id);
+      }
+      if(userInfo.swipedRight.contains(element.id)){
+        print("yes");
+        toRemove.add(element.id);
+      }
+    });
+    print(toRemove);
     print("users");
     print(users);
+    print(filteredList);
     print("swipedRight");
     print(userInfo.swipedRight);
     print("swipedLeft");
     print(userInfo.swipedLeft);
-    users.forEach((element) {
-      if(userInfo.swipedLeft.contains(element.uid)){
-        print("yes");
-        toRemove.add(element.uid);
-      }
-      if(userInfo.swipedRight.contains(element.uid)){
-        print("yes");
-        toRemove.add(element.uid);
-      }
-    });
-    print(toRemove);
-    toRemove.forEach((element) {users.remove(element); });
+    toRemove.forEach((element) {filteredList.remove(element); });
+    return filteredList;
   }
 
   Future<void> getUsers() async {
-    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).where("Location.Country", isEqualTo:userInfo.location.country).where("Location.Area", isEqualTo:userInfo.location.area)
-        .get();
-    usersInFirebase.docs.forEach((result) async {
-      await getUserProfileData(uid: result.id);
+    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).where("Location.Country", isEqualTo:userInfo.location.country).where("Location.Area", isEqualTo:userInfo.location.area).get();
+    List<String> filteredList =removeAlreadySeenUsers(usersInFirebase);
+    filteredList.forEach((result) async {
+      await getUserProfileData(uid: result);
     });
-    removeAlreadySeenUsers();
     update();
 
   }

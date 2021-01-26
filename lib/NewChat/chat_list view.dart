@@ -50,13 +50,13 @@ class ChatRoomState extends State<ChatRoom> {
               if(snapshot.data['Swiped Right For'].length==0){
                 return Center(
                   child: Container(
-                    child: Text("There are no Matches yet",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+                    child: Text("None likes you yet",style: TextStyle(color: Colors.red,fontSize: 20),), ),
                 );
               }
             }catch(_){
               return Center(
                 child: Container(
-                  child: Text("There are no Matches yet",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+                  child: Text("None likes you yet",style: TextStyle(color: Colors.red,fontSize: 20),), ),
               );
             }
 
