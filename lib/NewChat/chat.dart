@@ -80,8 +80,8 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
                   padding: EdgeInsets.only(
                       top: 8,
                       bottom: 8,
-                      left: sendByMe ? 0 : 100,
-                      right: sendByMe ? 100 : 0),
+                      right: sendByMe ? 0 : 100,
+                      left: sendByMe ? 100 : 0),
                   child: CachedNetworkImage(
                     height: Get.height/4,
                     width: Get.width,
