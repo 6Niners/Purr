@@ -50,13 +50,13 @@ class ChatRoomState extends State<ChatRoom> {
               if(snapshot.data['Swiped Right For'].length==0){
                 return Center(
                   child: Container(
-                    child: Text("None likes you yet",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+                    child: Text("None likes you yet",style: TextStyle(color: Colors.red,fontSize: 17),), ),
                 );
               }
             }catch(_){
               return Center(
                 child: Container(
-                  child: Text("None likes you yet",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+                  child: Text("None likes you yet",style: TextStyle(color: Colors.red,fontSize: 17),), ),
               );
             }
 
@@ -214,7 +214,7 @@ Future<void> likeBack() async {
         new FlatButton(
           onPressed: () {
             Get.back();
-            //registraioon controller remove from list
+            //registration controller remove from list
           },
           child: new Text(
             'Delete from list',

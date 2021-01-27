@@ -21,10 +21,10 @@ class Themes {
     cursorColor: Colors.blue[900],
     // set the primaryColor light theme or accentColor for dark theme.
     textTheme: TextTheme(
-        headline6: TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold),
-        bodyText1: TextStyle(color: Colors.black,fontSize: 18),
-        subtitle1: TextStyle(color: Colors.blue,fontSize: 14),
-        bodyText2: TextStyle(color: Colors.white,fontSize: 14),
+      headline6: TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold),
+      bodyText1: TextStyle(color: Colors.black,fontSize: 18),
+      subtitle1: TextStyle(color: Colors.blue,fontSize: 14),
+      bodyText2: TextStyle(color: Colors.white,fontSize: 14),
     ),
   );
   static final dark = ThemeData.dark().copyWith(
@@ -49,9 +49,9 @@ class Themes {
     cursorColor: Colors.blue[900],
 
     textTheme: TextTheme(
-        headline6:  TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold),
-        bodyText1: TextStyle(color: Colors.white,fontSize: 18),
-        subtitle1: TextStyle(color: Colors.blue,fontSize: 14),
+      headline6:  TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold),
+      bodyText1: TextStyle(color: Colors.white,fontSize: 18),
+      subtitle1: TextStyle(color: Colors.blue,fontSize: 14),
       bodyText2: TextStyle(color: Colors.white,fontSize: 14),
     ),
   );
