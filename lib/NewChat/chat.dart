@@ -122,12 +122,12 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
                           topLeft: Radius.circular(23),
                           topRight: Radius.circular(23),
                           bottomRight: Radius.circular(23)),
-                      color: sendByMe ? //Color(0xfff3eac2):Color(0xffffa62b)
-                     Color(0xff1f4068):Color(0xffe43f5a) //Dark mode
+                      color: sendByMe ? Color(0xffEF8B00):Color(0xffdb6400)
+                     //Color(0xff1f4068):Color(0xffe43f5a) //Dark mode
                   ),
                   child: Text(document.data()['message'],
                       textAlign: TextAlign.start,
-                      style: Get.theme.textTheme.bodyText1),
+                      style: Get.theme.textTheme.bodyText2),
                 ),
               );
               }}).toList(),
@@ -264,8 +264,8 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
     return Container(
       padding: EdgeInsets.all(10),
       height: 60.0,
-      color: // Color(0xff9ad3bc), //message composer light mode color
-       Color(0xff1b1b2f), //message composer dark mode color
+      color: Color(0xff16697a), //message composer light mode color
+       //Color(0xff1b1b2f), //message composer dark mode color
       //color: Color(0xFFB2EBF2),
       //color: Color(0xFFFFCDD2),
       child: Row(
@@ -273,18 +273,15 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
           IconButton(
             icon: Icon(Icons.camera),
             iconSize: 25.0,
-            color: //Color(0xffdb6400),//light mode
-             Color(0xff0d7377),//dark mode
-            // Get.theme.textTheme.bodyText2.color,
+            color: Get.theme.textTheme.bodyText2.color,
 
             onPressed: () => {takePicture()},
           ),
           IconButton(
               icon: Icon(Icons.photo),
               iconSize: 25.0,
-              color: // Color(0xffdb6400),//light mode
-                      Color(0xff0d7377), //Get.theme.textTheme.bodyText2.color,
-              //color: Colors.redAccent,
+              color: Get.theme.textTheme.bodyText2.color,
+
               onPressed: () async {
                 createImageMessage();
               }),
@@ -299,7 +296,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
               style: Get.theme.textTheme.bodyText2,
               decoration: InputDecoration.collapsed(
                 hintText: 'meow your message',
-                hintStyle: Get.theme.textTheme.bodyText1
+                hintStyle: Get.theme.textTheme.bodyText2
               ),
             ),
           ),
@@ -307,10 +304,8 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
           IconButton(
             icon: Icon(Icons.send),
             iconSize: 25.0,
-            color: //Color(0xffec524b),//light mode
-             Color(0xff0d7377),
-            //Get.theme.textTheme.bodyText2.color,
-            //color: Colors.redAccent,
+            color: Get.theme.textTheme.bodyText2.color,
+
             onPressed: () { createMessageMap(messageController.text);
               messageController.text="";
             }, //onPressed
@@ -346,8 +341,8 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor:
-            Color(0xff1b1b2f),//appBar dark mode color
-            // Color(0xff9ad3bc), //appBar light mode color
+            //Color(0xff1b1b2f),//appBar dark mode color
+             Color(0xff16697a), //appBar light mode color
             title: Text(receiverName,
               style: TextStyle(
                 fontSize: 20.0,

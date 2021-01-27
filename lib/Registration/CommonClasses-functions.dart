@@ -24,7 +24,7 @@ class Themes {
       headline6: TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold),
       bodyText1: TextStyle(color: Colors.black,fontSize: 18),
       subtitle1: TextStyle(color: Colors.blue,fontSize: 14),
-      bodyText2: TextStyle(color: Colors.white,fontSize: 14),
+      bodyText2: TextStyle(color: Colors.white,fontSize: 16),
     ),
   );
   static final dark = ThemeData.dark().copyWith(
