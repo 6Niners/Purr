@@ -1,5 +1,4 @@
 
-import 'dart:async';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -122,7 +121,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
                           topLeft: Radius.circular(23),
                           topRight: Radius.circular(23),
                           bottomRight: Radius.circular(23)),
-                      color: sendByMe ? Color(0xffEF8B00):Color(0xffdb6400)
+                      color: sendByMe ? Get.isDarkMode?Color(0xff1f4068):Color(0xffEF8B00):Get.isDarkMode?Color(0xffe43f5a):Color(0xffdb6400)
                      //Color(0xff1f4068):Color(0xffe43f5a) //Dark mode
                   ),
                   child: Text(document.data()['message'],
@@ -142,44 +141,44 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
   //            Chat Functions            //
   //////////////////////////////////////////
 
-///////////////////////////////////////////
-  Future<void> takePicture() async {
-    // print('function works');
-    ImagePicker _picker = ImagePicker();
-    _picker.getImage(
-      source: ImageSource.camera,
-      maxWidth: 600.0,
-      maxHeight: 700.0,
-      imageQuality: 25,
-      preferredCameraDevice: CameraDevice.front,
-    );
-  }
 
   ///////////////////////////////////////////
-
-  Future<void> pickpicture() async {
-    // print('function works');
-    final picker = ImagePicker();
-    picker.getImage(
-        source: ImageSource.gallery,
-        maxWidth: 600,
-        maxHeight: 700,
-        imageQuality: 50
-    );
+  void loadingDialog() {
+      Get.defaultDialog(
+          title: "Uploading... ",
+          titleStyle: TextStyle(color: Colors.white),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                child: CircularProgressIndicator(),
+                padding: EdgeInsets.all(10),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.grey[900]);
+  }
+  void closeDialog() {
+    if (Get.isDialogOpen) {
+      Get.back();
+    } else {
+      print("this is not a dialog");
+    }
   }
 
-  ///////////////////////////////////////////
-
-  createImageMessage() async {
+  createImageMessage({bool camera=false}) async {
     // print('function works'+ Message);
       String _imageURL;
-      var image=await ImagePicker().getImage(source: ImageSource.gallery);
+      var image=await ImagePicker().getImage(source: camera?ImageSource.camera:ImageSource.gallery);
       String fileName = basename(image.path);
       StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child('uploads/$fileName');
       StorageUploadTask uploadTask = firebaseStorageRef.putFile(File(image.path));
+      loadingDialog();
       StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
       taskSnapshot.ref.getDownloadURL().then(
-              (value) { print("Done: $value"); _imageURL=value;
+              (value) {
+                closeDialog();
+                print("Done: $value"); _imageURL=value;
               // if there is something in the writing bare
               Map<String, dynamic> chatRoomMap = {
                 //save the data in the database using mapping
@@ -192,10 +191,6 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
               addmessage(widget.chatRoom, chatRoomMap);
           }
       );
-
-
-
-
   }
 
   ///////////////////////////////////////////
@@ -264,8 +259,10 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
     return Container(
       padding: EdgeInsets.all(10),
       height: 60.0,
-      color: Color(0xff16697a), //message composer light mode color
-       //Color(0xff1b1b2f), //message composer dark mode color
+      color: Get.isDarkMode?Color(0xff1b1b2f): Color(0xff16697a),
+
+      //message composer light mode color 0xff16697a
+       //, //message composer dark mode color 0xff1b1b2f
       //color: Color(0xFFB2EBF2),
       //color: Color(0xFFFFCDD2),
       child: Row(
@@ -275,7 +272,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
             iconSize: 25.0,
             color: Get.theme.textTheme.bodyText2.color,
 
-            onPressed: () => {takePicture()},
+            onPressed: () => {createImageMessage(camera: true)},
           ),
           IconButton(
               icon: Icon(Icons.photo),
@@ -330,8 +327,7 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
   Widget build(BuildContext context) {
 
     //createChatRoom(FirebaseAuth.instance.currentUser.uid+"_"+"Another user1");
-    return
-      Container(
+    return Container(
         decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(Colors.black26, BlendMode.darken),
@@ -339,10 +335,8 @@ class _ChatBoxNewState extends State<ChatBoxNew> {
                 fit: BoxFit.cover)),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor:
-            //Color(0xff1b1b2f),//appBar dark mode color
-             Color(0xff16697a), //appBar light mode color
+          appBar: AppBar(//appBar dark mode color 0xff1b1b2f
+            backgroundColor:Get.isDarkMode?Color(0xff1b1b2f):Color(0xff16697a), //appBar light mode color 0xff16697a
             title: Text(receiverName,
               style: TextStyle(
                 fontSize: 20.0,

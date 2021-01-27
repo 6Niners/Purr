@@ -25,6 +25,8 @@ class RegistrationController extends GetxController {
   String background="assets/other.jpg";
   UserLocation userLocation = UserLocation();
   bool likeBack=false;
+  ProfileData likeBackData=ProfileData();
+
   @override
   Future<void> onInit() async {
     await super.onInit();
@@ -151,7 +153,7 @@ class RegistrationController extends GetxController {
     if(firebaseUser!=null){
       if(firebaseUser.emailVerified){
         if(await profileIsComplete()){
-          await getAddressFromLatLng();
+          getAddressFromLatLng();
           Get.offAll(MainPage());
         }else{
           Get.offAll(SetupProfilePage());
@@ -169,6 +171,7 @@ class RegistrationController extends GetxController {
     await user.doc(userInfo.uid).set(tmp.toMapTesting());
   }
   Future<void> updateUserDataLocation(UserLocation tmp) async {
+    userInfo.location=tmp;
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     await user.doc(userInfo.uid).update({
       "Location":tmp.toMap(),
@@ -258,29 +261,36 @@ class RegistrationController extends GetxController {
     }
     update();
   }
+  Future<void> getUserProfileLikeBack(String uid) async {
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+      DocumentSnapshot document=await user.doc(uid).get();
+      if (document.exists){
+        likeBackData=ProfileData(uid: uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'],location: UserLocation(area: document.data()["Location"]["Area"], country: document.data()["Location"]["Country"]), );
+    }
+    update();
+  }
   List<String> removeAlreadySeenUsers(QuerySnapshot list){
     List<String> filteredList=List<String>();
     List<String> toRemove=List<String>();
-
     list.docs.forEach((element) {
       filteredList.add(element.id);
       if(userInfo.swipedLeft.contains(element.id)){
-        print("yes");
+        //print("yes");
         toRemove.add(element.id);
       }
       if(userInfo.swipedRight.contains(element.id)){
-        print("yes");
+        //print("yes");
         toRemove.add(element.id);
       }
     });
-    print(toRemove);
-    print("users");
-    print(users);
-    print(filteredList);
-    print("swipedRight");
-    print(userInfo.swipedRight);
-    print("swipedLeft");
-    print(userInfo.swipedLeft);
+    //print(toRemove);
+    //print("users");
+    //print(users);
+    //print(filteredList);
+    //print("swipedRight");
+    //print(userInfo.swipedRight);
+    //print("swipedLeft");
+    //print(userInfo.swipedLeft);
     toRemove.forEach((element) {filteredList.remove(element); });
     return filteredList;
   }
@@ -347,7 +357,7 @@ class RegistrationController extends GetxController {
                 : Icons.visibility_off,
           ),
           onPressed: () {
-            // Update the state i.e. toogle the state of passwordVisible variable
+            // Update the state i.e. toggle the state of passwordVisible variable
               obscureText.obscure = !obscureText.obscure;
               update();
             }
@@ -409,7 +419,6 @@ class RegistrationController extends GetxController {
 
     List<Placemark> address =  await placemarkFromCoordinates(location.latitude, location.longitude);
     print("ADDRESS: ${address[0].administrativeArea}, Country: ${address[0].country}");
-
     userLocation = UserLocation(area: address[0].administrativeArea,country: address[0].country);
     updateUserDataLocation(userLocation);
   }

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:purr/Models/ProfileData.dart';
+import 'package:purr/NewChat/LikeBackPage.dart';
 import 'package:purr/NewChat/chat.dart';
 import 'package:purr/Profile/Avatar.dart';
 import 'package:purr/Registration/RegistrationController.dart';
@@ -242,6 +243,7 @@ Future<void> likeBack() async {
     ),
   );
 }
+// ignore: must_be_immutable
 class MatchesTile extends StatelessWidget {
   final String avatarUrl;
   String otherUserUID;
@@ -250,20 +252,7 @@ class MatchesTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-            await likeBack();
-            RegistrationController controller = Get.find();
-            if(controller.likeBack){
-            String roomId=otherUserUID+"_"+FirebaseAuth.instance.currentUser.uid;
-            await FirebaseFirestore.instance.collection('ChatRoom').doc(roomId).get().then((document){
-            if (document.exists){
-              Get.to(ChatBoxNew(roomId));
-            }else{
-              roomId=FirebaseAuth.instance.currentUser.uid+"_"+otherUserUID;
-              Get.to(ChatBoxNew(roomId));
-            }
-            });
-            controller.matchUsers(ProfileData(uid: otherUserUID));
-            }
+            Get.to(LikeBackPage(otherUserUID));
       },
       child: Center(
         child:Avatar(
