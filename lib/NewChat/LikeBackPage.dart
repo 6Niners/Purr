@@ -24,6 +24,7 @@ class _LikeBackPageState extends State<LikeBackPage> {
   @override
   void initState() {
     // TODO: implement initState
+    regController.likeBackData=ProfileData();
     regController.getUserProfileLikeBack(widget.uid);
     super.initState();
   }
