@@ -14,11 +14,15 @@ class FetchProfilePage extends StatefulWidget {
 class _FetchProfilePageState extends State<FetchProfilePage> {
 
   RegistrationController regController = Get.find();
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    regController.getUserProfileData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
-    regController.getUserProfileData();
 
 
     return GetBuilder<RegistrationController>( builder: (_) {
@@ -29,13 +33,6 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
           backgroundColor: Colors.blueGrey[800],
           title: Text("Profile"),
           elevation: 0.0,
-        ),
-
-        floatingActionButton: FloatingActionButton.extended(
-            label: Text("Update"),
-            icon: Icon(Icons.wifi_protected_setup),
-            backgroundColor: Colors.blueGrey[800],
-            onPressed: (){},
         ),
 
 
@@ -107,8 +104,8 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
                 fontWeight: FontWeight.bold,
               ),),
 
-
               SizedBox(height: 30.0),
+
               Row(
                 children: [
                   Icon(Icons.email, color: Colors.white,),
@@ -121,7 +118,24 @@ class _FetchProfilePageState extends State<FetchProfilePage> {
 
                   ),)
                 ],
+              ),
+
+              SizedBox(height: 20.0),
+
+              Row(
+                children: [
+                  Icon(Icons.location_on, color: Colors.white,),
+
+                  SizedBox(width: 10),
+
+                  Text("${_.userInfo.location.country}, ${_.userInfo.location.area}", style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+
+                  ),)
+                ],
               )
+
             ],
           ):Container(
             child: CircularProgressIndicator(),

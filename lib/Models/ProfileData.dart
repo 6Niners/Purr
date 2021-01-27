@@ -15,6 +15,12 @@ class ProfileData {
     if(location==null){
       location=UserLocation();
     }
+    if(swipedLeft==null){
+      swipedLeft=List<String>();
+    }
+    if(swipedRight==null){
+      swipedRight=List<String>();
+    }
   }
   bool isComplete(){
     return petName!="null"&&petType!="null"&&breed!="null"&&gender!="null"&&petName!=null&&petType!=null&&breed!=null&&gender!=null&&avatarUrl!=null;

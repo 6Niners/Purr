@@ -30,6 +30,7 @@ class RegistrationController extends GetxController {
     await super.onInit();
     auth=FirebaseAuth.instance;
 
+
   }
 
   Future<void> signIn(String email, String password) async {
@@ -150,7 +151,8 @@ class RegistrationController extends GetxController {
     if(firebaseUser!=null){
       if(firebaseUser.emailVerified){
         if(await profileIsComplete()){
-        Get.offAll(MainPage());
+          await getAddressFromLatLng();
+          Get.offAll(MainPage());
         }else{
           Get.offAll(SetupProfilePage());
         }
@@ -165,6 +167,13 @@ class RegistrationController extends GetxController {
     userInfo=tmp;
     final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
     await user.doc(userInfo.uid).set(tmp.toMapTesting());
+  }
+  Future<void> updateUserDataLocation(UserLocation tmp) async {
+    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    await user.doc(userInfo.uid).update({
+      "Location":tmp.toMap(),
+    }
+    );
   }
 
   Future<void> addUserSwipeLeft(ProfileData tmp) async {
@@ -188,13 +197,14 @@ class RegistrationController extends GetxController {
     if (document.exists){
       tmp=ProfileData(uid: tmp.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] );
     }
+    /*
     FirebaseFirestore.instance.collection('UserData').doc(tmp.uid).update({
       "Swiped Right": FieldValue.arrayRemove([userInfo.uid])
     });
-    /*
+    */
     FirebaseFirestore.instance.collection('UserData').doc(userInfo.uid).update({
       "Swiped Right For": FieldValue.arrayRemove([tmp.uid+"_"+tmp.avatarUrl])
-    });*/
+    });
   }
   backgroundForChat() async {
     if ( equalsIgnoreCase(userInfo.petType,'cat')) {
@@ -232,7 +242,11 @@ class RegistrationController extends GetxController {
       uid=auth.currentUser.uid;
       DocumentSnapshot document=await user.doc(uid).get();
         if (document.exists){
-          userInfo=ProfileData(uid:auth.currentUser.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar']  ,email: firebaseUser.email,swipedLeft:(document.data()['Swiped Left'] as List)?.map((item) => item as String)?.toList(),swipedRight:(document.data()['Swiped Right'] as List)?.map((item) => item as String)?.toList() );
+          userInfo=ProfileData(uid:auth.currentUser.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],
+              breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'],
+              location: UserLocation(area: document.data()["Location"]["Area"], country: document.data()["Location"]["Country"]),
+              email: firebaseUser.email,swipedLeft:(document.data()['Swiped Left'] as List)?.map((item) => item as String)?.toList(),
+              swipedRight:(document.data()['Swiped Right'] as List)?.map((item) => item as String)?.toList() );
         }
       backgroundForChat();
       update();
@@ -244,34 +258,39 @@ class RegistrationController extends GetxController {
     }
     update();
   }
-  removeAlreadySeenUsers(){
+  List<String> removeAlreadySeenUsers(QuerySnapshot list){
+    List<String> filteredList=List<String>();
     List<String> toRemove=List<String>();
+
+    list.docs.forEach((element) {
+      filteredList.add(element.id);
+      if(userInfo.swipedLeft.contains(element.id)){
+        print("yes");
+        toRemove.add(element.id);
+      }
+      if(userInfo.swipedRight.contains(element.id)){
+        print("yes");
+        toRemove.add(element.id);
+      }
+    });
+    print(toRemove);
     print("users");
     print(users);
+    print(filteredList);
     print("swipedRight");
     print(userInfo.swipedRight);
     print("swipedLeft");
     print(userInfo.swipedLeft);
-    users.forEach((element) {
-      if(userInfo.swipedLeft.contains(element.uid)){
-        print("yes");
-        toRemove.add(element.uid);
-      }
-      if(userInfo.swipedRight.contains(element.uid)){
-        print("yes");
-        toRemove.add(element.uid);
-      }
-    });
-    print(toRemove);
-    toRemove.forEach((element) {users.remove(element); });
+    toRemove.forEach((element) {filteredList.remove(element); });
+    return filteredList;
   }
 
   Future<void> getUsers() async {
-    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).get();
-    usersInFirebase.docs.forEach((result) async {
-      await getUserProfileData(uid: result.id);
+    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).where("Location.Country", isEqualTo:userInfo.location.country).where("Location.Area", isEqualTo:userInfo.location.area).get();
+    List<String> filteredList =removeAlreadySeenUsers(usersInFirebase);
+    filteredList.forEach((result) async {
+      await getUserProfileData(uid: result);
     });
-    removeAlreadySeenUsers();
     update();
 
   }
@@ -387,9 +406,12 @@ class RegistrationController extends GetxController {
 
   Future<void> getAddressFromLatLng() async {
     var location = await getCurrentLocation();
+
     List<Placemark> address =  await placemarkFromCoordinates(location.latitude, location.longitude);
     print("ADDRESS: ${address[0].administrativeArea}, Country: ${address[0].country}");
-    userLocation=UserLocation(area: address[0].administrativeArea,country: address[0].country);
+
+    userLocation = UserLocation(area: address[0].administrativeArea,country: address[0].country);
+    updateUserDataLocation(userLocation);
   }
 
 

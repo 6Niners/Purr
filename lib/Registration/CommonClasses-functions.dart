@@ -16,7 +16,7 @@ class Themes {
     //message sent by
     focusColor: Colors.blue[800],
     //message sent to me
-    cardColor: Colors.grey[100],
+    cardColor: Colors.grey[700],
     //meeasge comboser
     cursorColor: Colors.blue[900],
     // set the primaryColor light theme or accentColor for dark theme.
