@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 class Themes {
   static final light = ThemeData.light().copyWith(
     backgroundColor: Colors.white,
@@ -21,10 +22,11 @@ class Themes {
     cursorColor: Colors.blue[900],
     // set the primaryColor light theme or accentColor for dark theme.
     textTheme: TextTheme(
-      headline6: TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold),
-      bodyText1: TextStyle(color: Colors.black,fontSize: 18),
-      subtitle1: TextStyle(color: Colors.blue,fontSize: 14),
-      bodyText2: TextStyle(color: Colors.white,fontSize: 16),
+      headline6: TextStyle(
+          color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+      bodyText1: TextStyle(color: Colors.black, fontSize: 18),
+      subtitle1: TextStyle(color: Colors.blue, fontSize: 14),
+      bodyText2: TextStyle(color: Colors.white, fontSize: 16),
     ),
   );
   static final dark = ThemeData.dark().copyWith(
@@ -49,36 +51,36 @@ class Themes {
     cursorColor: Colors.blue[900],
 
     textTheme: TextTheme(
-      headline6:  TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold),
-      bodyText1: TextStyle(color: Colors.white,fontSize: 18),
-      subtitle1: TextStyle(color: Colors.blue,fontSize: 14),
-      bodyText2: TextStyle(color: Colors.white,fontSize: 14),
+      headline6: TextStyle(
+          color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+      bodyText1: TextStyle(color: Colors.white, fontSize: 18),
+      subtitle1: TextStyle(color: Colors.blue, fontSize: 14),
+      bodyText2: TextStyle(color: Colors.white, fontSize: 14),
     ),
   );
 }
-class BoolToPassByReference extends GetxController{
-  bool obscure=true;
 
+class BoolToPassByReference extends GetxController {
+  bool obscure = true;
 }
 
-
-String emailValidator(String email){
-    if (!EmailValidator.validate(email)) {
-      return 'Please type a valid Email';
-    }
-    return null;
+String emailValidator(String email) {
+  if (!EmailValidator.validate(email)) {
+    return 'Please type a valid Email';
+  }
+  return null;
 }
 
-String passwordValidator(String password){
-  if(password.isEmpty){
+String passwordValidator(String password) {
+  if (password.isEmpty) {
     return 'Password Field empty';
-  }else if(password.length < 6){
+  } else if (password.length < 6) {
     return 'Password is Short';
   }
   return null;
 }
 
-class PasswordMatchValidatorClass{
+class PasswordMatchValidatorClass {
   TextEditingController otherPasswordController;
   PasswordMatchValidatorClass(this.otherPasswordController);
 

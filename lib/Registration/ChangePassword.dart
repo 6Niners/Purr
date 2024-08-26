@@ -4,8 +4,6 @@ import 'package:purr/Registration/CommonClasses-functions.dart';
 import 'package:purr/Registration/RegistrationController.dart';
 
 class ChangePasswordPage extends StatefulWidget {
-
-
   @override
   ChangePasswordPageState createState() => ChangePasswordPageState();
 }
@@ -15,11 +13,11 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
   TextEditingController _newPassword = TextEditingController();
   TextEditingController _newPasswordConfirm = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  BoolToPassByReference passwordValidated=BoolToPassByReference();
+  BoolToPassByReference passwordValidated = BoolToPassByReference();
 
-  BoolToPassByReference _obscureTextCurrentPassword=BoolToPassByReference();
-  BoolToPassByReference _obscureTextNewPassword=BoolToPassByReference();
-  BoolToPassByReference _obscureTextConfirmPassword=BoolToPassByReference();
+  BoolToPassByReference _obscureTextCurrentPassword = BoolToPassByReference();
+  BoolToPassByReference _obscureTextNewPassword = BoolToPassByReference();
+  BoolToPassByReference _obscureTextConfirmPassword = BoolToPassByReference();
 
   RegistrationController controller = Get.find();
   @override
@@ -52,32 +50,32 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                   style: Get.theme.textTheme.headline6,
                                 )),
                           ),
-                          GetBuilder<RegistrationController>(
-                              builder: (_) {
-                                return _.buildTextFormFieldPassword(
-                                    _currentPassword, 'Current Password',
-                                    _obscureTextCurrentPassword,validator: (value) {
-                                  if(passwordValidated.obscure){return null;}else{return "wrong password";}
-                                },);
-                              }
-                          ),
-
-                          GetBuilder<RegistrationController>(
-                              builder: (_) {
-                                return _.buildTextFormFieldPassword(
-                                    _newPassword, 'Password',
-                                    _obscureTextNewPassword);
-                              }
-                          ),
-
+                          GetBuilder<RegistrationController>(builder: (_) {
+                            return _.buildTextFormFieldPassword(
+                              _currentPassword,
+                              'Current Password',
+                              _obscureTextCurrentPassword,
+                              validator: (value) {
+                                if (passwordValidated.obscure) {
+                                  return null;
+                                } else {
+                                  return "wrong password";
+                                }
+                              },
+                            );
+                          }),
+                          GetBuilder<RegistrationController>(builder: (_) {
+                            return _.buildTextFormFieldPassword(_newPassword,
+                                'Password', _obscureTextNewPassword);
+                          }),
                           GetBuilder<RegistrationController>(
                             builder: (_) {
-                              return  _.buildTextFormFieldPassword(
-                                  _newPasswordConfirm, 'Confirm Password',
-                                  _obscureTextConfirmPassword, textController2:_newPassword);
-
+                              return _.buildTextFormFieldPassword(
+                                  _newPasswordConfirm,
+                                  'Confirm Password',
+                                  _obscureTextConfirmPassword,
+                                  textController2: _newPassword);
                             },
-
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,12 +87,16 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                 height: 70,
                                 child: RaisedButton(
                                   color: Get.theme.canvasColor,
-                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-
+                                  shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(20)),
                                   onPressed: () async {
                                     Get.back();
                                   },
-                                  child: Text('Back',style: Get.theme.textTheme.bodyText1,),
+                                  child: Text(
+                                    'Back',
+                                    style: Get.theme.textTheme.bodyText1,
+                                  ),
                                 ),
                               ),
                               Container(
@@ -104,17 +106,25 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                                 height: 70,
                                 child: RaisedButton(
                                   color: Get.theme.buttonColor,
-                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-
+                                  shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(20)),
                                   onPressed: () async {
                                     //print("in");
-                                    passwordValidated.obscure=await controller.validatePassword(_currentPassword.text);
+                                    passwordValidated.obscure =
+                                        await controller.validatePassword(
+                                            _currentPassword.text);
                                     setState(() {});
-                                    if (_formKey.currentState.validate()&&passwordValidated.obscure) {
-                                      await controller.updatePassword(_newPassword.text);
+                                    if (_formKey.currentState.validate() &&
+                                        passwordValidated.obscure) {
+                                      await controller
+                                          .updatePassword(_newPassword.text);
                                     }
                                   },
-                                  child: Text('Sign Up',style: Get.theme.textTheme.bodyText1,),
+                                  child: Text(
+                                    'Sign Up',
+                                    style: Get.theme.textTheme.bodyText1,
+                                  ),
                                 ),
                               )
                             ],

@@ -21,8 +21,14 @@ class ChatRoom extends StatefulWidget {
 
 class ChatRoomState extends State<ChatRoom> {
   RegistrationController controller = Get.find();
-  Stream<QuerySnapshot> chatRooms = FirebaseFirestore.instance.collection("ChatRoom").where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid).snapshots();
-  Stream<DocumentSnapshot> matchesStream = FirebaseFirestore.instance.collection("UserData").doc(FirebaseAuth.instance.currentUser.uid).snapshots();
+  Stream<QuerySnapshot> chatRooms = FirebaseFirestore.instance
+      .collection("ChatRoom")
+      .where("users list", arrayContains: FirebaseAuth.instance.currentUser.uid)
+      .snapshots();
+  Stream<DocumentSnapshot> matchesStream = FirebaseFirestore.instance
+      .collection("UserData")
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .snapshots();
   var collection;
   Widget matches() {
     //check if the person in swiped for is the in swiped right
@@ -33,7 +39,10 @@ class ChatRoomState extends State<ChatRoom> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("Likes You",style: Get.theme.textTheme.headline6,),
+              Text(
+                "Likes You",
+                style: Get.theme.textTheme.headline6,
+              ),
             ],
           ),
         ),
@@ -41,23 +50,38 @@ class ChatRoomState extends State<ChatRoom> {
           stream: matchesStream,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Text('Something went wrong',style: TextStyle(color: Colors.red,fontSize: 25),);
+              return Text(
+                'Something went wrong',
+                style: TextStyle(color: Colors.red, fontSize: 25),
+              );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),));
+              return Center(
+                  child: Text(
+                "Loading",
+                style: TextStyle(color: Colors.green, fontSize: 25),
+              ));
             }
-            try{
+            try {
               // ignore: unnecessary_statements
-              if(snapshot.data['Swiped Right For'].length==0){
+              if (snapshot.data['Swiped Right For'].length == 0) {
                 return Center(
                   child: Container(
-                    child: Text("No one likes you yet :_(",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+                    child: Text(
+                      "No one likes you yet :_(",
+                      style: TextStyle(color: Colors.red, fontSize: 20),
+                    ),
+                  ),
                 );
               }
-            }catch(_){
+            } catch (_) {
               return Center(
                 child: Container(
-                  child: Text("No one likes you yet :_(",style: TextStyle(color: Colors.red,fontSize: 15),), ),
+                  child: Text(
+                    "No one likes you yet :_(",
+                    style: TextStyle(color: Colors.red, fontSize: 15),
+                  ),
+                ),
               );
             }
 
@@ -68,15 +92,17 @@ class ChatRoomState extends State<ChatRoom> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     //print(snapshot.data['Swiped Right For'].toString().substring(snapshot.data['Swiped Right For'].toString().indexOf("_")+1));
-                    var selectedItem=(snapshot.data['Swiped Right For'] as List)?.map((item) => item as String)?.toList()[index];
+                    var selectedItem =
+                        (snapshot.data['Swiped Right For'] as List)
+                            ?.map((item) => item as String)
+                            ?.toList()[index];
                     return MatchesTile(
-                      avatarUrl:selectedItem.substring(selectedItem.indexOf("_")+1),
+                      avatarUrl:
+                          selectedItem.substring(selectedItem.indexOf("_") + 1),
                       otherUserUID: selectedItem.split("_")[0],
                     );
-                  }
-              ),
+                  }),
             );
-
           },
         ),
       ],
@@ -92,7 +118,10 @@ class ChatRoomState extends State<ChatRoom> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("Chats",style: Get.theme.textTheme.headline6,),
+              Text(
+                "Chats",
+                style: Get.theme.textTheme.headline6,
+              ),
             ],
           ),
         ),
@@ -100,31 +129,44 @@ class ChatRoomState extends State<ChatRoom> {
           stream: chatRooms,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Text('Something went wrong',style: TextStyle(color: Colors.red,fontSize: 25),);
+              return Text(
+                'Something went wrong',
+                style: TextStyle(color: Colors.red, fontSize: 25),
+              );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: Text("Loading",style: TextStyle(color: Colors.green,fontSize: 25),));
+              return Center(
+                  child: Text(
+                "Loading",
+                style: TextStyle(color: Colors.green, fontSize: 25),
+              ));
             }
-            if(snapshot.data.docs.length==0){
+            if (snapshot.data.docs.length == 0) {
               return Center(
                 child: Container(
-                  child: Text("There no chats",style: TextStyle(color: Colors.red,fontSize: 20),), ),
+                  child: Text(
+                    "There no chats",
+                    style: TextStyle(color: Colors.red, fontSize: 20),
+                  ),
+                ),
               );
             }
             return ListView.builder(
-              itemCount: snapshot.data.docs.length,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                print(snapshot.data.docs[index].data()['users']);
-                var userNames=snapshot.data.docs[index].data()['users Names'].toString().split("_");
-                userNames.remove(controller.userInfo.petName);
-                String username=userNames[0];
-                return ChatRoomsTile(
-                  userName: username,
-                  chatRoomID: snapshot.data.docs[index].data()['users'],
-                );}
-            );
-
+                itemCount: snapshot.data.docs.length,
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  print(snapshot.data.docs[index].data()['users']);
+                  var userNames = snapshot.data.docs[index]
+                      .data()['users Names']
+                      .toString()
+                      .split("_");
+                  userNames.remove(controller.userInfo.petName);
+                  String username = userNames[0];
+                  return ChatRoomsTile(
+                    userName: username,
+                    chatRoomID: snapshot.data.docs[index].data()['users'],
+                  );
+                });
           },
         ),
       ],
@@ -147,7 +189,7 @@ class ChatRoomState extends State<ChatRoom> {
         ],
       ),
 
-    /*
+      /*
     floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
@@ -163,11 +205,11 @@ class ChatRoomState extends State<ChatRoom> {
 class ChatRoomsTile extends StatelessWidget {
   final String userName;
   final String chatRoomID;
-  ChatRoomsTile({this.userName,this.chatRoomID});
+  ChatRoomsTile({this.userName, this.chatRoomID});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Get.to(ChatBoxNew(chatRoomID));
       },
       child: Container(
@@ -182,8 +224,9 @@ class ChatRoomsTile extends StatelessWidget {
                   color: Get.theme.highlightColor,
                   borderRadius: BorderRadius.circular(30)),
               child: Center(
-                child: Text(userName.substring(0, 1),
-                    textAlign: TextAlign.center,
+                child: Text(
+                  userName.substring(0, 1),
+                  textAlign: TextAlign.center,
                   style: Get.theme.textTheme.bodyText1,
                 ),
               ),
@@ -191,8 +234,9 @@ class ChatRoomsTile extends StatelessWidget {
             SizedBox(
               width: 12,
             ),
-            Text(userName,
-                textAlign: TextAlign.start,
+            Text(
+              userName,
+              textAlign: TextAlign.start,
               style: Get.theme.textTheme.bodyText1,
             )
           ],
@@ -201,9 +245,10 @@ class ChatRoomsTile extends StatelessWidget {
     );
   }
 }
+
 Future<void> likeBack() async {
   RegistrationController controller = Get.find();
-  controller.likeBack=false;
+  controller.likeBack = false;
   await Get.dialog(
     AlertDialog(
       backgroundColor: Colors.grey[700],
@@ -224,7 +269,7 @@ Future<void> likeBack() async {
         new FlatButton(
           onPressed: () {
             Get.back();
-            controller.likeBack=false;
+            controller.likeBack = false;
           },
           child: new Text(
             'No',
@@ -233,7 +278,7 @@ Future<void> likeBack() async {
         new FlatButton(
           onPressed: () {
             Get.back();
-            controller.likeBack=true;
+            controller.likeBack = true;
           },
           child: new Text(
             'Yes',
@@ -243,19 +288,20 @@ Future<void> likeBack() async {
     ),
   );
 }
+
 // ignore: must_be_immutable
 class MatchesTile extends StatelessWidget {
   final String avatarUrl;
   String otherUserUID;
-  MatchesTile({this.avatarUrl,this.otherUserUID});
+  MatchesTile({this.avatarUrl, this.otherUserUID});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-            Get.to(LikeBackPage(otherUserUID));
+        Get.to(LikeBackPage(otherUserUID));
       },
       child: Center(
-        child:Avatar(
+        child: Avatar(
           avatarUrl: avatarUrl,
         ),
       ),

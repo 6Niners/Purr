@@ -12,27 +12,24 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:purr/main.dart';
 
-
-
 bool equalsIgnoreCase(String string1, String string2) {
-  return string1?.toLowerCase() == string2?.toLowerCase();}
+  return string1?.toLowerCase() == string2?.toLowerCase();
+}
 
 class RegistrationController extends GetxController {
   User firebaseUser;
   FirebaseAuth auth;
-  ProfileData userInfo=ProfileData();
-  List<ProfileData> users=List<ProfileData>();
-  String background="assets/other.jpg";
+  ProfileData userInfo = ProfileData();
+  List<ProfileData> users = List<ProfileData>();
+  String background = "assets/other.jpg";
   UserLocation userLocation = UserLocation();
-  bool likeBack=false;
-  ProfileData likeBackData=ProfileData();
+  bool likeBack = false;
+  ProfileData likeBackData = ProfileData();
 
   @override
   Future<void> onInit() async {
     await super.onInit();
-    auth=FirebaseAuth.instance;
-
-
+    auth = FirebaseAuth.instance;
   }
 
   Future<void> signIn(String email, String password) async {
@@ -43,8 +40,7 @@ class RegistrationController extends GetxController {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
-        showToast(
-            'No user found for that email.', backgroundColor: Colors.red);
+        showToast('No user found for that email.', backgroundColor: Colors.red);
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
         showToast('Wrong password provided for that user.',
@@ -53,18 +49,19 @@ class RegistrationController extends GetxController {
     }
   }
 
-
   Future<void> signUp(String email, String password) async {
     try {
       await auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await updateUserData(ProfileData(petName:"null",petType:"null",breed:"null"));
+      await updateUserData(
+          ProfileData(petName: "null", petType: "null", breed: "null"));
       Get.offAll(VerifyEmailPage());
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'weak-password') {
         print('The password provided is very weak');
-        showToast('The password provided is very weak', backgroundColor: Colors.red);
+        showToast('The password provided is very weak',
+            backgroundColor: Colors.red);
       } else if (e.code == 'email-already-in-use') {
         print('This email is already in use, try to sign in instead');
         showToast('This email is already in use, try to sign in instead',
@@ -72,7 +69,6 @@ class RegistrationController extends GetxController {
       } else {
         showToast(e.message, backgroundColor: Colors.red);
       }
-
     } catch (e) {
       print(e.toString());
     }
@@ -87,10 +83,9 @@ class RegistrationController extends GetxController {
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'user-not-found') {
-        showToast(
-            'There is no user with that email', backgroundColor: Colors.red);
-      }
-      else {
+        showToast('There is no user with that email',
+            backgroundColor: Colors.red);
+      } else {
         showToast(e.message, backgroundColor: Colors.red);
       }
     }
@@ -102,8 +97,8 @@ class RegistrationController extends GetxController {
     var authCredentials = EmailAuthProvider.credential(
         email: firebaseUser.email, password: password);
     try {
-      var authResult = await firebaseUser
-          .reauthenticateWithCredential(authCredentials);
+      var authResult =
+          await firebaseUser.reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
       print(e);
@@ -114,8 +109,7 @@ class RegistrationController extends GetxController {
   Future<void> sendEmailVerification() async {
     firebaseUser = auth.currentUser;
     firebaseUser.sendEmailVerification();
-    showToast(
-        "verification email has been sent", backgroundColor: Colors.blue);
+    showToast("verification email has been sent", backgroundColor: Colors.blue);
   }
 
   Future<void> updatePassword(String password) async {
@@ -133,6 +127,7 @@ class RegistrationController extends GetxController {
       Get.offAll(SetupProfilePage());
     }
   }
+
   Future signOut() async {
     try {
       await auth.signOut();
@@ -148,35 +143,37 @@ class RegistrationController extends GetxController {
     print(userInfo.toMapTesting());
     return userInfo.isComplete();
   }
+
   Future checkIfLoggedIn() async {
     firebaseUser = auth.currentUser;
-    if(firebaseUser!=null){
-      if(firebaseUser.emailVerified){
-        if(await profileIsComplete()){
+    if (firebaseUser != null) {
+      if (firebaseUser.emailVerified) {
+        if (await profileIsComplete()) {
           getAddressFromLatLng();
           Get.offAll(MainPage());
-        }else{
+        } else {
           Get.offAll(SetupProfilePage());
         }
-      }else{
+      } else {
         Get.offAll(VerifyEmailPage());
       }
     }
   }
 
-
   Future<void> updateUserData(ProfileData tmp) async {
-    userInfo=tmp;
-    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    userInfo = tmp;
+    final CollectionReference user =
+        FirebaseFirestore.instance.collection('UserData');
     await user.doc(userInfo.uid).set(tmp.toMapTesting());
   }
+
   Future<void> updateUserDataLocation(UserLocation tmp) async {
-    userInfo.location=tmp;
-    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
+    userInfo.location = tmp;
+    final CollectionReference user =
+        FirebaseFirestore.instance.collection('UserData');
     await user.doc(userInfo.uid).update({
-      "Location":tmp.toMap(),
-    }
-    );
+      "Location": tmp.toMap(),
+    });
   }
 
   Future<void> addUserSwipeLeft(ProfileData tmp) async {
@@ -186,19 +183,27 @@ class RegistrationController extends GetxController {
   }
 
   Future<void> addUserSwipeRight(ProfileData tmp) async {
-    FirebaseFirestore.instance.collection('UserData').doc(userInfo.uid).update( {
+    FirebaseFirestore.instance.collection('UserData').doc(userInfo.uid).update({
       "Swiped Right": FieldValue.arrayUnion([tmp.uid])
     });
     FirebaseFirestore.instance.collection('UserData').doc(tmp.uid).update({
-      "Swiped Right For": FieldValue.arrayUnion([userInfo.uid+"_"+userInfo.avatarUrl])
+      "Swiped Right For":
+          FieldValue.arrayUnion([userInfo.uid + "_" + userInfo.avatarUrl])
     });
   }
 
   Future<void> matchUsers(ProfileData tmp) async {
-    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-    DocumentSnapshot document=await user.doc(tmp.uid).get();
-    if (document.exists){
-      tmp=ProfileData(uid: tmp.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] );
+    final CollectionReference user =
+        FirebaseFirestore.instance.collection('UserData');
+    DocumentSnapshot document = await user.doc(tmp.uid).get();
+    if (document.exists) {
+      tmp = ProfileData(
+          uid: tmp.uid,
+          petName: document.data()['Pet Name'],
+          petType: document.data()['Pet Type'],
+          breed: document.data()['Breed'],
+          gender: document.data()['Gender'],
+          avatarUrl: document.data()['Avatar']);
     }
     /*
     FirebaseFirestore.instance.collection('UserData').doc(tmp.uid).update({
@@ -206,79 +211,105 @@ class RegistrationController extends GetxController {
     });
     */
     FirebaseFirestore.instance.collection('UserData').doc(userInfo.uid).update({
-      "Swiped Right For": FieldValue.arrayRemove([tmp.uid+"_"+tmp.avatarUrl])
+      "Swiped Right For":
+          FieldValue.arrayRemove([tmp.uid + "_" + tmp.avatarUrl])
     });
   }
+
   backgroundForChat() async {
-    if ( equalsIgnoreCase(userInfo.petType,'cat')) {
-      background= "assets/wallpaper-cat.jpg";
+    if (equalsIgnoreCase(userInfo.petType, 'cat')) {
+      background = "assets/wallpaper-cat.jpg";
+    } else if (equalsIgnoreCase(userInfo.petType, 'dog')) {
+      background = "assets/dog2.jpg";
+    } else if (equalsIgnoreCase(userInfo.petType, 'hamster')) {
+      background = "assets/hamster.jpg";
+    } else if (equalsIgnoreCase(userInfo.petType, 'squirrel')) {
+      background = "assets/squirrel.jpg";
+    } else if (equalsIgnoreCase(userInfo.petType, 'turtle')) {
+      background = "assets/turtle1.jpg";
+    } else if (equalsIgnoreCase(userInfo.petType, 'rabbit')) {
+      background = "assets/rabbit.jpg";
+    } else if (equalsIgnoreCase(userInfo.petType, 'bird')) {
+      background = "assets/bird.jpg";
+    } else if (equalsIgnoreCase(userInfo.petType, 'parrot')) {
+      background = "assets/parrot1.jpg";
+    } else {
+      background = "assets/other.jpg";
     }
-    else if ( equalsIgnoreCase(userInfo.petType,'dog')) {
-      background=  "assets/dog2.jpg";  }
-
-    else if ( equalsIgnoreCase(userInfo.petType,'hamster')) {
-      background=  "assets/hamster.jpg";  }
-
-    else if ( equalsIgnoreCase(userInfo.petType,'squirrel')) {
-      background=  "assets/squirrel.jpg";  }
-
-    else if ( equalsIgnoreCase(userInfo.petType,'turtle')) {
-      background=  "assets/turtle1.jpg";  }
-
-    else if ( equalsIgnoreCase(userInfo.petType,'rabbit')) {
-      background=  "assets/rabbit.jpg";  }
-
-    else if ( equalsIgnoreCase(userInfo.petType,'bird')){
-      background=  "assets/bird.jpg";  }
-
-    else if ( equalsIgnoreCase(userInfo.petType,'parrot')){
-      background=  "assets/parrot1.jpg";  }
-
-    else{
-      background=  "assets/other.jpg";
-    }
-
   }
+
   Future<void> getUserProfileData({String uid}) async {
-    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-    if(uid==null) {
-      uid=auth.currentUser.uid;
-      DocumentSnapshot document=await user.doc(uid).get();
-        if (document.exists){
-          userInfo=ProfileData(uid:auth.currentUser.uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],
-              breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'],
-              location: UserLocation(area: document.data()["Location"]["Area"], country: document.data()["Location"]["Country"]),
-              email: firebaseUser.email,swipedLeft:(document.data()['Swiped Left'] as List)?.map((item) => item as String)?.toList(),
-              swipedRight:(document.data()['Swiped Right'] as List)?.map((item) => item as String)?.toList() );
-        }
+    final CollectionReference user =
+        FirebaseFirestore.instance.collection('UserData');
+    if (uid == null) {
+      uid = auth.currentUser.uid;
+      DocumentSnapshot document = await user.doc(uid).get();
+      if (document.exists) {
+        userInfo = ProfileData(
+            uid: auth.currentUser.uid,
+            petName: document.data()['Pet Name'],
+            petType: document.data()['Pet Type'],
+            breed: document.data()['Breed'],
+            gender: document.data()['Gender'],
+            avatarUrl: document.data()['Avatar'],
+            location: UserLocation(
+                area: document.data()["Location"]["Area"],
+                country: document.data()["Location"]["Country"]),
+            email: firebaseUser.email,
+            swipedLeft: (document.data()['Swiped Left'] as List)
+                ?.map((item) => item as String)
+                ?.toList(),
+            swipedRight: (document.data()['Swiped Right'] as List)
+                ?.map((item) => item as String)
+                ?.toList());
+      }
       backgroundForChat();
       update();
-    }else{
-    DocumentSnapshot document=await user.doc(uid).get();
-      if (document.exists){
-        users.add(ProfileData(uid: uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'] ));
+    } else {
+      DocumentSnapshot document = await user.doc(uid).get();
+      if (document.exists) {
+        users.add(ProfileData(
+            uid: uid,
+            petName: document.data()['Pet Name'],
+            petType: document.data()['Pet Type'],
+            breed: document.data()['Breed'],
+            gender: document.data()['Gender'],
+            avatarUrl: document.data()['Avatar']));
       }
     }
     update();
   }
+
   Future<void> getUserProfileLikeBack(String uid) async {
-    final CollectionReference user = FirebaseFirestore.instance.collection('UserData');
-      DocumentSnapshot document=await user.doc(uid).get();
-      if (document.exists){
-        likeBackData=ProfileData(uid: uid,petName:document.data()['Pet Name'],petType:document.data()['Pet Type'],breed:document.data()['Breed'],gender:document.data()['Gender'],avatarUrl:document.data()['Avatar'],location: UserLocation(area: document.data()["Location"]["Area"], country: document.data()["Location"]["Country"]), );
+    final CollectionReference user =
+        FirebaseFirestore.instance.collection('UserData');
+    DocumentSnapshot document = await user.doc(uid).get();
+    if (document.exists) {
+      likeBackData = ProfileData(
+        uid: uid,
+        petName: document.data()['Pet Name'],
+        petType: document.data()['Pet Type'],
+        breed: document.data()['Breed'],
+        gender: document.data()['Gender'],
+        avatarUrl: document.data()['Avatar'],
+        location: UserLocation(
+            area: document.data()["Location"]["Area"],
+            country: document.data()["Location"]["Country"]),
+      );
     }
     update();
   }
-  List<String> removeAlreadySeenUsers(QuerySnapshot list){
-    List<String> filteredList=List<String>();
-    List<String> toRemove=List<String>();
+
+  List<String> removeAlreadySeenUsers(QuerySnapshot list) {
+    List<String> filteredList = List<String>();
+    List<String> toRemove = List<String>();
     list.docs.forEach((element) {
       filteredList.add(element.id);
-      if(userInfo.swipedLeft.contains(element.id)){
+      if (userInfo.swipedLeft.contains(element.id)) {
         //print("yes");
         toRemove.add(element.id);
       }
-      if(userInfo.swipedRight.contains(element.id)){
+      if (userInfo.swipedRight.contains(element.id)) {
         //print("yes");
         toRemove.add(element.id);
       }
@@ -291,87 +322,103 @@ class RegistrationController extends GetxController {
     //print(userInfo.swipedRight);
     //print("swipedLeft");
     //print(userInfo.swipedLeft);
-    toRemove.forEach((element) {filteredList.remove(element); });
+    toRemove.forEach((element) {
+      filteredList.remove(element);
+    });
     return filteredList;
   }
 
   Future<void> getUsers() async {
-    var usersInFirebase = await FirebaseFirestore.instance.collection('UserData').where('Pet Type', isEqualTo: userInfo.petType).where("Gender", isNotEqualTo: userInfo.gender).where("Location.Country", isEqualTo:userInfo.location.country).where("Location.Area", isEqualTo:userInfo.location.area).get();
-    List<String> filteredList =removeAlreadySeenUsers(usersInFirebase);
+    var usersInFirebase = await FirebaseFirestore.instance
+        .collection('UserData')
+        .where('Pet Type', isEqualTo: userInfo.petType)
+        .where("Gender", isNotEqualTo: userInfo.gender)
+        .where("Location.Country", isEqualTo: userInfo.location.country)
+        .where("Location.Area", isEqualTo: userInfo.location.area)
+        .get();
+    List<String> filteredList = removeAlreadySeenUsers(usersInFirebase);
     filteredList.forEach((result) async {
       await getUserProfileData(uid: result);
     });
     update();
-
   }
-
-
 
 //ui widgets to avoid repeating the same functions
-  Container buildTextFormField(TextEditingController textController,String labelText,Function(String) validator) {
+  Container buildTextFormField(TextEditingController textController,
+      String labelText, Function(String) validator) {
     return Container(
         padding: EdgeInsets.all(10),
-    margin: EdgeInsets.all(5),
-    child: TextFormField(
-        validator:validator,
-        controller: textController,
-        style: Get.theme.textTheme.bodyText1,
-        autovalidateMode: AutovalidateMode.disabled,
-        decoration: InputDecoration(
+        margin: EdgeInsets.all(5),
+        child: TextFormField(
+            validator: validator,
+            controller: textController,
+            style: Get.theme.textTheme.bodyText1,
+            autovalidateMode: AutovalidateMode.disabled,
+            decoration: InputDecoration(
+              labelText: labelText,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(32.0),
+                  borderSide: BorderSide(
+                    color: Get.theme.highlightColor,
+                  )),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide: BorderSide(
+                  color: Get.theme.highlightColor,
+                ),
+              ),
+            )));
+  }
+
+  Container buildTextFormFieldPassword(TextEditingController textController,
+      String labelText, BoolToPassByReference obscureText,
+      {TextEditingController textController2,
+      String Function(String) validator}) {
+    if (validator == null) {
+      if (textController2 == null) {
+        validator = passwordValidator;
+      } else {
+        PasswordMatchValidatorClass otherPasswordField =
+            PasswordMatchValidatorClass(textController2);
+        validator = otherPasswordField.passwordMatchValidator;
+      }
+    }
+    return Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(5),
+        child: TextFormField(
+          controller: textController,
+          style: Get.theme.textTheme.bodyText1,
+          validator: validator,
+          autovalidateMode: AutovalidateMode.disabled,
+          decoration: InputDecoration(
             labelText: labelText,
-
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
-          focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,),),
-        )
-    )
-    );
-  }
-
-
-  Container buildTextFormFieldPassword(TextEditingController textController,String labelText,BoolToPassByReference obscureText,{TextEditingController textController2,String Function(String) validator}) {
-    if(validator==null){
-    if(textController2==null){
-      validator=passwordValidator;
-    }else{
-      PasswordMatchValidatorClass otherPasswordField=PasswordMatchValidatorClass(textController2);
-      validator=otherPasswordField.passwordMatchValidator;
-    }
-    }
-    return Container(
-        padding: EdgeInsets.all(10),
-    margin: EdgeInsets.all(5),
-    child: TextFormField(
-      controller: textController,
-      style: Get.theme.textTheme.bodyText1,
-      validator: validator,
-      autovalidateMode: AutovalidateMode.disabled,
-      decoration: InputDecoration(
-        labelText: labelText,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
-        focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),borderSide:BorderSide( color: Get.theme.highlightColor,)),
-        suffixIcon: IconButton(
-          icon: Icon(
-            // Based on passwordVisible state choose the icon
-            obscureText.obscure
-                ? Icons.visibility
-                : Icons.visibility_off,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide: BorderSide(
+                  color: Get.theme.highlightColor,
+                )),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide: BorderSide(
+                  color: Get.theme.highlightColor,
+                )),
+            suffixIcon: IconButton(
+                icon: Icon(
+                  // Based on passwordVisible state choose the icon
+                  obscureText.obscure ? Icons.visibility : Icons.visibility_off,
+                ),
+                onPressed: () {
+                  // Update the state i.e. toggle the state of passwordVisible variable
+                  obscureText.obscure = !obscureText.obscure;
+                  update();
+                }),
           ),
-          onPressed: () {
-            // Update the state i.e. toggle the state of passwordVisible variable
-              obscureText.obscure = !obscureText.obscure;
-              update();
-            }
-        ),
-      ),
-
-      obscureText: obscureText.obscure,
-    )
-    );
+          obscureText: obscureText.obscure,
+        ));
   }
-
 
   Future<Position> getCurrentLocation() async {
-
     bool serviceEnabled = false;
     LocationPermission permission;
 
@@ -381,69 +428,47 @@ class RegistrationController extends GetxController {
       return Future.error("Location services disabled");
     }
 
-
     permission = await Geolocator.checkPermission();
 
-
     if (permission == LocationPermission.deniedForever) {
-      showToast('Location permissions are permanently denied, we cannot request permissions.', backgroundColor: Colors.red);
+      showToast(
+          'Location permissions are permanently denied, we cannot request permissions.',
+          backgroundColor: Colors.red);
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-
     // request location on start up when (only once location services) is selected
     if (permission == LocationPermission.denied) {
-
       permission = await Geolocator.requestPermission();
 
       if (permission != LocationPermission.whileInUse &&
           permission != LocationPermission.always) {
-        showToast('Location permissions are denied (actual value: $permission).', backgroundColor: Colors.red);
+        showToast(
+            'Location permissions are denied (actual value: $permission).',
+            backgroundColor: Colors.red);
 
-        return Future.error('Location permissions are denied (actual value: $permission).');
+        return Future.error(
+            'Location permissions are denied (actual value: $permission).');
       }
     }
 
-
-    var location = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-    print( "LAT: ${location.latitude}, LNG: ${location.longitude}" );
+    var location = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
+    print("LAT: ${location.latitude}, LNG: ${location.longitude}");
 
     return location;
   }
 
-
-
   Future<void> getAddressFromLatLng() async {
     var location = await getCurrentLocation();
 
-    List<Placemark> address =  await placemarkFromCoordinates(location.latitude, location.longitude);
-    print("ADDRESS: ${address[0].administrativeArea}, Country: ${address[0].country}");
-    userLocation = UserLocation(area: address[0].administrativeArea,country: address[0].country);
+    List<Placemark> address =
+        await placemarkFromCoordinates(location.latitude, location.longitude);
+    print(
+        "ADDRESS: ${address[0].administrativeArea}, Country: ${address[0].country}");
+    userLocation = UserLocation(
+        area: address[0].administrativeArea, country: address[0].country);
     updateUserDataLocation(userLocation);
   }
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

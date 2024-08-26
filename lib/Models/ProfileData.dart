@@ -1,5 +1,3 @@
-
-
 class ProfileData {
   final String uid;
   final String petName;
@@ -9,22 +7,41 @@ class ProfileData {
   final String email;
   final String avatarUrl;
   UserLocation location;
-  List<String> swipedLeft=List<String>();
-  List<String> swipedRight=List<String>();
-  ProfileData ({this.petName, this.petType, this.breed,this.email,this.avatarUrl,this.gender, this.location, this.uid,this.swipedLeft,this.swipedRight}){
-    if(location==null){
-      location=UserLocation();
+  List<String> swipedLeft = List<String>();
+  List<String> swipedRight = List<String>();
+  ProfileData(
+      {this.petName,
+      this.petType,
+      this.breed,
+      this.email,
+      this.avatarUrl,
+      this.gender,
+      this.location,
+      this.uid,
+      this.swipedLeft,
+      this.swipedRight}) {
+    if (location == null) {
+      location = UserLocation();
     }
-    if(swipedLeft==null){
-      swipedLeft=List<String>();
+    if (swipedLeft == null) {
+      swipedLeft = List<String>();
     }
-    if(swipedRight==null){
-      swipedRight=List<String>();
+    if (swipedRight == null) {
+      swipedRight = List<String>();
     }
   }
-  bool isComplete(){
-    return petName!="null"&&petType!="null"&&breed!="null"&&gender!="null"&&petName!=null&&petType!=null&&breed!=null&&gender!=null&&avatarUrl!=null;
+  bool isComplete() {
+    return petName != "null" &&
+        petType != "null" &&
+        breed != "null" &&
+        gender != "null" &&
+        petName != null &&
+        petType != null &&
+        breed != null &&
+        gender != null &&
+        avatarUrl != null;
   }
+
   Map<String, dynamic> toMap() {
     return {
       'Pet Name': petName,
@@ -35,6 +52,7 @@ class ProfileData {
       'Location': location.toMap(),
     };
   }
+
   Map<String, dynamic> toMapTesting() {
     return {
       'Pet Name': petName,
@@ -43,10 +61,11 @@ class ProfileData {
       'Gender': gender,
       'Avatar': avatarUrl,
       'Location': location.toMap(),
-      "swipedLeft":swipedLeft,
-      "swipedRight":swipedRight
+      "swipedLeft": swipedLeft,
+      "swipedRight": swipedRight
     };
   }
+
   Map<String, dynamic> toMapShowToUser() {
     return {
       'Pet Name': petName,
@@ -57,19 +76,13 @@ class ProfileData {
   }
 }
 
-
 class UserLocation {
-
   String area;
   String country;
 
-  UserLocation({this.area,this.country});
+  UserLocation({this.area, this.country});
 
   Map<String, dynamic> toMap() {
-    return {
-      "Area": area,
-      "Country": country
-    };
+    return {"Area": area, "Country": country};
   }
-
 }

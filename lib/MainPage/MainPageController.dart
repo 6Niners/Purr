@@ -4,20 +4,16 @@ import 'package:purr/Registration/RegistrationController.dart';
 import 'package:purr/UI_Widgets.dart';
 
 class MainPageController extends GetxController {
-
-
   @override
   Future<void> onInit() async {
     super.onInit();
   }
 
-
-
   // Start of swiping functions
-  void checkSwipe(CardSwipeOrientation orientation,index) {
+  void checkSwipe(CardSwipeOrientation orientation, index) {
     //enum CardSwipeOrientation { LEFT, RIGHT, RECOVER, UP, DOWN }
     //                          {   0  ,  1  ,    2   , 3 ,   4  }
-    RegistrationController regController =Get.find();
+    RegistrationController regController = Get.find();
     if (orientation.index == 0) {
       swipeLeft();
       regController.addUserSwipeLeft(regController.users[index]);
@@ -53,6 +49,4 @@ class MainPageController extends GetxController {
   }
 
   //end of swiping functions
-
-
 }

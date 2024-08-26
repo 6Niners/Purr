@@ -4,15 +4,11 @@ import 'package:purr/Registration/RegistrationController.dart';
 import 'package:purr/Registration/CommonClasses-functions.dart';
 
 class SignUpPage extends StatefulWidget {
-
-
   @override
   SignUpPageState createState() => SignUpPageState();
 }
 
 class SignUpPageState extends State<SignUpPage> {
-
-
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
   TextEditingController _confirmPassword = TextEditingController();
@@ -36,7 +32,6 @@ class SignUpPageState extends State<SignUpPage> {
                 child: Card(
                   color: Get.theme.backgroundColor,
                   elevation: 30,
-
                   child: SingleChildScrollView(
                     child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -47,29 +42,25 @@ class SignUpPageState extends State<SignUpPage> {
                             child: Container(
                                 padding: EdgeInsets.all(10),
                                 margin: EdgeInsets.all(5),
-                                child: Text("Sign Up",style: Get.theme.textTheme.headline6,)),
+                                child: Text(
+                                  "Sign Up",
+                                  style: Get.theme.textTheme.headline6,
+                                )),
                           ),
                           regController.buildTextFormField(
-                                  _email,
-                                  "Email",
-                                  emailValidator
-                              ),
+                              _email, "Email", emailValidator),
+                          GetBuilder<RegistrationController>(builder: (_) {
+                            return _.buildTextFormFieldPassword(
+                                _password, 'Password', _obscureTextPassword);
+                          }),
                           GetBuilder<RegistrationController>(
-                              builder: (_) {
-                                return _.buildTextFormFieldPassword(
-                                    _password, 'Password',
-                                    _obscureTextPassword);
-                              }
-                            ),
-
-                          GetBuilder<RegistrationController>(
-                              builder: (_) {
-                                return  _.buildTextFormFieldPassword(
-                                      _confirmPassword, 'Confirm Password',
-                                      _obscureTextConfirmPassword, textController2:_password);
-
-                              },
-
+                            builder: (_) {
+                              return _.buildTextFormFieldPassword(
+                                  _confirmPassword,
+                                  'Confirm Password',
+                                  _obscureTextConfirmPassword,
+                                  textController2: _password);
+                            },
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,15 +70,18 @@ class SignUpPageState extends State<SignUpPage> {
                                 margin: EdgeInsets.all(5),
                                 width: 150,
                                 height: 70,
-
                                 child: RaisedButton(
                                   color: Get.theme.canvasColor,
-                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-
+                                  shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(20)),
                                   onPressed: () async {
                                     Get.back();
                                   },
-                                  child: Text('Back',style: Get.theme.textTheme.bodyText1,),
+                                  child: Text(
+                                    'Back',
+                                    style: Get.theme.textTheme.bodyText1,
+                                  ),
                                 ),
                               ),
                               Container(
@@ -95,11 +89,11 @@ class SignUpPageState extends State<SignUpPage> {
                                 margin: EdgeInsets.all(5),
                                 width: 150,
                                 height: 70,
-
                                 child: RaisedButton(
                                   color: Get.theme.buttonColor,
-                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-
+                                  shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(20)),
                                   onPressed: () async {
                                     //print("in");
                                     if (_formKey.currentState.validate()) {
@@ -107,20 +101,18 @@ class SignUpPageState extends State<SignUpPage> {
                                           _email.text, _password.text);
                                     }
                                   },
-                                  child: Text('Sign Up',style: Get.theme.textTheme.bodyText1,),
+                                  child: Text(
+                                    'Sign Up',
+                                    style: Get.theme.textTheme.bodyText1,
+                                  ),
                                 ),
                               )
                             ],
                           ),
-                        ]
-                    ),
+                        ]),
                   ),
                 ),
-              )
-          )
-      ),
+              ))),
     );
   }
-
-
 }

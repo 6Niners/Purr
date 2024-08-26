@@ -45,15 +45,14 @@ class LoginPageState extends State<LoginPage> {
                                     style: Get.theme.textTheme.headline6,
                                   )),
                             ),
-
-                           regController.buildTextFormField(_email, "Email", emailValidator),
-
+                            regController.buildTextFormField(
+                                _email, "Email", emailValidator),
                             GetBuilder<RegistrationController>(
                               builder: (_) {
-                                return _.buildTextFormFieldPassword(_password, 'Password', _obscureTextPassword);
+                                return _.buildTextFormFieldPassword(_password,
+                                    'Password', _obscureTextPassword);
                               },
                             ),
-
                             Center(
                               child: GestureDetector(
                                 onTap: () {
@@ -75,24 +74,26 @@ class LoginPageState extends State<LoginPage> {
                                   height: 70,
                                   child: RaisedButton(
                                     color: Get.theme.canvasColor,
-                                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-
+                                    shape: new RoundedRectangleBorder(
+                                        borderRadius:
+                                            new BorderRadius.circular(20)),
                                     onPressed: () async {
                                       Get.back();
                                     },
                                     child: Text('Back',
-                                        style:Get.theme.textTheme.bodyText1),
+                                        style: Get.theme.textTheme.bodyText1),
                                   ),
                                 ),
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   margin: EdgeInsets.all(5),
-
                                   width: 150,
                                   height: 70,
                                   child: RaisedButton(
-                                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-                                    color:Get.theme.buttonColor,
+                                    shape: new RoundedRectangleBorder(
+                                        borderRadius:
+                                            new BorderRadius.circular(20)),
+                                    color: Get.theme.buttonColor,
                                     onPressed: () async {
                                       //print("in");
                                       if (_formKey.currentState.validate()) {
@@ -101,7 +102,7 @@ class LoginPageState extends State<LoginPage> {
                                       }
                                     },
                                     child: Text('Sign In',
-                                        style:Get.theme.textTheme.bodyText1),
+                                        style: Get.theme.textTheme.bodyText1),
                                   ),
                                 ),
                               ],

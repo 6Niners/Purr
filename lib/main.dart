@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       darkTheme: Themes.dark,
       //home: MainPage(),
       //home: LoginPage(title: 'Sign In'),
-      home:ListOfPages(),
+      home: ListOfPages(),
     );
   }
 }
@@ -39,7 +39,11 @@ class ListOfPages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text("Main Menu"), centerTitle: true,backgroundColor: Colors.blue,),
+      appBar: AppBar(
+        title: Text("Main Menu"),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -58,7 +62,6 @@ class ListOfPages extends StatelessWidget {
               pageButton(ChatRoom(), "chat list"),
 
               //PageButton(ChatBoxNew(FirebaseAuth.instance.currentUser.uid+"_"+"Meow"), "chatNew"),
-
             ],
           ),
         ),
@@ -66,13 +69,18 @@ class ListOfPages extends StatelessWidget {
     );
   }
 
-  FlatButton pageButton(var page,String text) {
+  FlatButton pageButton(var page, String text) {
     return FlatButton(
-
-    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
-  onPressed: (){Get.to(page); },
-  color:Colors.grey[800],
-  child: Text(text,style: TextStyle(color: Colors.white),),);
+      shape: new RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(10)),
+      onPressed: () {
+        Get.to(page);
+      },
+      color: Colors.grey[800],
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.white),
+      ),
+    );
   }
 }
-
